@@ -7,7 +7,7 @@ import { useMarketplace } from "@/lib/store/marketplace-store";
 export default function BoardPage() {
   const { session, projects, applicantLanes, moveApplicant, showToast } = useMarketplace();
 
-  const rid = session?.rid || "brightloop";
+  const rid = session?.rid || "client";
   const myProjects = projects.filter((p) => p.rid === rid || !session?.rid);
   const [selectedProjectId, setSelectedProjectId] = useState<number>(
     myProjects.length > 0 ? myProjects[0].id : 0

@@ -92,96 +92,6 @@ export const FORMATS = [
   "Web3 / Blockchain",
 ];
 
-// Fallback seed data if database is fresh
-const SEED_CLIENTS: Record<string, ClientProfile> = {
-  brightloop: {
-    id: "brightloop",
-    org: "Brightloop Studio",
-    person: "Aditya Mehra",
-    verify: "Organisation verified",
-    since: "2024",
-    city: "Mumbai",
-    ratings: [
-      {
-        by: "Nikhil A.",
-        date: "Jun 2026",
-        overall: 5,
-        responded: true,
-        described: true,
-        paid: true,
-        note: "Milestone payments cleared within a day each time, exactly as scoped.",
-      },
-      {
-        by: "Priya S.",
-        date: "Jun 2026",
-        overall: 4,
-        responded: true,
-        described: true,
-        paid: "na",
-        note: "Scope was exactly as described. Wasn't selected.",
-      },
-    ],
-  },
-  pixelforge: {
-    id: "pixelforge",
-    org: "PixelForge Ads",
-    person: "Naina Kapadia",
-    verify: "Platform reviewed",
-    since: "2023",
-    city: "Mumbai",
-    ratings: [
-      {
-        by: "Ritika J.",
-        date: "Jul 2026",
-        overall: 5,
-        responded: true,
-        described: true,
-        paid: true,
-        note: "Fastest payment I've had — invoice cleared the same week.",
-      },
-    ],
-  },
-};
-
-const SEED_PROJECTS: Project[] = [
-  {
-    id: 0,
-    rid: "brightloop",
-    role: "Frontend Developer — React",
-    project: "Bloom Grocery App Rebuild",
-    format: "Web Development",
-    city: "Remote",
-    paid: "Paid",
-    comp: "₹80,000 fixed, paid in 2 milestones",
-    deadline: "9 Aug",
-    window: "Sep–Oct 2026",
-    langs: ["React", "Next.js"],
-    age: "₹60,000–90,000",
-    gender: "Any",
-    mode: "Async, then video call",
-    skills: ["API Integration"],
-    desc: "Rebuild the checkout flow and product catalogue for a grocery delivery app. Clean component architecture over cleverness. Comfortable working from Figma files and shipping in two-week milestones.",
-  },
-  {
-    id: 1,
-    rid: "pixelforge",
-    role: "Product photographer — festive campaign",
-    project: "Diwali catalogue shoot",
-    format: "Photography",
-    city: "Mumbai",
-    paid: "Paid",
-    comp: "₹25,000/day + usage rights",
-    deadline: "2 Aug",
-    window: "12–13 Aug 2026",
-    langs: [],
-    age: "₹20,000–30,000/day",
-    gender: "Any",
-    mode: "In-person shoot",
-    skills: ["Studio Lighting"],
-    desc: "Two studio days shooting packaged food and gift hampers for a festive catalogue. Own lighting kit required. Prior e-commerce or catalogue work helpful.",
-  },
-];
-
 export interface Session {
   role: RoleType;
   name: string;
@@ -223,8 +133,8 @@ const MarketplaceContext = createContext<MarketplaceContextType | null>(null);
 
 export function MarketplaceProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [projects, setProjects] = useState<Project[]>(SEED_PROJECTS);
-  const [clients, setClients] = useState<Record<string, ClientProfile>>(SEED_CLIENTS);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [clients, setClients] = useState<Record<string, ClientProfile>>({});
   const [myApps, setMyApps] = useState<UserApplication[]>([]);
   const [applicantLanes, setApplicantLanes] = useState<Record<string, ApplicantCandidate[]>>({
     new: [],
@@ -256,33 +166,38 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
           .select("*")
           .order("created_at", { ascending: false });
 
-        if (!projErr && dbProjects && dbProjects.length > 0) {
-          const mappedProjects: Project[] = dbProjects.map((p) => ({
-            id: p.id,
-            rid: p.client_id || "brightloop",
-            role: p.role_title,
-            project: p.title,
-            format: p.category,
-            city: p.city,
-            paid: p.compensation_type === "Unpaid" ? "Unpaid" : p.compensation_type === "Hourly" ? "Hourly" : "Paid",
-            comp: p.compensation_details,
-            deadline: p.deadline,
-            window: p.is_flexible_dates ? "Dates not locked" : `${p.start_date || ""}–${p.end_date || ""}`,
-            langs: p.required_tools || [],
-            age: `₹${p.budget_min?.toLocaleString("en-IN") || 0}–${p.budget_max?.toLocaleString("en-IN") || 0}`,
-            gender: p.experience_required || "Any",
-            mode: p.interview_mode || "Async",
-            skills: p.additional_skills || [],
-            desc: p.description,
-            status: p.status,
-          }));
-          setProjects(mappedProjects);
+        if (!projErr) {
+          if (dbProjects && dbProjects.length > 0) {
+            const mappedProjects: Project[] = dbProjects.map((p) => ({
+              id: p.id,
+              rid: p.client_id || "client",
+              role: p.role_title,
+              project: p.title,
+              format: p.category,
+              city: p.city,
+              paid: p.compensation_type === "Unpaid" ? "Unpaid" : p.compensation_type === "Hourly" ? "Hourly" : "Paid",
+              comp: p.compensation_details,
+              deadline: p.deadline,
+              window: p.is_flexible_dates ? "Dates not locked" : `${p.start_date || ""}–${p.end_date || ""}`,
+              langs: p.required_tools || [],
+              age: `₹${p.budget_min?.toLocaleString("en-IN") || 0}–${p.budget_max?.toLocaleString("en-IN") || 0}`,
+              gender: p.experience_required || "Any",
+              mode: p.interview_mode || "Async",
+              skills: p.additional_skills || [],
+              desc: p.description,
+              status: p.status,
+            }));
+            setProjects(mappedProjects);
+          } else {
+            // Live database is empty
+            setProjects([]);
+          }
         }
 
         // 2. Fetch live profiles from Supabase
         const { data: dbProfiles } = await supabase.from("profiles").select("*");
-        if (dbProfiles && dbProfiles.length > 0) {
-          const clientMap: Record<string, ClientProfile> = { ...SEED_CLIENTS };
+        if (dbProfiles) {
+          const clientMap: Record<string, ClientProfile> = {};
           dbProfiles.forEach((p) => {
             if (p.role === "client" || p.role === "indie") {
               clientMap[p.id] = {
@@ -323,7 +238,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
           });
         }
       } catch (e) {
-        console.warn("Supabase fetch error, maintaining state:", e);
+        console.warn("Supabase fetch error:", e);
       }
     }
     setIsLoading(false);
@@ -335,23 +250,15 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
       if (savedSession) {
         setSession(JSON.parse(savedSession));
       }
-      const savedProjects = localStorage.getItem("brief_projects");
-      if (savedProjects) {
-        setProjects(JSON.parse(savedProjects));
-      }
-      const savedMyApps = localStorage.getItem("brief_myapps");
-      if (savedMyApps) {
-        setMyApps(JSON.parse(savedMyApps));
-      }
     } catch (e) {}
     refreshData();
   }, [refreshData]);
 
   const loginAsDemo = (role: RoleType) => {
     const names: Record<RoleType, { name: string; rid?: string }> = {
-      freelancer: { name: "Keerti Sharma" },
-      client: { name: "Aditya Mehra", rid: "brightloop" },
-      indie: { name: "Rhea Kapoor", rid: "indie" },
+      freelancer: { name: "Freelancer" },
+      client: { name: "Client Account", rid: "client" },
+      indie: { name: "Independent Client", rid: "indie" },
       admin: { name: "Admin Desk" },
     };
     const user = names[role];
@@ -362,7 +269,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     const newSession: Session = {
       role,
       name,
-      rid: rid || (role === "client" ? "brightloop" : role === "indie" ? "indie" : null),
+      rid: rid || (role === "client" ? "client" : role === "indie" ? "indie" : null),
     };
     setSession(newSession);
     try {
@@ -375,6 +282,8 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     setSession(null);
     try {
       localStorage.removeItem("brief_session");
+      localStorage.removeItem("brief_projects");
+      localStorage.removeItem("brief_myapps");
     } catch (e) {}
     showToast("Signed out.");
   };
@@ -448,9 +357,9 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
 
     // Add candidate to applicant lanes
     const candidate: ApplicantCandidate = {
-      n: session?.name || "Verified Freelancer",
-      c: "Mumbai · Verified Profile",
-      note: note || "Experienced specialist. Portfolio attached.",
+      n: session?.name || "Applicant",
+      c: "Verified Profile",
+      note: note || "Application submitted.",
       sampleUrl,
     };
     setApplicantLanes((prev) => ({
@@ -506,9 +415,6 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
         ratings: [newRating, ...updatedClients[project.rid].ratings],
       };
       setClients(updatedClients);
-      try {
-        localStorage.setItem("brief_clients", JSON.stringify(updatedClients));
-      } catch (e) {}
     }
 
     const updatedApps = [...myApps];
@@ -564,7 +470,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
   };
 
   const postProject = async (projectData: Omit<Project, "id">): Promise<number> => {
-    let nextId = projects.length ? Math.max(...projects.map((p) => p.id)) + 1 : 0;
+    let nextId = projects.length ? Math.max(...projects.map((p) => p.id)) + 1 : 1;
 
     const supabase = createClient();
     if (supabase) {
@@ -594,7 +500,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
           nextId = data.id;
         }
       } catch (err) {
-        console.warn("Supabase project insert fallback:", err);
+        console.warn("Supabase project insert:", err);
       }
     }
 
@@ -604,9 +510,6 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     };
     const updated = [newProject, ...projects];
     setProjects(updated);
-    try {
-      localStorage.setItem("brief_projects", JSON.stringify(updated));
-    } catch (e) {}
     showToast("Project published.");
     return nextId;
   };
@@ -671,7 +574,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
           role: "freelancer",
         });
       } catch (err) {
-        console.warn("Supabase profile upsert note:", err);
+        console.warn("Supabase profile upsert:", err);
       }
     }
 

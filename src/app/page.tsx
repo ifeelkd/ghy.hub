@@ -6,12 +6,12 @@ import { useMarketplace } from "@/lib/store/marketplace-store";
 import ProjectCard from "@/components/cards/ProjectCard";
 import SignatureShareCard from "@/components/cards/SignatureShareCard";
 import OnboardingGuideModal from "@/components/ui/OnboardingGuideModal";
-import { Sparkles, ShieldCheck } from "lucide-react";
+import { Sparkles, ShieldCheck, PlusCircle } from "lucide-react";
 
 export default function LandingPage() {
   const { projects } = useMarketplace();
   const [isGuideOpen, setIsGuideOpen] = useState(false);
-  const featuredProjects = projects.slice(0, 3);
+  const featuredProjects = projects.slice(0, 6);
 
   return (
     <main className="animate-view-in">
@@ -52,7 +52,7 @@ export default function LandingPage() {
             </div>
 
             <div>
-              <SignatureShareCard />
+              <SignatureShareCard project={projects[0]} />
             </div>
           </div>
         </section>
@@ -141,16 +141,44 @@ export default function LandingPage() {
         <section className="section" style={{ paddingTop: 0 }}>
           <span className="eyebrow">Live</span>
           <h2 className="display section-title">Open projects</h2>
-          <div className="cards">
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
-          <div style={{ textAlign: "center", marginTop: "1.6rem" }}>
-            <Link href="/explore" className="btn btn-ghost">
-              All projects
-            </Link>
-          </div>
+
+          {featuredProjects.length > 0 ? (
+            <>
+              <div className="cards">
+                {featuredProjects.map((project) => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
+              </div>
+              <div style={{ textAlign: "center", marginTop: "1.6rem" }}>
+                <Link href="/explore" className="btn btn-ghost">
+                  All projects
+                </Link>
+              </div>
+            </>
+          ) : (
+            <div
+              className="glass"
+              style={{
+                borderRadius: "var(--r)",
+                padding: "2.5rem 1.5rem",
+                textAlign: "center",
+                marginTop: "1.2rem",
+              }}
+            >
+              <h3 style={{ fontSize: "1.3rem", marginBottom: "0.4rem" }}>No open projects yet</h3>
+              <p className="meta" style={{ marginBottom: "1.2rem" }}>
+                Be the first to post a verified brief or build your freelancer profile.
+              </p>
+              <div style={{ display: "flex", gap: "0.6rem", justifyContent: "center", flexWrap: "wrap" }}>
+                <Link href="/post-project" className="btn btn-primary btn-sm">
+                  <PlusCircle size={16} /> Post a project
+                </Link>
+                <Link href="/onboarding" className="btn btn-ghost btn-sm">
+                  Build freelancer profile
+                </Link>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* VERIFICATION TIERS */}

@@ -111,7 +111,7 @@ export default function PostProjectPage() {
       const budgetText = `₹${minNum.toLocaleString("en-IN")}–${maxNum.toLocaleString("en-IN")}`;
       
       const newId = await postProject({
-        rid: session?.rid || "brightloop",
+        rid: session?.rid || "client",
         role: roleTitle,
         project: title,
         format: format[0] || "Web Development",
@@ -567,7 +567,7 @@ export default function PostProjectPage() {
             <SignatureShareCard
               project={{
                 id: createdProjectId || 0,
-                rid: session?.rid || "brightloop",
+                rid: session?.rid || "client",
                 role: roleTitle || "Position Title",
                 project: title || "Project Title",
                 format: format[0] || "Web Development",

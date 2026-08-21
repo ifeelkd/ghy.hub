@@ -9,9 +9,9 @@ import TrustRatingPanel from "@/components/ui/TrustRatingPanel";
 export default function ClientDashboardPage() {
   const { session, projects, clients, aggregateRatings, applicantLanes } = useMarketplace();
 
-  const rid = session?.rid || "brightloop";
-  const client = clients[rid] || clients.brightloop;
-  const clientProjects = projects.filter((p) => p.rid === rid);
+  const rid = session?.rid || "client";
+  const client = clients[rid];
+  const clientProjects = projects.filter((p) => p.rid === rid || !session?.rid);
   const aggregate = aggregateRatings(rid);
 
   const totalApplications =
@@ -38,10 +38,10 @@ export default function ClientDashboardPage() {
           <div>
             <span className="eyebrow">Dashboard</span>
             <h1 className="display" style={{ fontSize: "clamp(1.9rem, 4vw, 2.7rem)" }}>
-              {client.org}
+              {client?.org || session?.name || "Client Account"}
             </h1>
             <p className="meta" style={{ marginTop: "0.3rem" }}>
-              {client.verify} · on Brief since {client.since}
+              {client?.verify || "Identity verified"} · on Brief since {client?.since || "2026"}
             </p>
           </div>
 

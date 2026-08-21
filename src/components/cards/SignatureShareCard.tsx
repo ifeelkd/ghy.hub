@@ -38,7 +38,7 @@ export default function SignatureShareCard({
     ? `${baseOrigin}/onboarding`
     : project
     ? `${baseOrigin}/projects/${project.id}`
-    : `${baseOrigin}/explore`;
+    : `${baseOrigin}/post-project`;
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -83,56 +83,65 @@ export default function SignatureShareCard({
     );
   }
 
-  const role = project || {
-    id: 0,
-    rid: "brightloop",
-    role: "Frontend Developer — React",
-    project: "Bloom Grocery App",
-    format: "Web Development",
-    city: "Remote",
-    paid: "Paid" as const,
-    comp: "₹80,000 fixed, paid in 2 milestones",
-    deadline: "9 Aug",
-    window: "Sep–Oct 2026",
-    langs: ["React", "Remote"],
-    age: "6–8 weeks",
-    gender: "Any",
-    mode: "Async, then video call",
-    skills: ["API Integration"],
-    desc: "",
-  };
+  // If a real project is passed
+  if (project) {
+    const recruiter = clients[project.rid];
+    const aggregate = aggregateRatings(project.rid);
 
-  const recruiter = clients[role.rid];
-  const aggregate = aggregateRatings(role.rid);
+    return (
+      <div className="sig-card glass-strong" role="img" aria-label="Project card">
+        <span className="sig-tag">✓ Now hiring</span>
+        <h3>{project.project}</h3>
+        <p className="role-line">
+          {project.role} · {project.city} · {project.age || "Competitive"}
+        </p>
+        <div className="sig-meta">
+          {recruiter && <Badge variant="verify">✓ {recruiter.verify}</Badge>}
+          <Badge variant={project.paid === "Unpaid" ? "unpaid" : "paid"}>{project.paid}</Badge>
+          <Badge variant="unpaid">{project.city}</Badge>
+          {aggregate.n > 0 ? (
+            <span className="score-inline">
+              <span className="n">{aggregate.avg}</span>
+              <em>· {aggregate.n} ratings</em>
+            </span>
+          ) : (
+            <span className="score-inline">
+              <em>New verified listing</em>
+            </span>
+          )}
+        </div>
+        <div className="sig-foot">
+          <span className="sig-link">
+            {shareUrl.replace(/^https?:\/\//, "")}
+            <br />
+            <b style={{ color: "var(--ink)" }}>Apply on Brief</b>
+          </span>
+          <div className="qr-canvas-wrap">
+            <canvas ref={canvasRef} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
+  // Empty showcase card if no project has been posted yet
   return (
-    <div className="sig-card glass-strong" role="img" aria-label="Example project card">
-      <span className="sig-tag">✓ Now hiring</span>
-      <h3>{role.project}</h3>
+    <div className="sig-card glass-strong" role="img" aria-label="Showcase share card">
+      <span className="sig-tag">✓ Verified Brief</span>
+      <h3>Post your first brief</h3>
       <p className="role-line">
-        {role.role} · {role.city} · {role.age || "6–8 weeks"}
+        Dev · Design · Photography · Video · Content
       </p>
       <div className="sig-meta">
-        {recruiter && <Badge variant="verify">✓ {recruiter.verify}</Badge>}
-        <Badge variant={role.paid === "Unpaid" ? "unpaid" : "paid"}>{role.paid}</Badge>
-        <Badge variant="unpaid">{role.city}</Badge>
-        {aggregate.n > 0 ? (
-          <span className="score-inline">
-            <span className="n">{aggregate.avg}</span>
-            <em>· {aggregate.n} ratings</em>
-          </span>
-        ) : (
-          <span className="score-inline">
-            <span className="n">4.6</span>
-            <em>· 23 ratings</em>
-          </span>
-        )}
+        <Badge variant="verify">✓ Organisation verified</Badge>
+        <Badge variant="paid">Zero platform fee</Badge>
+        <Badge variant="unpaid">Remote &amp; Local</Badge>
       </div>
       <div className="sig-foot">
         <span className="sig-link">
           {shareUrl.replace(/^https?:\/\//, "")}
           <br />
-          <b style={{ color: "var(--ink)" }}>Apply on Brief</b>
+          <b style={{ color: "var(--ink)" }}>Post a project</b>
         </span>
         <div className="qr-canvas-wrap">
           <canvas ref={canvasRef} />
