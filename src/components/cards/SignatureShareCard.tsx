@@ -71,9 +71,9 @@ export default function SignatureShareCard({
         </div>
         <div className="sig-foot">
           <span className="sig-link">
-            {shareUrl.replace(/^https?:\/\//, "")}
+            <span style={{ color: "var(--muted)", fontSize: "0.74rem" }}>Scan QR code to</span>
             <br />
-            <b style={{ color: "var(--ink)" }}>View full profile</b>
+            <b style={{ color: "var(--ink)", fontSize: "0.86rem" }}>View full profile</b>
           </span>
           <div className="qr-canvas-wrap">
             <canvas ref={canvasRef} />
@@ -112,9 +112,9 @@ export default function SignatureShareCard({
         </div>
         <div className="sig-foot">
           <span className="sig-link">
-            {shareUrl.replace(/^https?:\/\//, "")}
+            <span style={{ color: "var(--muted)", fontSize: "0.74rem" }}>Scan QR code to</span>
             <br />
-            <b style={{ color: "var(--ink)" }}>Apply on Brief</b>
+            <b style={{ color: "var(--ink)", fontSize: "0.86rem" }}>Apply on Brief</b>
           </span>
           <div className="qr-canvas-wrap">
             <canvas ref={canvasRef} />
@@ -139,9 +139,9 @@ export default function SignatureShareCard({
       </div>
       <div className="sig-foot">
         <span className="sig-link">
-          {shareUrl.replace(/^https?:\/\//, "")}
+          <span style={{ color: "var(--muted)", fontSize: "0.74rem" }}>Verified marketplace</span>
           <br />
-          <b style={{ color: "var(--ink)" }}>Post a project</b>
+          <b style={{ color: "var(--ink)", fontSize: "0.86rem" }}>Brief for Freelancers</b>
         </span>
         <div className="qr-canvas-wrap">
           <canvas ref={canvasRef} />
