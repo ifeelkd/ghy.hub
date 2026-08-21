@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Brief — Freelance work, verified</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#ECEAE5;
+  --ink:#1E1B29;
+  --muted:#5E5A6B;
+  --faint:#66616F;
+  --line:rgba(30,27,41,.09);
+  --glass:rgba(255,255,255,.58);
+  --glass-strong:rgba(255,255,255,.74);
+  --accent:#5B4E8F;
+  --accent-deep:#443868;
+  --accent-tint:rgba(91,78,143,.10);
+  --accent-tint2:rgba(91,78,143,.16);
+  --ok:#4E7D5B; --ok-tint:rgba(78,125,91,.12);
+  --warn:#96525A; --warn-tint:rgba(150,82,90,.12);
+  --r:18px; --r-sm:12px;
+  --shadow:0 1px 2px rgba(25,20,35,.05),0 16px 40px rgba(25,20,35,.08);
+  --shadow-soft:0 1px 2px rgba(25,20,35,.04),0 8px 24px rgba(25,20,35,.06);
+  --font-display:"Instrument Serif",Georgia,serif;
+  --font-body:"Instrument Sans",-apple-system,"Segoe UI",sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+  font-family:var(--font-body);color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;line-height:1.55;
+  min-height:100vh;
+}
+.bg-wash{
+  position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(1100px 600px at 85% -10%, rgba(150,135,190,.20), transparent 60%),
+    radial-gradient(900px 700px at -10% 30%, rgba(255,255,255,.65), transparent 55%),
+    radial-gradient(1000px 800px at 50% 110%, rgba(130,115,165,.14), transparent 60%),
+    var(--bg);
+}
+::selection{background:var(--accent-tint2)}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;-webkit-appearance:none;appearance:none;touch-action:manipulation;-webkit-tap-highlight-color:rgba(91,78,143,.15)}
+a,button,.chip,.mini,.role-card,.upload-zone{touch-action:manipulation}
+input,select,textarea{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+/* ============ GLASS MATERIAL ============ */
+.glass{
+  background:var(--glass);
+  -webkit-backdrop-filter:blur(18px) saturate(1.15);
+  backdrop-filter:blur(18px) saturate(1.15);
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.65),var(--shadow-soft);
+}
+.glass-strong{
+  background:var(--glass-strong);
+  -webkit-backdrop-filter:blur(24px) saturate(1.2);
+  backdrop-filter:blur(24px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.65);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),var(--shadow);
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass{background:rgba(255,255,255,.94)}
+  .glass-strong{background:rgba(255,255,255,.97)}
+}
+@media (prefers-reduced-transparency:reduce){
+  .glass,.glass-strong{background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+
+/* ============ TYPE ============ */
+.display{font-family:var(--font-display);font-weight:400;letter-spacing:-.01em;line-height:1.08}
+.eyebrow{
+  font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);display:inline-flex;align-items:center;gap:.5rem;
+}
+.eyebrow::before{content:"";width:18px;height:1px;background:var(--accent);opacity:.6}
+.meta{font-size:.8rem;color:var(--faint);font-variant-numeric:tabular-nums}
+.section-title{font-size:clamp(1.7rem,3.5vw,2.4rem)}
+.lead{color:var(--muted);font-size:1.05rem;max-width:56ch}
+
+/* ============ NAV ============ */
+.nav-wrap{position:fixed;top:0;left:0;right:0;z-index:60;padding:calc(.9rem + env(safe-area-inset-top)) clamp(.8rem,3vw,1.5rem) .9rem;display:flex;justify-content:center;pointer-events:none}
+.nav{pointer-events:auto}
+.nav{
+  width:100%;max-width:1060px;border-radius:999px;
+  display:flex;align-items:center;gap:.25rem;padding:.45rem .55rem .45rem 1.05rem;
+}
+.brand{font-family:var(--font-display);font-size:1.35rem;letter-spacing:.01em;margin-right:.5rem;display:flex;align-items:baseline;gap:.45rem;flex-shrink:0}
+.brand small{font-family:var(--font-body);font-size:.62rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+.nav-links{display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none;flex:1;-webkit-overflow-scrolling:touch}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-link{
+  padding:.5rem .85rem;border-radius:999px;font-size:.88rem;font-weight:500;color:var(--muted);
+  white-space:nowrap;transition:background .18s ease,color .18s ease;
+}
+.nav-link:hover{background:rgba(30,27,41,.05);color:var(--ink)}
+.nav-link.active{background:var(--accent-tint2);color:var(--accent-deep)}
+.nav-cta{flex-shrink:0}
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+  padding:.68rem 1.25rem;border-radius:999px;font-weight:600;font-size:.9rem;
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+  white-space:nowrap;
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 2px 8px rgba(68,56,104,.28),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn-primary:hover{background:var(--accent-deep);transform:translateY(-1px);box-shadow:0 6px 18px rgba(68,56,104,.32),inset 0 1px 0 rgba(255,255,255,.2)}
+.btn-ghost{background:rgba(255,255,255,.5);border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{background:#fff;transform:translateY(-1px)}
+.btn-quiet{color:var(--muted);padding:.5rem .8rem}
+.btn-quiet:hover{color:var(--ink)}
+.btn-sm{padding:.42rem .85rem;font-size:.82rem}
+.btn[disabled]{opacity:.45;pointer-events:none}
+
+.nav-cta .short{display:none}
+
+/* ============ LAYOUT ============ */
+.view{display:none;padding-top:5.2rem;min-height:100vh;min-height:100dvh}
+.view.on{display:block;animation:viewIn .35s ease}
+@keyframes viewIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.container{max-width:1060px;margin:0 auto;padding:0 clamp(1rem,4vw,1.5rem)}
+.section{padding:clamp(2.5rem,6vw,4.5rem) 0}
+
+/* ============ HERO ============ */
+.hero{padding:clamp(2rem,6vw,5rem) 0 clamp(2rem,5vw,3.5rem)}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(2rem,5vw,4rem);align-items:center}
+.hero h1{font-size:clamp(2.5rem,6vw,4.1rem);margin:.9rem 0 1.1rem}
+.hero h1 em{font-style:italic;color:var(--accent-deep)}
+.hero-ctas{display:flex;gap:.7rem;margin-top:1.6rem;flex-wrap:wrap}
+.hero-note{margin-top:1.1rem;font-size:.82rem;color:var(--faint)}
+
+/* signature share card */
+.sig-card{
+  border-radius:22px;padding:1.5rem;position:relative;overflow:hidden;
+  max-width:390px;margin:0 auto;
+  transition:transform .4s ease;
+}
+.sig-card::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.35) 0%,transparent 40%);
+}
+.sig-tag{display:inline-flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--accent-deep);background:var(--accent-tint);padding:.32rem .7rem;border-radius:999px}
+.sig-card h3{font-family:var(--font-display);font-size:1.85rem;line-height:1.1;margin:.9rem 0 .35rem}
+.sig-card .role-line{color:var(--muted);font-size:.92rem}
+.sig-meta{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 1.1rem}
+.sig-foot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:.9rem}
+.qr{width:44px;height:44px;border-radius:8px;background:
+  conic-gradient(var(--ink) 25%,transparent 0 50%,var(--ink) 0 75%,transparent 0) 0 0/50% 50%;
+  opacity:.85;flex-shrink:0}
+.sig-link{font-size:.78rem;color:var(--faint)}
+.badge{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:600;padding:.28rem .65rem;border-radius:999px;white-space:nowrap}
+.badge svg{flex-shrink:0}
+.b-verify{background:var(--accent-tint);color:var(--accent-deep)}
+.b-paid{background:var(--ok-tint);color:var(--ok)}
+.b-unpaid{background:rgba(30,27,41,.06);color:var(--muted)}
+.b-warn{background:var(--warn-tint);color:var(--warn)}
+
+/* trust strip */
+.trust-strip{border-radius:var(--r);padding:1.1rem 1.4rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;justify-content:center;text-align:center}
+.trust-strip strong{font-weight:650}
+.trust-strip .meta{width:100%}
+
+/* how it works */
+.journeys{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-top:2rem}
+.journey{border-radius:var(--r);padding:1.6rem}
+.journey h3{font-family:var(--font-display);font-size:1.5rem;margin-bottom:1.1rem}
+.step{display:flex;gap:.9rem;padding:.7rem 0;border-top:1px solid var(--line)}
+.step:first-of-type{border-top:none}
+.step-n{font-family:var(--font-display);font-size:1.25rem;color:var(--accent);min-width:1.4rem;line-height:1.3}
+.step b{display:block;font-weight:600;font-size:.95rem}
+.step p{font-size:.86rem;color:var(--muted)}
+
+/* project cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.1rem;margin-top:1.6rem}
+.role-card{border-radius:var(--r);padding:1.3rem;display:flex;flex-direction:column;gap:.65rem;transition:transform .2s ease,box-shadow .2s ease;cursor:pointer;text-align:left}
+.role-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.role-card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:.6rem}
+.role-card h4{font-size:1.06rem;font-weight:650;line-height:1.3}
+.role-card .proj{font-size:.84rem;color:var(--muted)}
+.chip-row{display:flex;flex-wrap:wrap;gap:.35rem}
+.role-card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:.6rem;border-top:1px solid var(--line)}
+
+/* safety tiers */
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1rem;margin-top:1.6rem}
+.tier{border-radius:var(--r);padding:1.25rem}
+.tier b{display:block;margin:.6rem 0 .25rem}
+.tier p{font-size:.84rem;color:var(--muted)}
+.tier-dot{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--accent-tint)}
+
+/* footer */
+footer{padding:3rem 0 calc(6rem + env(safe-area-inset-bottom));text-align:center;color:var(--faint);font-size:.82rem}
+.foot-cta{border-radius:26px;padding:clamp(2rem,5vw,3.5rem);text-align:center;margin-bottom:2.5rem}
+.foot-cta h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:.7rem}
+
+/* ============ EXPLORE ============ */
+.explore-head{padding:1.5rem 0 .5rem}
+.search-bar{display:flex;align-items:center;gap:.7rem;border-radius:999px;padding:.35rem .5rem .35rem 1.1rem;margin:1.2rem 0 .9rem}
+.search-bar svg{flex-shrink:0;opacity:.5}
+.search-bar input{flex:1;border:none;background:none;outline:none;font-size:.95rem;padding:.55rem 0;min-width:0}
+.filters{display:flex;gap:.45rem;overflow-x:auto;padding-bottom:.5rem;scrollbar-width:none}
+.filters::-webkit-scrollbar{display:none}
+.chip{padding:.42rem .9rem;border-radius:999px;font-size:.83rem;font-weight:550;border:1px solid var(--line);background:rgba(255,255,255,.5);color:var(--muted);white-space:nowrap;transition:all .15s ease}
+.chip:hover{background:#fff;color:var(--ink)}
+.chip.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+.results-meta{margin:.6rem 0 0}
+.empty{padding:3rem 1rem;text-align:center;color:var(--muted)}
+
+/* ============ PROJECT DETAIL ============ */
+.detail-hero{border-radius:22px;padding:clamp(1.5rem,4vw,2.5rem);margin-top:1.2rem}
+.detail-hero h1{font-size:clamp(1.9rem,4.5vw,3rem);margin:.7rem 0 .3rem}
+.detail-grid{display:grid;grid-template-columns:1.4fr .8fr;gap:1.2rem;margin-top:1.2rem;align-items:start}
+.panel{border-radius:var(--r);padding:1.4rem}
+.panel h3{font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-bottom:.8rem}
+.panel p{color:var(--muted);font-size:.93rem}
+.kv{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-top:1px solid var(--line);font-size:.9rem}
+.kv:first-of-type{border-top:none}
+.kv span{color:var(--faint)}
+.kv b{font-weight:600;text-align:right}
+.sticky-side{position:sticky;top:5.5rem;display:flex;flex-direction:column;gap:1rem}
+.back-link{display:inline-flex;align-items:center;gap:.4rem;color:var(--muted);font-size:.88rem;font-weight:550;margin-top:1rem}
+.back-link:hover{color:var(--ink)}
+
+/* ============ FORMS / ONBOARDING ============ */
+.flow-wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:1.4rem;align-items:start;margin-top:1.4rem}
+.flow-main{border-radius:22px;padding:clamp(1.4rem,3.5vw,2.2rem)}
+.progress{height:4px;border-radius:99px;background:rgba(30,27,41,.08);overflow:hidden;margin:1rem 0 1.8rem}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease}
+.fstep{display:none}
+.fstep.on{display:block;animation:viewIn .3s ease}
+.fstep h2{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:.3rem}
+.fstep .hint{color:var(--muted);font-size:.92rem;margin-bottom:1.5rem}
+.field{margin-bottom:1.1rem}
+.field label{display:block;font-size:.84rem;font-weight:600;margin-bottom:.4rem}
+.field .sub{font-weight:400;color:var(--faint)}
+.field input[type=text],.field input[type=url],.field input[type=number],.field select,.field textarea{
+  width:100%;min-width:0;padding:.75rem .95rem;border-radius:var(--r-sm);border:1px solid var(--line);
+  background:rgba(255,255,255,.75);outline:none;transition:border .15s,box-shadow .15s;font-size:.93rem;
+}
+.field textarea{resize:vertical;min-height:90px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.chips-select{display:flex;flex-wrap:wrap;gap:.4rem}
+.flow-nav{display:flex;justify-content:space-between;gap:.8rem;margin-top:1.8rem;padding-top:1.3rem;border-top:1px solid var(--line)}
+.upload-zone{
+  border:1.5px dashed rgba(91,78,143,.4);border-radius:var(--r);padding:2rem 1rem;text-align:center;
+  color:var(--muted);background:var(--accent-tint);cursor:pointer;transition:background .15s;font-size:.9rem;
+}
+.upload-zone:hover{background:var(--accent-tint2)}
+.upload-zone b{display:block;color:var(--accent-deep);margin-bottom:.2rem}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:.8rem}
+.thumb{aspect-ratio:3/4;border-radius:var(--r-sm);background:linear-gradient(160deg,#D6CFE3,#A79BC4);position:relative;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.thumb.empty-t{background:rgba(30,27,41,.05);border:1px dashed var(--line)}
+.thumb .x{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:99px;background:rgba(30,27,41,.55);color:#fff;font-size:.7rem;display:flex;align-items:center;justify-content:center}
+/* live preview card */
+.preview-card{border-radius:22px;padding:1.5rem;position:sticky;top:5.5rem}
+.preview-card .pv-photo{aspect-ratio:4/3;border-radius:var(--r-sm);background:linear-gradient(150deg,#D8CFE7,#9C8BC0);margin-bottom:1rem;display:flex;align-items:flex-end;padding:.9rem;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+.pv-name{font-family:var(--font-display);font-size:1.6rem;color:#fff;text-shadow:0 1px 12px rgba(30,20,45,.4)}
+.completion{display:flex;align-items:center;gap:.7rem;margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--line)}
+.ring{--p:10;width:42px;height:42px;border-radius:50%;background:conic-gradient(var(--accent) calc(var(--p)*1%),rgba(30,27,41,.08) 0);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ring i{width:32px;height:32px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:.66rem;font-weight:700;color:var(--accent-deep)}
+/* success */
+.success-wrap{text-align:center;padding:2.5rem 1rem}
+.success-ico{width:64px;height:64px;border-radius:50%;background:var(--ok-tint);color:var(--ok);display:flex;align-items:center;justify-content:center;margin:0 auto 1.2rem;animation:pop .45s ease}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+/* fee guard */
+.field.bad input,.field.bad textarea,.field.bad select,.field.bad .tk{border-color:var(--warn)!important;box-shadow:0 0 0 3px var(--warn-tint)}
+.err{color:var(--warn);font-size:.78rem;font-weight:600;margin-top:.4rem}
+.guard{border-radius:var(--r-sm);padding:1rem 1.1rem;background:var(--warn-tint);color:var(--warn);font-size:.88rem;display:none;margin-top:.8rem}
+.guard.on{display:block}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:rgba(255,255,255,.55)}
+.seg button{flex:1;padding:.6rem;font-size:.88rem;font-weight:550;color:var(--muted);transition:all .15s}
+.seg button.sel{background:var(--accent);color:#fff}
+
+/* summary card (client flow) */
+.sum-list{font-size:.88rem}
+.sum-list .kv b{max-width:60%;overflow-wrap:anywhere}
+
+/* ============ APPLICATIONS BOARD ============ */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:1.4rem;align-items:start}
+.lane{border-radius:var(--r);padding:.9rem;min-height:200px}
+.lane-head{display:flex;justify-content:space-between;align-items:center;padding:.2rem .3rem .8rem}
+.lane-head b{font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.lane-count{font-size:.72rem;font-weight:700;background:rgba(30,27,41,.07);border-radius:99px;padding:.15rem .55rem;color:var(--muted)}
+.app-card{border-radius:var(--r-sm);padding:.9rem;margin-bottom:.7rem;background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.6);box-shadow:var(--shadow-soft);animation:viewIn .25s ease}
+.app-top{display:flex;gap:.7rem;align-items:center;margin-bottom:.5rem}
+.avatar{width:38px;height:38px;border-radius:12px;background:linear-gradient(150deg,#C7B9DD,#8A75B5);color:#fff;font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.app-top b{font-size:.9rem;display:block;line-height:1.2}
+.app-top .meta{font-size:.74rem}
+.app-note{font-size:.8rem;color:var(--muted);margin-bottom:.6rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.app-actions{display:flex;gap:.35rem;flex-wrap:wrap}
+.mini{font-size:.72rem;font-weight:600;padding:.32rem .6rem;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--muted);transition:all .15s}
+.mini:hover{color:var(--ink);border-color:var(--faint)}
+.mini.act{background:var(--accent-tint);border-color:transparent;color:var(--accent-deep)}
+
+/* ============ MODAL ============ */
+.modal-veil{position:fixed;inset:0;background:rgba(30,27,41,.35);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);z-index:80;display:none;align-items:flex-end;justify-content:center;padding:0}
+.modal-veil.on{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{width:100%;max-width:520px;max-height:88vh;max-height:88dvh;overflow-y:auto;border-radius:24px 24px 0 0;padding:1.6rem calc(1.6rem + env(safe-area-inset-right)) calc(1.6rem + env(safe-area-inset-bottom)) calc(1.6rem + env(safe-area-inset-left));animation:sheetUp .3s ease}
+@keyframes sheetUp{from{transform:translateY(30px);opacity:0}to{transform:none;opacity:1}}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.1rem}
+.modal-head h3{font-size:1.25rem;font-weight:650}
+.modal-x{width:32px;height:32px;border-radius:99px;background:rgba(30,27,41,.06);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.modal-x:hover{background:rgba(30,27,41,.1);color:var(--ink)}
+
+/* toast */
+.toast{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:.75rem 1.3rem;border-radius:999px;font-size:.87rem;font-weight:550;opacity:0;transition:all .3s ease;z-index:99;pointer-events:none;box-shadow:0 10px 30px rgba(25,18,38,.3);max-width:92vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1023px){
+  .hero-grid{grid-template-columns:1fr;gap:2.2rem}
+  .sig-card{transform:rotate(0)}
+  .journeys{grid-template-columns:1fr}
+  .detail-grid{grid-template-columns:1fr}
+  .sticky-side{position:static}
+  .flow-wrap{grid-template-columns:1fr}
+  .preview-card{position:static}
+  .board{grid-auto-flow:column;grid-template-columns:none;grid-auto-columns:minmax(270px,78vw);overflow-x:auto;padding-bottom:1rem;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+  .lane{scroll-snap-align:start}
+}
+@media (max-width:639px){
+  .container{padding:0 calc(.85rem + env(safe-area-inset-left)) 0 calc(.85rem + env(safe-area-inset-right))}
+  .section{padding:1.9rem 0}
+  .hero{padding:1.5rem 0 1.7rem}
+  .hero h1{font-size:clamp(2rem,8.5vw,2.6rem)}
+  .hero-ctas{margin-top:1.2rem}
+  .view{padding-top:4.5rem}
+  .nav-wrap{padding:calc(.55rem + env(safe-area-inset-top)) .55rem .55rem}
+  .role-card{padding:1.05rem}
+  .journey{padding:1.1rem 1rem}
+  .panel{padding:1.05rem}
+  .flow-main{padding:1.15rem 1rem}
+  .preview-card{padding:1.1rem}
+  .detail-hero{padding:1.15rem 1rem}
+  .trust-strip{padding:.85rem .9rem}
+  .tier{padding:1rem}
+  .lane{padding:.65rem}
+  .foot-cta{padding:1.5rem 1rem}
+  footer{padding:2rem 0 4rem}
+  .sig-card{padding:1.15rem}
+  .fstep h2{font-size:1.45rem}
+  .fstep .hint{margin-bottom:1.1rem}
+  .nav{padding-left:.85rem}
+  .brand small{display:none}
+  .nav-cta .long{display:none}
+  .nav-cta .short{display:inline}
+  .field-row{grid-template-columns:1fr}
+  .thumbs{grid-template-columns:repeat(3,1fr)}
+  .flow-nav{flex-direction:column-reverse}
+  .flow-nav .btn{width:100%}
+  .hero-ctas .btn{flex:1;justify-content:center}
+}
+@media (min-width:640px){
+  .modal-veil{align-items:center;padding:1.5rem}
+  .modal{border-radius:24px;animation:modalIn .28s ease}
+  @keyframes modalIn{from{transform:translateY(14px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+}
+@media (pointer:coarse),(max-width:1023px){
+  .nav-link,.brand{min-height:44px;display:inline-flex;align-items:center}
+  .btn-sm{min-height:44px;padding-top:.5rem;padding-bottom:.5rem}
+  .chip{min-height:44px;display:inline-flex;align-items:center}
+  .mini{min-height:40px;display:inline-flex;align-items:center;padding:.4rem .75rem}
+  .acct .av{width:36px;height:36px}
+  .tk-chip{padding:.4rem .4rem .4rem .75rem}
+  .tk-chip button{width:24px;height:24px}
+  .modal-x{width:42px;height:42px}
+  .thumb .x{width:28px;height:28px;font-size:.8rem}
+  .tab{min-height:44px}
+  .lane-count,.status-pill{min-height:24px;display:inline-flex;align-items:center}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+}
+
+/* ============ AUTH ============ */
+.auth-wrap{min-height:100vh;min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:5.5rem 1rem 3rem}
+.auth-card{width:100%;max-width:440px;border-radius:24px;padding:clamp(1.4rem,4vw,2.2rem)}
+.auth-card h1{font-size:clamp(1.6rem,4vw,2.1rem);margin-bottom:.25rem}
+.auth-card .hint{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+.role-pick{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.2rem}
+.role-opt{display:flex;gap:.85rem;align-items:flex-start;text-align:left;padding:.9rem 1rem;border-radius:var(--r-sm);border:1px solid var(--line);background:rgba(255,255,255,.6);transition:border .15s,background .15s;width:100%}
+.role-opt:hover{background:#fff}
+.role-opt.sel{border-color:var(--accent);background:var(--accent-tint);box-shadow:0 0 0 3px var(--accent-tint)}
+.role-opt b{display:block;font-size:.94rem}
+.role-opt p{font-size:.8rem;color:var(--muted);margin-top:.1rem}
+.role-opt .rk{width:26px;height:26px;border-radius:8px;background:var(--accent-tint2);color:var(--accent-deep);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:.1rem}
+.otp-row{display:flex;gap:.5rem;margin-bottom:.4rem}
+.otp-row input{flex:1 1 0;width:100%;min-width:0;max-width:88px;text-align:center;font-size:1.25rem;font-weight:600;padding:.7rem .2rem;border-radius:var(--r-sm);border:1px solid var(--line);background:rgba(255,255,255,.75);outline:none;font-variant-numeric:tabular-nums;-webkit-appearance:none;appearance:none}
+.otp-row input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+.auth-note{font-size:.78rem;color:var(--faint);text-align:center;margin-top:.9rem;line-height:1.5}
+.demo-fill{border-top:1px solid var(--line);margin-top:1.2rem;padding-top:1rem}
+.demo-fill p{font-size:.75rem;color:var(--faint);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.demo-btns{display:flex;flex-wrap:wrap;gap:.4rem}
+.acct-wrap{position:relative;flex-shrink:0}
+.acct{display:flex;align-items:center;gap:.5rem;padding:.28rem .32rem .28rem .7rem;border-radius:999px;background:rgba(30,27,41,.05);flex-shrink:0;max-width:150px}
+.acct:hover{background:rgba(30,27,41,.09)}
+.acct b{font-size:.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acct .av{width:28px;height:28px;border-radius:999px;background:var(--accent);color:#fff;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.acct-menu{position:absolute;right:0;top:calc(100% + .5rem);min-width:210px;border-radius:16px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);padding:.4rem;display:none;z-index:70}
+.acct-menu.on{display:block}
+.acct-menu .who{padding:.65rem .75rem .15rem;font-size:.88rem;font-weight:650;line-height:1.3}
+.acct-menu .role{padding:0 .75rem .6rem;font-size:.76rem;color:var(--faint);border-bottom:1px solid var(--line);margin-bottom:.35rem}
+.acct-menu button{display:block;width:100%;text-align:left;padding:.72rem .75rem;border-radius:11px;font-size:.89rem;font-weight:600;min-height:44px}
+.acct-menu button:hover{background:rgba(30,27,41,.05)}
+.acct-menu button.out{color:var(--warn)}
+
+/* ============ TOKEN FIELD ============ */
+.tk{border:1px solid var(--line);border-radius:var(--r-sm);background:rgba(255,255,255,.75);padding:.45rem;transition:border .15s,box-shadow .15s}
+.tk.focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+.tk-chips{display:flex;flex-wrap:wrap;gap:.35rem}
+.tk-chips:not(:empty){margin-bottom:.4rem}
+.tk-chip{display:inline-flex;align-items:center;gap:.35rem;background:var(--accent-tint);color:var(--accent-deep);border-radius:999px;padding:.3rem .35rem .3rem .7rem;font-size:.82rem;font-weight:550}
+.tk-chip button{width:17px;height:17px;border-radius:999px;background:rgba(68,56,104,.18);color:var(--accent-deep);font-size:.62rem;display:flex;align-items:center;justify-content:center;line-height:1}
+.tk-chip button:hover{background:var(--accent);color:#fff}
+.tk-in{position:relative}
+.tk-in input{width:100%;border:none;background:none;outline:none;padding:.4rem .5rem;font-size:.92rem}
+.tk-menu{position:static;margin-top:.45rem;max-height:210px;overflow-y:auto;border-radius:var(--r-sm);background:#fff;border:1px solid var(--line);display:none;-webkit-overflow-scrolling:touch}
+.tk-menu.on{display:block}
+.tk-opt{display:block;width:100%;text-align:left;padding:.55rem .8rem;font-size:.88rem;color:var(--ink);border-bottom:1px solid rgba(30,27,41,.05)}
+.tk-opt:last-child{border-bottom:none}
+.tk-opt:hover,.tk-opt.hi{background:var(--accent-tint)}
+.tk-opt.add{color:var(--accent-deep);font-weight:600}
+.tk-opt .g{color:var(--faint);font-size:.78rem;float:right}
+.tk-empty{padding:.7rem .8rem;font-size:.84rem;color:var(--faint)}
+
+/* ============ RATINGS ============ */
+.score-lg{display:flex;align-items:baseline;gap:.45rem}
+.score-lg b{font-family:var(--font-display);font-size:2.3rem;line-height:1}
+.score-lg span{font-size:.85rem;color:var(--faint)}
+.score-inline{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:650;color:var(--ink);background:rgba(30,27,41,.055);padding:.24rem .55rem;border-radius:999px;white-space:nowrap}
+.score-inline .n{font-variant-numeric:tabular-nums}
+.score-inline em{font-style:normal;color:var(--faint);font-weight:500}
+.metric{display:grid;grid-template-columns:1fr auto;gap:.5rem .8rem;align-items:center;padding:.5rem 0;border-top:1px solid var(--line);font-size:.87rem}
+.metric:first-of-type{border-top:none}
+.metric .bar{grid-column:1/-1;height:4px;border-radius:99px;background:rgba(30,27,41,.08);overflow:hidden}
+.metric .bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.metric .bar i.low{background:var(--warn)}
+.metric b{font-variant-numeric:tabular-nums;font-weight:650}
+.rating-row{padding:.9rem 0;border-top:1px solid var(--line)}
+.rating-row:first-of-type{border-top:none}
+.rating-head{display:flex;justify-content:space-between;align-items:center;gap:.6rem;margin-bottom:.35rem}
+.rating-facts{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.5rem}
+.fact{font-size:.72rem;font-weight:600;padding:.22rem .55rem;border-radius:999px}
+.fact.y{background:var(--ok-tint);color:var(--ok)}
+.fact.n{background:var(--warn-tint);color:var(--warn)}
+.fact.na{background:rgba(30,27,41,.06);color:var(--faint)}
+.scale{display:flex;gap:.4rem}
+.scale button{flex:1;padding:.6rem 0;border-radius:var(--r-sm);border:1px solid var(--line);background:rgba(255,255,255,.7);font-weight:650;font-variant-numeric:tabular-nums;transition:all .15s}
+.scale button.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+.yn{display:flex;gap:.4rem}
+.yn button{flex:1;padding:.55rem 0;border-radius:var(--r-sm);border:1px solid var(--line);background:rgba(255,255,255,.7);font-size:.86rem;font-weight:600;color:var(--muted);transition:all .15s}
+.yn button.sel{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* ============ LISTS / ADMIN / DASH ============ */
+.row-item{display:flex;gap:1rem;align-items:center;padding:1rem;border-radius:var(--r);margin-bottom:.7rem}
+.row-item .grow{flex:1;min-width:0}
+.row-item h4{font-size:.97rem;font-weight:650}
+.row-item .meta{margin-top:.15rem}
+.row-actions{display:flex;gap:.4rem;flex-wrap:wrap;flex-shrink:0}
+.status-pill{font-size:.72rem;font-weight:700;padding:.24rem .6rem;border-radius:999px;letter-spacing:.03em;white-space:nowrap}
+.st-new{background:var(--accent-tint);color:var(--accent-deep)}
+.st-short{background:var(--ok-tint);color:var(--ok)}
+.st-closed{background:rgba(30,27,41,.07);color:var(--muted)}
+.st-rej{background:var(--warn-tint);color:var(--warn)}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin:1.2rem 0}
+.stat{border-radius:var(--r);padding:1rem 1.1rem}
+.stat b{display:block;font-family:var(--font-display);font-size:1.9rem;line-height:1.1}
+.stat span{font-size:.78rem;color:var(--faint)}
+.tabs{display:flex;gap:.3rem;border-bottom:1px solid var(--line);margin:1.2rem 0 1.2rem;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:.6rem .9rem;font-size:.88rem;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;margin-bottom:-1px}
+.tab.sel{color:var(--accent-deep);border-bottom-color:var(--accent)}
+.date-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.field input[type=date]{width:100%;padding:.72rem .95rem;border-radius:var(--r-sm);border:1px solid var(--line);background:rgba(255,255,255,.75);outline:none;font-size:.93rem;-webkit-appearance:none;appearance:none;min-height:44px}
+.field input[type=date]:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-tint)}
+.check{display:flex;gap:.6rem;align-items:flex-start;font-size:.87rem;color:var(--muted);cursor:pointer;padding:.4rem 0}
+.check input{width:18px;height:18px;accent-color:var(--accent);flex-shrink:0;margin-top:.1rem}
+@media (max-width:639px){
+  .date-row{grid-template-columns:1fr}
+  .tk-menu{max-height:180px}
+  .tk-opt{padding:.75rem .8rem;font-size:.92rem}
+  .row-item{flex-direction:column;align-items:flex-start;gap:.7rem}
+  .row-actions{width:100%}
+  .row-actions .btn,.row-actions .mini{flex:1;justify-content:center}
+  .auth-wrap{padding-top:4.8rem}
+}
+
+/* ---- touch targets: last so nothing overrides ---- */
+@media (pointer:coarse),(max-width:1023px){
+  input,select,textarea,.tk input,.otp-row input,.field input,.search-bar input{font-size:16px!important}
+  .otp-row input{font-size:20px!important}
+  .acct .av{width:42px!important;height:42px!important}
+  .tk-chip button{width:30px!important;height:30px!important}
+  .modal-x{width:42px!important;height:42px!important}
+  .thumb .x{width:28px!important;height:28px!important;font-size:.78rem}
+  .btn-quiet,.btn-sm{min-height:44px}
+  .mini{min-height:40px}
+  .nav-link,.chip,.tab{min-height:44px}
+}
+</style>
+</head>
+<body>
+<div class="bg-wash" aria-hidden="true"></div>
+
+<noscript>
+  <div style="position:relative;z-index:200;margin:5.6rem auto 0;max-width:640px;padding:1.1rem 1.2rem;border-radius:16px;background:#7A2B34;color:#fff;font:400 14px/1.55 -apple-system,'Segoe UI',sans-serif">
+    <b style="display:block;font-size:15px;margin-bottom:.35rem">This preview can&rsquo;t run the app.</b>
+    JavaScript is switched off here. On iPhone this usually means the file opened in <b>Quick Look</b> &mdash; the preview sheet in Files, Mail, or Messages &mdash; which renders pages but never runs them. iOS also blocks Safari from opening local files, so there is no in-preview fix.
+    <span style="display:block;margin-top:.6rem">To use it on iPhone, publish the file and open the link instead: drag it onto <b>app.netlify.com/drop</b> for a free URL, then open that URL in Safari. Everything below is a static preview only &mdash; nothing is clickable.</span>
+  </div>
+</noscript>
+<div id="errbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:999;background:#7A2B34;color:#fff;font:600 12px/1.45 -apple-system,sans-serif;padding:10px 12px;white-space:pre-wrap;word-break:break-word"></div>
+
+<!-- ============ NAV ============ -->
+<div class="nav-wrap">
+  <nav class="nav glass-strong" aria-label="Main">
+    <a class="brand" href="#" onclick="home();return false">Brief <small>Beta</small></a>
+    <div class="nav-links" id="nav-links"><button class="nav-link" data-nav="explore" onclick="go('explore')">Projects</button></div>
+    <div id="nav-right"><button class="btn btn-primary btn-sm nav-cta" onclick="go('auth')">Sign in</button></div>
+  </nav>
+</div>
+
+<!-- ============ VIEW: AUTH ============ -->
+<main id="view-auth" class="view">
+  <div class="auth-wrap">
+    <div class="auth-card glass-strong">
+
+      <div class="fstep on" data-au="1">
+        <h1 class="display">Sign in</h1>
+        <p class="hint">Select account type. New numbers are registered automatically.</p>
+        <div class="role-pick" id="role-pick"></div>
+        <button class="btn btn-primary" style="width:100%" id="au-next1" onclick="auStep(2)" disabled>Continue</button>
+        <div class="demo-fill">
+          <p>Demo accounts — prototype only</p>
+          <div class="demo-btns">
+            <button class="mini" onclick="demoLogin('freelancer')">Freelancer</button>
+            <button class="mini" onclick="demoLogin('client')">Client / business</button>
+            <button class="mini" onclick="demoLogin('indie')">Independent client</button>
+            <button class="mini" onclick="demoLogin('admin')">Admin</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="fstep" data-au="2">
+        <h1 class="display">Mobile number</h1>
+        <p class="hint" id="au-role-echo">Signing in as Freelancer.</p>
+        <div class="field"><label>Mobile number</label>
+          <div style="display:flex;gap:.5rem">
+            <select id="au-cc" aria-label="Country code" style="width:82px;flex:0 0 82px;min-width:0;padding:.75rem .5rem;border-radius:var(--r-sm);border:1px solid var(--line);background:rgba(255,255,255,.75)"><option>+91</option><option>+971</option><option>+44</option><option>+1</option></select>
+            <input type="text" id="au-phone" inputmode="numeric" aria-label="Mobile number" placeholder="98XXXXXXXX" maxlength="10" oninput="auPhoneCheck()" style="flex:1 1 0;min-width:0">
+          </div>
+        </div>
+        <div class="field"><label>Full name <span class="sub">— as shown to clients</span></label><input type="text" id="au-name" placeholder="Keerti Sharma" oninput="auPhoneCheck()"></div>
+        <button class="btn btn-primary" style="width:100%" id="au-next2" onclick="auSendOtp()" disabled>Send code</button>
+        <div class="flow-nav" style="margin-top:1rem;padding-top:1rem"><button class="btn btn-quiet" onclick="auStep(1)">Back</button><span></span></div>
+      </div>
+
+      <div class="fstep" data-au="3">
+        <h1 class="display">Enter code</h1>
+        <p class="hint" id="au-sent-to">Sent to +91 98XXXXXXXX.</p>
+        <div class="otp-row">
+          <input type="text" inputmode="numeric" maxlength="1" id="o1" oninput="otpHop(this,'o2')">
+          <input type="text" inputmode="numeric" maxlength="1" id="o2" oninput="otpHop(this,'o3')">
+          <input type="text" inputmode="numeric" maxlength="1" id="o3" oninput="otpHop(this,'o4')">
+          <input type="text" inputmode="numeric" maxlength="1" id="o4" oninput="otpHop(this,null)">
+        </div>
+        <p class="auth-note">Prototype: any 4 digits work. Code is not sent.</p>
+        <button class="btn btn-primary" style="width:100%;margin-top:1rem" id="au-verify" onclick="auVerify()" disabled>Verify</button>
+        <div class="flow-nav" style="margin-top:1rem;padding-top:1rem"><button class="btn btn-quiet" onclick="auStep(2)">Back</button><span></span></div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ============ VIEW: LANDING ============ -->
+<main id="view-landing" class="view on">
+  <div class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Dev · Design · Photo · Video · Content</span>
+          <h1 class="display">Freelance work,<br>verified.</h1>
+          <p class="lead">Post projects. Apply with one profile. Review applicants in one place. Freelancers rate the clients they work with.</p>
+          <div class="hero-ctas">
+            <button class="btn btn-primary" onclick="go('explore')">View projects</button>
+            <button class="btn btn-ghost" onclick="go('auth')">Sign in</button>
+          </div>
+          <p class="hero-note">Free for freelancers. No bidding fees or subscriptions to apply.</p>
+        </div>
+        <div>
+          <div class="sig-card glass-strong" role="img" aria-label="Example project card">
+            <span class="sig-tag">✓ Now hiring</span>
+            <h3>Bloom Grocery App</h3>
+            <p class="role-line">Frontend Developer — React, Remote · 6–8 weeks</p>
+            <div class="sig-meta">
+              <span class="badge b-verify">✓ Organisation verified</span>
+              <span class="badge b-paid">Paid</span>
+              <span class="badge b-unpaid">Remote</span>
+              <span class="score-inline"><span class="n">4.6</span><em>· 23 ratings</em></span>
+            </div>
+            <div class="sig-foot"><span class="sig-link">brief.work/p/bloom-grocery-app<br><b style="color:var(--ink)">Apply on Brief</b></span><div class="qr" aria-hidden="true"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="trust-strip glass">
+        <strong>Policy — freelancers pay nothing.</strong>
+        <span style="color:var(--muted)">No bidding fees, subscriptions, or portfolio fees. Listings that charge freelancers are removed.</span>
+      </div>
+    </section>
+
+    <section class="section">
+      <span class="eyebrow">What it does</span>
+      <h2 class="display section-title">Two sides, one system</h2>
+      <div class="journeys">
+        <div class="journey glass">
+          <h3>For freelancers</h3>
+          <div class="step"><span class="step-n">1</span><div><b>Build a profile</b><p>Portfolio pieces, skills, tools, and a case-study link.</p></div></div>
+          <div class="step"><span class="step-n">2</span><div><b>Apply</b><p>Your profile attaches automatically. Optional note and a work sample.</p></div></div>
+          <div class="step"><span class="step-n">3</span><div><b>Rate the client</b><p>After a project closes, record whether they responded, paid as stated, and matched the brief.</p></div></div>
+        </div>
+        <div class="journey glass">
+          <h3>For clients</h3>
+          <div class="step"><span class="step-n">1</span><div><b>Post a project</b><p>Structured form. Compensation is a required field.</p></div></div>
+          <div class="step"><span class="step-n">2</span><div><b>Share</b><p>Auto-generated card and link, sized for WhatsApp, LinkedIn, and X.</p></div></div>
+          <div class="step"><span class="step-n">3</span><div><b>Review</b><p>Applications land in four lanes: New, Shortlisted, Maybe, Rejected.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <span class="eyebrow">Live</span>
+      <h2 class="display section-title">Open projects</h2>
+      <div class="cards" id="landing-roles"></div>
+      <div style="text-align:center;margin-top:1.6rem"><button class="btn btn-ghost" onclick="go('explore')">All projects</button></div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <span class="eyebrow">Verification</span>
+      <h2 class="display section-title">Verification levels</h2>
+      <p class="lead" style="margin-top:.6rem">Every listing shows its poster's verification level and their rating from freelancers. Posting privileges depend on verification.</p>
+      <div class="tiers">
+        <div class="tier glass"><div class="tier-dot">○</div><b>Unverified</b><p>Can browse and draft. Listings stay limited until identity is confirmed.</p></div>
+        <div class="tier glass"><div class="tier-dot" style="color:var(--accent-deep)">✓</div><b>Identity verified</b><p>A real person confirmed. Can publish projects with the standard badge.</p></div>
+        <div class="tier glass"><div class="tier-dot" style="color:var(--accent-deep)">✓✓</div><b>Organisation verified</b><p>Company, studio, or agency confirmed with working credentials.</p></div>
+        <div class="tier glass"><div class="tier-dot" style="color:var(--accent-deep)">★</div><b>Platform reviewed</b><p>The listing itself checked by Brief before it goes live.</p></div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="foot-cta glass-strong">
+        <h2 class="display" style="font-size:clamp(1.5rem,3vw,2rem)">Create a profile or post a project.</h2>
+        <p class="meta" style="margin:.4rem auto 1.3rem">Free during beta.</p>
+        <div style="display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap"><button class="btn btn-primary" onclick="go('auth')">Sign in</button><button class="btn btn-ghost" onclick="go('explore')">View projects</button></div>
+      </div>
+      <p onclick="window.__diag&&window.__diag()">Brief · Built for India's web, design &amp; creative freelancers<br>Report a listing · Safety &amp; guidelines · Contact</p>
+    </footer>
+  </div>
+</main>
+
+<!-- ============ VIEW: EXPLORE ============ -->
+<main id="view-explore" class="view">
+  <div class="container">
+    <div class="explore-head">
+      <span class="eyebrow">Explore</span>
+      <h1 class="display" style="font-size:clamp(1.9rem,4vw,2.7rem)">Open projects</h1>
+      <div class="search-bar glass">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="search" type="text" placeholder="Search projects, clients, cities…" oninput="renderExplore()" aria-label="Search projects">
+      </div>
+      <div class="filters" id="filters"></div>
+      <p class="meta results-meta" id="results-meta"></p>
+    </div>
+    <div class="cards" id="explore-cards" style="margin-top:.9rem;padding-bottom:3rem"></div>
+  </div>
+</main>
+
+<!-- ============ VIEW: PROJECT DETAIL ============ -->
+<main id="view-detail" class="view"><div class="container" id="detail-body" style="padding-bottom:3rem"></div></main>
+
+<!-- ============ VIEW: CLIENT PROFILE / RATINGS ============ -->
+<main id="view-rprofile" class="view"><div class="container" id="rprofile-body" style="padding-bottom:3rem"></div></main>
+
+<!-- ============ VIEW: FREELANCER ONBOARDING ============ -->
+<main id="view-onboard" class="view">
+  <div class="container" style="padding-bottom:3rem">
+    <div style="padding-top:1.2rem">
+      <span class="eyebrow">Freelancer profile</span>
+      <h1 class="display" style="font-size:clamp(1.9rem,4vw,2.7rem)">Build your freelancer profile</h1>
+      <p class="lead" style="margin-top:.4rem">Four steps. The preview shows what clients see.</p>
+    </div>
+    <div class="flow-wrap">
+      <div class="flow-main glass">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="meta" id="ob-step-label">Step 1 of 4</span><span class="meta">Saved automatically</span>
+        </div>
+        <div class="progress"><i id="ob-progress" style="width:25%"></i></div>
+
+        <div class="fstep on" data-ob="1">
+          <h2 class="display">The basics</h2>
+          <p class="hint">Phone number stays private until you share it.</p>
+          <div class="field"><label>Display name <span class="sub">— as shown to clients</span></label><input type="text" id="f-name" placeholder="Keerti Sharma" oninput="syncPreview()"></div>
+          <div class="field"><label>Base city <span class="sub">— select or type your own</span></label><div id="f-city"></div></div>
+          <div class="field-row">
+            <div class="field"><label>Freelancing since <span class="sub">— private</span></label><input type="date" id="f-dob" onchange="syncPreview()"></div>
+            <div class="field"><label>Rate range</label>
+              <select id="f-age" onchange="syncPreview()"><option>₹500–1,000/hr</option><option selected>₹1,000–2,500/hr</option><option>₹2,500–5,000/hr</option><option>₹5,000+/hr</option><option>Project-based only</option></select>
+            </div>
+          </div>
+          <div class="field"><label>One-line tagline <span class="sub">— optional</span></label><input type="text" id="f-bio" placeholder="Full-stack developer specialising in React and Shopify" oninput="syncPreview()"></div>
+        </div>
+
+        <div class="fstep" data-ob="2">
+          <h2 class="display">Portfolio &amp; work samples</h2>
+          <p class="hint">Minimum two pieces. Portfolio link as Behance, Dribbble, GitHub, or Drive.</p>
+          <div class="upload-zone" onclick="addThumb()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')addThumb()"><b>Add portfolio pieces</b>Case studies, shots, or reels</div>
+          <div class="thumbs" id="thumbs"></div>
+          <div class="field" style="margin-top:1.2rem"><label>Portfolio link <span class="sub">— Behance, Dribbble, GitHub, or Drive</span></label><input type="url" id="f-tape" placeholder="https://behance.net/…" oninput="syncPreview()"></div>
+        </div>
+
+        <div class="fstep" data-ob="3">
+          <h2 class="display">Skills &amp; tools</h2>
+          <p class="hint">Clients filter by these. Select from the list or type to add your own.</p>
+          <div class="field"><label>Skills &amp; tools you use</label><div id="f-langs"></div></div>
+          <div class="field"><label>Specializations <span class="sub">— optional</span></label><div id="f-skills"></div></div>
+          <div class="field"><label>Available from <span class="sub">— optional</span></label><input type="date" id="f-avail"></div>
+          <div class="field"><label>Experience</label>
+            <div class="seg" id="exp-seg"><button class="sel" onclick="segSel(this)">New freelancer</button><button onclick="segSel(this)">1–10 projects</button><button onclick="segSel(this)">Established</button></div>
+          </div>
+        </div>
+
+        <div class="fstep" data-ob="4">
+          <h2 class="display">Review &amp; publish</h2>
+          <p class="hint">Publishing makes the profile public. Unpublish any time.</p>
+          <div class="panel" style="background:rgba(255,255,255,.6);border:1px solid var(--line)">
+            <div class="kv"><span>Profile</span><b id="rv-name">—</b></div>
+            <div class="kv"><span>City · Rate range</span><b id="rv-cityage">—</b></div>
+            <div class="kv"><span>Skills &amp; tools</span><b id="rv-langs">—</b></div>
+            <div class="kv"><span>Specializations</span><b id="rv-skills">—</b></div>
+            <div class="kv"><span>Portfolio</span><b id="rv-tape">—</b></div>
+            <div class="kv"><span>Visibility</span><b>Public · searchable</b></div>
+          </div>
+        </div>
+
+        <div class="fstep" data-ob="5">
+          <div class="success-wrap">
+            <div class="success-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <h2 class="display">Profile live</h2>
+            <p class="lead" style="margin:0 auto 1.4rem">You can apply to open projects. City and skill matches list first.</p>
+            <div style="display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="go('explore')">View projects</button>
+              <button class="btn btn-ghost" onclick="shareProfile()">Share card</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-nav" id="ob-nav">
+          <button class="btn btn-quiet" id="ob-back" onclick="obStep(-1)" disabled>Back</button>
+          <button class="btn btn-primary" id="ob-next" onclick="obStep(1)">Continue</button>
+        </div>
+      </div>
+
+      <aside class="preview-card glass-strong" aria-label="Live profile preview">
+        <span class="meta" style="text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:.68rem">Live preview</span>
+        <div class="pv-photo" style="margin-top:.8rem"><span class="pv-name" id="pv-name">Your name</span></div>
+        <p class="meta" id="pv-meta">Mumbai · ₹1,000–2,500/hr</p>
+        <p style="font-size:.9rem;color:var(--muted);margin-top:.3rem" id="pv-bio">Your one-line tagline appears here.</p>
+        <div class="chip-row" id="pv-chips" style="margin-top:.8rem"></div>
+        <div class="completion">
+          <div class="ring" id="ring"><i id="ring-label">10%</i></div>
+          <div><b style="font-size:.88rem">Profile completion</b><p class="meta" id="ring-hint">0 of 6 fields complete</p></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- ============ VIEW: POST A PROJECT ============ -->
+<main id="view-post" class="view">
+  <div class="container" style="padding-bottom:3rem">
+    <div style="padding-top:1.2rem">
+      <span class="eyebrow">Clients</span>
+      <h1 class="display" style="font-size:clamp(1.9rem,4vw,2.7rem)">Post a project</h1>
+      <p class="lead" style="margin-top:.4rem">Five steps. The listing becomes a public page with a share card.</p>
+    </div>
+    <div class="flow-wrap">
+      <div class="flow-main glass">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="meta" id="pc-step-label">Step 1 of 5</span><span class="meta">Draft saved</span>
+        </div>
+        <div class="progress"><i id="pc-progress" style="width:20%"></i></div>
+
+        <div class="fstep on" data-pc="1">
+          <h2 class="display">The project</h2>
+          <p class="hint">Appears on the public page.</p>
+          <div class="field"><label>Project title</label><input type="text" id="p-title" placeholder="Bloom Grocery App Rebuild" oninput="syncSummary()"></div>
+          <div class="field"><label>Category</label><div id="p-format"></div></div>
+          <div class="field"><label>City <span class="sub">— or Remote</span></label><div id="p-city"></div></div>
+        </div>
+
+        <div class="fstep" data-pc="2">
+          <h2 class="display">The position</h2>
+          <p class="hint">Written brief. Shown in full on the listing.</p>
+          <div class="field"><label>Position title</label><input type="text" id="p-role" placeholder="Frontend Developer — React" oninput="syncSummary()"></div>
+          <div class="field"><label>Description</label><textarea id="p-desc" placeholder="Rebuild the checkout flow and product catalogue for a grocery delivery app…" oninput="syncSummary()"></textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Budget from (₹)</label><input type="number" id="p-age1" min="0" placeholder="60000" oninput="syncSummary()"></div>
+            <div class="field"><label>Budget to (₹)</label><input type="number" id="p-age2" min="0" placeholder="90000" oninput="syncSummary()"></div>
+          </div>
+          <div class="field"><label>Experience level required</label>
+            <div class="seg" id="p-gender"><button class="sel" onclick="segSel(this);syncSummary()">Any</button><button onclick="segSel(this);syncSummary()">Junior</button><button onclick="segSel(this);syncSummary()">Senior</button></div>
+          </div>
+          <div class="field"><label>Skills &amp; tools required <span class="sub">— select or type to add</span></label><div id="p-langs"></div></div>
+          <div class="field"><label>Additional skills <span class="sub">— optional</span></label><div id="p-skills"></div></div>
+        </div>
+
+        <div class="fstep" data-pc="3">
+          <h2 class="display">Dates</h2>
+          <p class="hint">Applications close automatically on the deadline.</p>
+          <div class="field"><label>Applications close</label><input type="date" id="p-deadline" onchange="syncSummary()"></div>
+          <div class="field"><label>Project timeline</label>
+            <div class="date-row">
+              <input type="date" id="p-start" onchange="syncSummary()" aria-label="Project start">
+              <input type="date" id="p-end" onchange="syncSummary()" aria-label="Project end">
+            </div>
+            <label class="check" style="margin-top:.5rem"><input type="checkbox" id="p-flex" onchange="syncSummary()"><span>Dates not locked yet</span></label>
+          </div>
+          <div class="field"><label>Interview mode</label>
+            <div class="seg" id="p-mode"><button class="sel" onclick="segSel(this);syncSummary()">Async</button><button onclick="segSel(this);syncSummary()">Video call</button><button onclick="segSel(this);syncSummary()">Both</button></div>
+          </div>
+        </div>
+
+        <div class="fstep" data-pc="4">
+          <h2 class="display">Compensation</h2>
+          <p class="hint">Every listing states compensation. Unpaid is allowed, blank is not.</p>
+          <div class="field"><label>Type</label>
+            <div class="seg" id="p-comp"><button class="sel" onclick="segSel(this);syncSummary()">Fixed price</button><button onclick="segSel(this);syncSummary()">Hourly</button><button onclick="segSel(this);syncSummary()">Unpaid</button></div>
+          </div>
+          <div class="field"><label>Details <span class="sub">— rate, milestones, deliverables</span></label><input type="text" id="p-comp-text" placeholder="₹80,000 fixed, paid in 2 milestones" oninput="syncSummary()"></div>
+          <div class="field" style="margin-top:1.4rem"><label>Do freelancers pay anything to apply, bid, or be considered?</label>
+            <div class="seg" id="p-fee"><button class="sel" onclick="segSel(this);feeGuard(false)">No</button><button onclick="segSel(this);feeGuard(true)">Yes</button></div>
+            <div class="guard" id="fee-guard"><b>This listing cannot be published.</b> Brief does not allow projects that charge freelancers — no bidding fees, subscriptions, or portfolio fees.</div>
+          </div>
+        </div>
+
+        <div class="fstep" data-pc="5">
+          <h2 class="display">Review &amp; publish</h2>
+          <p class="hint">New accounts are checked before the badge shows. Typically under 24 hours.</p>
+          <div class="panel" style="background:rgba(255,255,255,.6);border:1px solid var(--line)"><div class="sum-list" id="pc-review"></div></div>
+        </div>
+
+        <div class="fstep" data-pc="6">
+          <div class="success-wrap">
+            <div class="success-ico"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+            <h2 class="display">Project published</h2>
+            <p class="lead" style="margin:0 auto 1.4rem">The public page is live. Share card below.</p>
+            <div style="display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="openShare(0)">Share card</button>
+              <button class="btn btn-ghost" onclick="go('board')">Applications board</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-nav" id="pc-nav">
+          <button class="btn btn-quiet" id="pc-back" onclick="pcStep(-1)" disabled>Back</button>
+          <button class="btn btn-primary" id="pc-next" onclick="pcStep(1)">Continue</button>
+        </div>
+      </div>
+
+      <aside class="preview-card glass-strong" aria-label="Listing summary">
+        <span class="meta" style="text-transform:uppercase;letter-spacing:.1em;font-weight:700;font-size:.68rem">Listing summary</span>
+        <h3 class="display" style="font-size:1.6rem;margin:.5rem 0 .1rem" id="sum-title">Untitled project</h3>
+        <p class="meta" id="sum-sub">—</p>
+        <div class="sum-list" style="margin-top:.9rem">
+          <div class="kv"><span>Position</span><b id="sum-role">—</b></div>
+          <div class="kv"><span>Budget · Skills</span><b id="sum-agelang">—</b></div>
+          <div class="kv"><span>Applications close</span><b id="sum-deadline">—</b></div>
+          <div class="kv"><span>Timeline</span><b id="sum-window">—</b></div>
+          <div class="kv"><span>Compensation</span><b id="sum-comp">—</b></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<!-- ============ VIEW: FREELANCER — MY APPLICATIONS ============ -->
+<main id="view-myapps" class="view">
+  <div class="container" style="padding-bottom:3rem">
+    <div style="padding-top:1.2rem">
+      <span class="eyebrow">Applications</span>
+      <h1 class="display" style="font-size:clamp(1.9rem,4vw,2.7rem)">My applications</h1>
+      <p class="meta" style="margin-top:.3rem">Closed projects can be rated. Ratings are public and attributed to your account.</p>
+    </div>
+    <div class="stat-grid" id="myapps-stats"></div>
+    <div id="myapps-list"></div>
+  </div>
+</main>
+
+<!-- ============ VIEW: CLIENT DASHBOARD ============ -->
+<main id="view-dash" class="view">
+  <div class="container" style="padding-bottom:3rem">
+    <div style="padding-top:1.2rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap">
+      <div>
+        <span class="eyebrow">Dashboard</span>
+        <h1 class="display" style="font-size:clamp(1.9rem,4vw,2.7rem)" id="dash-org">Client</h1>
+        <p class="meta" style="margin-top:.3rem" id="dash-sub">—</p>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="go('post')">Post a project</button>
+    </div>
+    <div class="stat-grid" id="dash-stats"></div>
+    <h3 class="panel-h" style="font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:1.4rem 0 .8rem">Your projects</h3>
+    <div id="dash-roles"></div>
+    <div class="panel glass" style="margin-top:1.4rem" id="dash-rating"></div>
+  </div>
+</main>
+
+<!-- ============ VIEW: CLIENT BOARD ============ -->
+<main id="view-board" class="view">
+  <div class="container" style="padding-bottom:3rem">
+    <div style="padding-top:1.2rem;display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap">
+      <div>
+        <span class="eyebrow">Applications</span>
+        <h1 class="display" style="font-size:clamp(1.9rem,4vw,2.7rem)">Bloom Grocery App — Frontend Developer</h1>
+        <p class="meta" style="margin-top:.3rem">Closes 9 Aug · closing notifies all applicants</p>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="toast('Project closed. Applicants notified.')">Close project</button>
+    </div>
+    <div class="board" id="board"></div>
+  </div>
+</main>
+
+<!-- ============ VIEW: ADMIN ============ -->
+<main id="view-admin" class="view">
+  <div class="container" style="padding-bottom:3rem">
+    <div style="padding-top:1.2rem">
+      <span class="eyebrow">Moderation</span>
+      <h1 class="display" style="font-size:clamp(1.9rem,4vw,2.7rem)">Admin</h1>
+    </div>
+    <div class="stat-grid" id="admin-stats"></div>
+    <div class="tabs" id="admin-tabs">
+      <button class="tab sel" onclick="adminTab(this,'verif')">Verification queue</button>
+      <button class="tab" onclick="adminTab(this,'reports')">Reports</button>
+      <button class="tab" onclick="adminTab(this,'listings')">Listings</button>
+    </div>
+    <div id="admin-body"></div>
+  </div>
+</main>
+
+<!-- ============ MODALS ============ -->
+<div class="modal-veil" id="modal-apply" onclick="if(event.target===this)closeModal('modal-apply')">
+  <div class="modal glass-strong" role="dialog" aria-label="Apply to project">
+    <div class="modal-head"><h3>Apply</h3><button class="modal-x" onclick="closeModal('modal-apply')" aria-label="Close">✕</button></div>
+    <p style="font-size:.9rem;color:var(--muted);margin-bottom:1rem">Your profile attaches automatically.</p>
+    <div class="field"><label>Note to client <span class="sub">— optional</span></label><textarea id="ap-note" placeholder="I rebuilt a similar checkout flow for a D2C client last quarter."></textarea></div>
+    <div class="field"><label>Relevant work sample <span class="sub">— optional link</span></label><input type="url" id="ap-tape" placeholder="https://drive.google.com/…"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="submitApply()">Submit application</button>
+    <p class="meta" style="text-align:center;margin-top:.8rem">Status updates appear in Applications.</p>
+  </div>
+</div>
+
+<div class="modal-veil" id="modal-rate" onclick="if(event.target===this)closeModal('modal-rate')">
+  <div class="modal glass-strong" role="dialog" aria-label="Rate client">
+    <div class="modal-head"><h3>Rate this client</h3><button class="modal-x" onclick="closeModal('modal-rate')" aria-label="Close">✕</button></div>
+    <p style="font-size:.88rem;color:var(--muted);margin-bottom:1.2rem" id="rate-who">—</p>
+    <div class="field"><label>Did they respond to your application?</label>
+      <div class="yn" id="rt-responded"><button onclick="ynSel(this)">Yes</button><button onclick="ynSel(this)">No</button></div>
+    </div>
+    <div class="field"><label>Was the project as described?</label>
+      <div class="yn" id="rt-described"><button onclick="ynSel(this)">Yes</button><button onclick="ynSel(this)">No</button><button onclick="ynSel(this)">Didn't start</button></div>
+    </div>
+    <div class="field"><label>Were you paid as stated?</label>
+      <div class="yn" id="rt-paid"><button onclick="ynSel(this)">Yes</button><button onclick="ynSel(this)">No</button><button onclick="ynSel(this)">Not applicable</button></div>
+    </div>
+    <div class="field"><label>Overall <span class="sub">— 1 lowest, 5 highest</span></label>
+      <div class="scale" id="rt-overall"><button onclick="ynSel(this)">1</button><button onclick="ynSel(this)">2</button><button onclick="ynSel(this)">3</button><button onclick="ynSel(this)">4</button><button onclick="ynSel(this)">5</button></div>
+    </div>
+    <div class="field"><label>Note <span class="sub">— optional, public</span></label><textarea id="rt-note" placeholder="Factual detail helps other freelancers."></textarea></div>
+    <button class="btn btn-primary" style="width:100%" onclick="submitRating()">Submit rating</button>
+    <p class="meta" style="text-align:center;margin-top:.8rem">Ratings cannot be edited after submission.</p>
+  </div>
+</div>
+
+<div class="modal-veil" id="modal-share" onclick="if(event.target===this)closeModal('modal-share')">
+  <div class="modal glass-strong" role="dialog" aria-label="Share card">
+    <div class="modal-head"><h3>Share card</h3><button class="modal-x" onclick="closeModal('modal-share')" aria-label="Close">✕</button></div>
+    <div class="sig-card glass-strong" style="max-width:100%;margin-bottom:1.1rem" id="share-card-body"></div>
+    <div style="display:flex;gap:.6rem">
+      <button class="btn btn-primary" style="flex:1" onclick="toast('Card copied.')">Copy card</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="toast('Link copied.')">Copy link</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* --- visible error reporter --- */
+(function(){
+  function show(m){var b=document.getElementById('errbar');if(!b)return;b.style.display='block';b.textContent=(b.textContent?b.textContent+'\n\n':'')+m}
+  window.onerror=function(m,s,l,c){show('JS ERROR: '+m+'  @line '+l+':'+c);return false};
+  window.addEventListener('unhandledrejection',function(e){show('PROMISE: '+e.reason)});
+  window.__diag=function(){show('UA: '+navigator.userAgent+'\ngo():'+(typeof go)+' TokenField():'+(typeof TokenField))};
+})();
+
+/* ============ REFERENCE DATA ============ */
+var LANGS=["React","Next.js","Node.js","Python","TypeScript","Figma","Adobe XD","Photoshop","Illustrator","Premiere Pro","DaVinci Resolve","After Effects","Lightroom","WordPress","Shopify","Webflow","Solidity","Blender","Canva","Framer"];
+var SKILLS=["SEO","Copywriting","3D Modelling","Drone Operation","Color Grading","API Integration","E-commerce Setup","Motion Graphics","Illustration","Branding","Voice Acting","Sound Design","Animation","UI Prototyping","Email Marketing","Studio Lighting"];
+var CITIES=["Remote","Mumbai","Delhi NCR","Bengaluru","Hyderabad","Chennai","Kolkata","Pune","Ahmedabad","Jaipur","Lucknow","Kochi","Chandigarh","Indore","Goa"];
+var FORMATS=["Web Development","Mobile Development","UI/UX Design","Graphic Design","Photography","Videography","Video Editing","Content Writing","Copywriting","SEO & Marketing","Voice Over","3D & Motion Graphics","WordPress / Shopify","Web3 / Blockchain"];
+
+/* ============ CLIENTS + RATINGS ============ */
+var RECRUITERS={
+ brightloop:{id:"brightloop",org:"Brightloop Studio",person:"Aditya Mehra",verify:"Organisation verified",since:"2024",city:"Mumbai",
+   ratings:[
+    {by:"Nikhil A.",date:"Jun 2026",overall:5,responded:true,described:true,paid:true,note:"Milestone payments cleared within a day each time, exactly as scoped."},
+    {by:"Priya S.",date:"Jun 2026",overall:4,responded:true,described:true,paid:"na",note:"Scope was exactly as described. Wasn't selected."},
+    {by:"Devansh R.",date:"May 2026",overall:5,responded:true,described:true,paid:true,note:""},
+    {by:"Anjali T.",date:"May 2026",overall:4,responded:true,described:false,paid:"na",note:"Kickoff call ran two hours late, otherwise fine."},
+    {by:"Karan M.",date:"Apr 2026",overall:5,responded:true,described:true,paid:true,note:""}
+   ]},
+ pixelforge:{id:"pixelforge",org:"PixelForge Ads",person:"Naina Kapadia",verify:"Platform reviewed",since:"2023",city:"Mumbai",
+   ratings:[
+    {by:"Ritika J.",date:"Jul 2026",overall:5,responded:true,described:true,paid:true,note:"Fastest payment I've had — invoice cleared the same week."},
+    {by:"Aman K.",date:"Jun 2026",overall:4,responded:true,described:true,paid:true,note:""},
+    {by:"Sneha P.",date:"Jun 2026",overall:5,responded:true,described:true,paid:true,note:""}
+   ]},
+ nimbus:{id:"nimbus",org:"Nimbus Health",person:"Karthik Iyer",verify:"Organisation verified",since:"2025",city:"Hyderabad",
+   ratings:[
+    {by:"Vikram N.",date:"Jun 2026",overall:3,responded:false,described:"na",paid:"na",note:"No response after submission. Role filled without notice."},
+    {by:"Lakshmi V.",date:"May 2026",overall:4,responded:true,described:true,paid:true,note:""},
+    {by:"Tarun S.",date:"May 2026",overall:2,responded:false,described:"na",paid:"na",note:"Applied twice, never heard back either time."}
+   ]},
+ indie:{id:"indie",org:"Independent — Rhea Kapoor",person:"Rhea Kapoor",verify:"Identity verified",since:"2026",city:"Delhi NCR",ratings:[]},
+ soundwave:{id:"soundwave",org:"Soundwave Media",person:"Farhan Sheikh",verify:"Identity verified",since:"2025",city:"Remote",
+   ratings:[{by:"Ishita B.",date:"Jun 2026",overall:5,responded:true,described:true,paid:true,note:"Clear direction, paid per episode as agreed."}]},
+ founders:{id:"founders",org:"Founders Circle",person:"Aditi Kulkarni",verify:"Organisation verified",since:"2022",city:"Mumbai",
+   ratings:[
+    {by:"Rohan D.",date:"Apr 2026",overall:5,responded:true,described:true,paid:true,note:"Hourly invoices paid in full at the end of each week."},
+    {by:"Mehak S.",date:"Mar 2026",overall:4,responded:true,described:true,paid:true,note:""}
+   ]}
+};
+
+function agg(rid){
+  var r=RECRUITERS[rid], list=r.ratings, n=list.length;
+  if(!n)return{n:0};
+  var sum=0,resp=[0,0],desc=[0,0],paid=[0,0];
+  for(var i=0;i<n;i++){var x=list[i];sum+=x.overall;
+    if(x.responded!=='na'){resp[1]++;if(x.responded===true)resp[0]++}
+    if(x.described!=='na'){desc[1]++;if(x.described===true)desc[0]++}
+    if(x.paid!=='na'){paid[1]++;if(x.paid===true)paid[0]++}}
+  function pc(a){return a[1]?Math.round(a[0]/a[1]*100):null}
+  return{n:n,avg:(sum/n).toFixed(1),responded:pc(resp),described:pc(desc),paid:pc(paid),
+         respN:resp[1],descN:desc[1],paidN:paid[1]};
+}
+function scoreInline(rid){
+  var a=agg(rid);
+  if(!a.n)return '<span class="score-inline"><em>No ratings yet</em></span>';
+  return '<span class="score-inline"><span class="n">'+a.avg+'</span><em>· '+a.n+' rating'+(a.n===1?'':'s')+'</em></span>';
+}
+function metricRow(label,val,cnt){
+  if(val===null)return '<div class="metric"><span>'+label+'</span><b style="color:var(--faint)">No data</b></div>';
+  return '<div class="metric"><span>'+label+'</span><b>'+val+'%</b><div class="bar"><i class="'+(val<70?'low':'')+'" style="width:'+val+'%"></i></div><span class="meta" style="grid-column:1/-1">from '+cnt+' rating'+(cnt===1?'':'s')+'</span></div>';
+}
+function ratingPanel(rid,compact){
+  var r=RECRUITERS[rid],a=agg(rid);
+  var head='<h3>Client</h3><div style="display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;flex-wrap:wrap">'
+    +'<div><b style="font-size:1rem">'+r.org+'</b><p class="meta">'+r.person+' · on Brief since '+r.since+'</p>'
+    +'<div class="chip-row" style="margin-top:.5rem"><span class="badge b-verify">✓ '+r.verify+'</span></div></div>';
+  if(a.n)head+='<div class="score-lg"><b>'+a.avg+'</b><span>/ 5 · '+a.n+'</span></div>';
+  head+='</div>';
+  if(!a.n)return head+'<p class="meta" style="margin-top:.9rem">No freelancer ratings yet. This client has not been rated on Brief.</p>';
+  var body='<div style="margin-top:1rem">'
+    +metricRow('Responded to applications',a.responded,a.respN)
+    +metricRow('Project as described',a.described,a.descN)
+    +metricRow('Paid as stated',a.paid,a.paidN)+'</div>';
+  if(!compact)body+='<button class="btn btn-ghost btn-sm" style="margin-top:1rem;width:100%" onclick="openRProfile(\''+rid+'\')">Read '+a.n+' rating'+(a.n===1?'':'s')+'</button>';
+  return head+body;
+}
+
+/* ============ PROJECTS ============ */
+var ROLES=[
+ {id:0,rid:"brightloop",role:"Frontend Developer — React",project:"Bloom Grocery App Rebuild",format:"Web Development",city:"Remote",paid:"Paid",comp:"₹80,000 fixed, paid in 2 milestones",deadline:"9 Aug",window:"Sep–Oct 2026",langs:["React","Next.js"],age:"₹60,000–90,000",gender:"Any",mode:"Async, then video call",skills:["API Integration"],desc:"Rebuild the checkout flow and product catalogue for a grocery delivery app. Clean component architecture over cleverness. Comfortable working from Figma files and shipping in two-week milestones."},
+ {id:1,rid:"pixelforge",role:"Product photographer — festive campaign",project:"Diwali catalogue shoot",format:"Photography",city:"Mumbai",paid:"Paid",comp:"₹25,000/day + usage rights",deadline:"2 Aug",window:"12–13 Aug 2026",langs:[],age:"₹20,000–30,000/day",gender:"Any",mode:"In-person shoot",skills:["Studio Lighting"],desc:"Two studio days shooting packaged food and gift hampers for a festive catalogue. Own lighting kit required. Prior e-commerce or catalogue work helpful."},
+ {id:2,rid:"nimbus",role:"UI/UX Designer — patient app",project:"Nimbus Health App v2",format:"UI/UX Design",city:"Hyderabad",paid:"Paid",comp:"As per scoped rate card",deadline:"16 Aug",window:"Oct–Dec 2026",langs:["Figma"],age:"₹50,000–70,000",gender:"Senior",mode:"Async, then video call",skills:[],desc:"Redesign the appointment booking and reports flow for a patient-facing health app. Needs healthcare or fintech UX experience and comfort presenting to a clinical stakeholder group across a 10-week engagement."},
+ {id:3,rid:"indie",role:"Website for a local NGO",project:"GreenRoots Foundation site",format:"Web Development",city:"Delhi NCR",paid:"Unpaid",comp:"Unpaid · portfolio credit and testimonial",deadline:"6 Aug",window:"Last two weekends of Aug",langs:["WordPress"],age:"—",gender:"Any",mode:"In person, Delhi NCR",skills:[],desc:"A five-page site for a small environmental NGO. Honest, functional work — good for a portfolio case study. Content and photos provided."},
+ {id:4,rid:"soundwave",role:"Voice-over artist — podcast intro",project:"Soundwave Weekly",format:"Voice Over",city:"Remote",paid:"Paid",comp:"₹5,000 per episode",deadline:"20 Aug",window:"Remote, flexible",langs:[],age:"₹5,000/ep",gender:"Any",mode:"Remote / audio submission",skills:["Voice Acting"],desc:"A dry, unhurried narrator voice for a 6-part weekly tech podcast intro. Home-studio quality acceptable. Direction over voice notes and calls."},
+ {id:5,rid:"founders",role:"Content writers — 4 positions",project:"Founders Circle blog",format:"Content Writing",city:"Mumbai",paid:"Hourly",comp:"₹800/hr, 10 hrs/week minimum",deadline:"11 Aug",window:"Ongoing from Sep",langs:[],age:"₹800/hr",gender:"Any",mode:"Async",skills:["SEO"],desc:"Four ongoing writer slots for a startup blog covering fundraising, hiring and product. SEO awareness a plus. Six-week trial period, evenings or weekends fine."}
+];
+
+/* ============ SESSION ============ */
+var ROLE_TYPES=[
+ {k:"freelancer",n:"Freelancer",d:"Build a profile, apply to projects, rate clients.",i:"F"},
+ {k:"client",n:"Client / business",d:"Post projects for a company, studio, or agency.",i:"C"},
+ {k:"indie",n:"Independent client",d:"Post projects as an individual.",i:"I"},
+ {k:"admin",n:"Admin",d:"Verification queue, reports, listing review.",i:"M"}
+];
+var SESSION=null, pendingRole=null;
+var MYAPPS=[
+ {roleId:0,status:"New",applied:"18 Jul",rated:false},
+ {roleId:1,status:"Shortlisted",applied:"12 Jul",rated:false},
+ {roleId:5,status:"Closed",applied:"2 Jul",rated:false},
+ {roleId:2,status:"Closed",applied:"24 Jun",rated:false}
+];
+var APPS={
+ new:[{n:"Kabir Menon",c:"Mumbai · 4 yrs",note:"Shipped three React storefronts, comfortable with Next.js App Router and Stripe."},
+      {n:"Arjun Pawar",c:"Pune · 2 yrs",note:"E-commerce background, strong on performance and accessibility."},
+      {n:"Sameer D.",c:"Nashik · 5 yrs",note:"Built a grocery delivery MVP solo end to end. Case study attached."}],
+ short:[{n:"Vihaan Rao",c:"Mumbai · 3 yrs",note:"Cleanest checkout demo of the batch — handled edge cases well."}],
+ maybe:[{n:"Ishaan K.",c:"Thane · 1 yr",note:"Solid fundamentals, portfolio still thin on production apps."}],
+ rej:[{n:"Rohit S.",c:"Mumbai · 8 yrs",note:"Rate expectations well above the posted budget."}]
+};
+var VERIF_Q=[
+ {who:"Rhea Kapoor",org:"Independent client",docs:"Aadhaar + LinkedIn profile",when:"2 hours ago"},
+ {who:"Naina Kapadia",org:"PixelForge Ads",docs:"GST certificate + work email",when:"Yesterday"},
+ {who:"Neha Bhatt",org:"Bhatt Design Co.",docs:"PAN + company website",when:"2 days ago"}
+];
+var REPORTS_Q=[
+ {what:"Listing — 'Junior dev needed, ₹500 to view brief'",why:"Charges freelancers a fee",by:"4 freelancers",sev:"high"},
+ {what:"User — @quickhire_mum",why:"Requesting free spec work over WhatsApp",by:"2 freelancers",sev:"high"},
+ {what:"Listing — 'Urgent logo, Andheri'",why:"No compensation stated",by:"1 freelancer",sev:"low"}
+];
+
+/* ============ TOKEN FIELD (select + type to add) ============ */
+var TK={};
+function TokenField(hostId,opts,ph,preset){
+  var host=document.getElementById(hostId);
+  if(!host)return;
+  var sel=(preset||[]).slice(), open=false, hi=-1;
+  host.className='tk';
+  host.innerHTML='<div class="tk-chips"></div><div class="tk-in"><input type="text" autocomplete="off" placeholder="'+ph+'"><div class="tk-menu"></div></div>';
+  var chips=host.querySelector('.tk-chips'), input=host.querySelector('input'), menu=host.querySelector('.tk-menu');
+
+  function renderChips(){
+    chips.innerHTML=sel.map(function(v,i){
+      return '<span class="tk-chip">'+esc(v)+'<button type="button" aria-label="Remove '+esc(v)+'" onclick="TK[\''+hostId+'\'].rm('+i+')">✕</button></span>';
+    }).join('');
+  }
+  function matches(){
+    var q=input.value.trim().toLowerCase();
+    return opts.filter(function(o){return sel.indexOf(o)<0 && (!q||o.toLowerCase().indexOf(q)>=0)});
+  }
+  function renderMenu(){
+    var q=input.value.trim(), list=matches(), html='';
+    var exact=opts.some(function(o){return o.toLowerCase()===q.toLowerCase()});
+    html+=list.map(function(o){
+      return '<button type="button" class="tk-opt" onmousedown="event.preventDefault()" onclick="TK[\''+hostId+'\'].add('+JSON.stringify(o).replace(/"/g,'&quot;')+')">'+esc(o)+'</button>';
+    }).join('');
+    if(q&&!exact&&sel.indexOf(q)<0)
+      html+='<button type="button" class="tk-opt add" onmousedown="event.preventDefault()" onclick="TK[\''+hostId+'\'].add('+JSON.stringify(q).replace(/"/g,'&quot;')+')">Add “'+esc(q)+'”<span class="g">not in list</span></button>';
+    if(!html)html='<div class="tk-empty">No matches. Type to add your own.</div>';
+    menu.innerHTML=html;
+  }
+  function show(){open=true;menu.classList.add('on');host.classList.add('focus');renderMenu()}
+  function hide(){open=false;menu.classList.remove('on');host.classList.remove('focus')}
+
+  input.addEventListener('focus',show);
+  input.addEventListener('input',function(){if(!open)show();else renderMenu()});
+  input.addEventListener('blur',function(){setTimeout(hide,180)});
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){e.preventDefault();
+      var q=input.value.trim();
+      if(!q)return;
+      var m=matches();
+      api.add(m.length&&m[0].toLowerCase().indexOf(q.toLowerCase())===0?m[0]:q);
+    } else if(e.key==='Backspace'&&!input.value&&sel.length){api.rm(sel.length-1)}
+    else if(e.key==='Escape'){hide();input.blur()}
+  });
+
+  var api={
+    add:function(v){v=(''+v).trim();if(!v)return;
+      if(sel.indexOf(v)<0){sel.push(v); if(opts.indexOf(v)<0)opts.push(v);}
+      input.value='';renderChips();renderMenu();input.focus();fire();},
+    rm:function(i){sel.splice(i,1);renderChips();renderMenu();fire();},
+    get:function(){return sel.slice()},
+    set:function(a){sel=a.slice();renderChips();fire();},
+    clear:function(){sel=[];renderChips();fire();}
+  };
+  function fire(){ if(typeof window.onTokenChange==='function')window.onTokenChange(hostId); }
+  TK[hostId]=api;
+  renderChips();
+  return api;
+}
+function esc(s){return (''+s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function tkGet(id){return TK[id]?TK[id].get():[]}
+window.onTokenChange=function(id){
+  if(id==='f-langs'||id==='f-skills'||id==='f-city')syncPreview();
+  if(id==='p-langs'||id==='p-skills'||id==='p-city'||id==='p-format')syncSummary();
+};
+
+/* ============ NAV / ROUTING ============ */
+var NAVS={
+ out:[["explore","Projects"]],
+ freelancer:[["explore","Projects"],["myapps","My applications"],["onboard","Profile"]],
+ client:[["dash","Dashboard"],["post","Post a project"],["board","Applications"]],
+ indie:[["dash","Dashboard"],["post","Post a project"],["board","Applications"]],
+ admin:[["admin","Moderation"],["explore","Projects"]]
+};
+function renderNav(){
+  var role=SESSION?SESSION.role:'out';
+  var items=NAVS[role]||NAVS.out;
+  document.getElementById('nav-links').innerHTML=items.map(function(x){
+    return '<button class="nav-link" data-nav="'+x[0]+'" onclick="go(\''+x[0]+'\')">'+x[1]+'</button>';
+  }).join('');
+  var right=document.getElementById('nav-right');
+  if(SESSION){
+    var rn={freelancer:'Freelancer account',client:'Client account',indie:'Independent client account',admin:'Admin account'};
+    right.innerHTML='<div class="acct-wrap">'
+      +'<button class="acct" onclick="toggleAcct(event)" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">'
+      +'<b>'+esc(SESSION.name.split(' ')[0])+'</b><span class="av" aria-hidden="true">'+esc(SESSION.name[0])+'</span></button>'
+      +'<div class="acct-menu" id="acct-menu" role="menu">'
+      +'<div class="who">'+esc(SESSION.name)+'</div><div class="role">'+(rn[SESSION.role]||'Account')+'</div>'
+      +'<button role="menuitem" onclick="closeAcct();home()">Go to home</button>'
+      +'<button role="menuitem" class="out" onclick="closeAcct();signOut()">Sign out</button>'
+      +'</div></div>';
+  } else {
+    right.innerHTML='<button class="btn btn-primary btn-sm nav-cta" onclick="go(\'auth\')">Sign in</button>';
+  }
+}
+function showView(view){
+  var el=document.getElementById('view-'+view);
+  if(!el)return;
+  var d=document.querySelectorAll('.view');
+  for(var i=0;i<d.length;i++)d[i].classList.remove('on');
+  el.classList.add('on');
+  var links=document.querySelectorAll('.nav-link');
+  for(var j=0;j<links.length;j++)links[j].classList.toggle('active',links[j].dataset.nav===view);
+  if(view==='auth')resetAuth();
+  if(view==='myapps')renderMyApps();
+  if(view==='dash')renderDash();
+  if(view==='admin')renderAdmin();
+  CURRENT=view;
+  try{window.scrollTo(0,0)}catch(e){}
+}
+
+/* ---- history routing: browser / Android back works ---- */
+var CURRENT='landing';
+var HISTORY_OK=(function(){
+  try{ history.replaceState(history.state||{},'',location.href); return true; }
+  catch(e){ return false; }
+})();
+var STACK=[];
+function go(view){ showView(view); push('#'+view); }
+function push(hash){
+  if(!HISTORY_OK){ STACK.push(hash); return; }
+  try{ if(location.hash!==hash) history.pushState({h:hash},'',hash); }catch(e){ HISTORY_OK=false; }
+}
+function applyHash(h){
+  h=(h||'').replace(/^#/,'');
+  if(h.indexOf('role-')===0){var id=parseInt(h.slice(5),10); if(!isNaN(id))return showDetail(id)}
+  if(h.indexOf('team-')===0)return showRProfile(h.slice(5));
+  showView(h||'landing');
+}
+window.addEventListener('popstate',function(e){
+  if(!HISTORY_OK)return;
+  var st=e.state||{};
+  var open=document.querySelector('.modal-veil.on');
+  if(open && !st.m){ doCloseModal(open.id); return; }
+  applyHash(location.hash);
+});
+
+/* ---- validation helpers ---- */
+function fieldOf(id){var e=document.getElementById(id);return e?e.closest('.field'):null}
+function clearErrors(scope){
+  var f=document.querySelectorAll(scope+' .field.bad');
+  for(var i=0;i<f.length;i++){f[i].classList.remove('bad');var e=f[i].querySelector('.err');if(e)e.remove()}
+}
+function fail(id,msg){
+  var f=fieldOf(id); if(!f)return false;
+  f.classList.add('bad');
+  if(!f.querySelector('.err')){var d=document.createElement('div');d.className='err';d.textContent=msg;f.appendChild(d)}
+  return false;
+}
+function today(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function home(){
+  if(!SESSION)return go('landing');
+  go(SESSION.role==='freelancer'?'explore':SESSION.role==='admin'?'admin':'dash');
+}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('on')},2600)}
+var lastFocus=null;
+function openModal(id){
+  lastFocus=document.activeElement;
+  var m=document.getElementById(id);
+  m.classList.add('on'); document.body.style.overflow='hidden';
+  if(HISTORY_OK){try{history.pushState({h:location.hash,m:id},'',location.hash)}catch(e){HISTORY_OK=false}}
+  setTimeout(function(){var f=m.querySelector('input,textarea,button:not(.modal-x)');if(f)f.focus()},60);
+}
+function doCloseModal(id){
+  var m=document.getElementById(id); if(!m)return;
+  m.classList.remove('on'); document.body.style.overflow='';
+  if(lastFocus&&lastFocus.focus){try{lastFocus.focus()}catch(e){}}
+}
+function closeModal(id){
+  if(HISTORY_OK&&history.state&&history.state.m===id){try{history.back();return}catch(e){}}
+  doCloseModal(id);
+}
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Tab')return;
+  var m=document.querySelector('.modal-veil.on'); if(!m)return;
+  var f=m.querySelectorAll('button,input,textarea,select,a[href]');
+  if(!f.length)return;
+  var first=f[0], last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+});
+document.addEventListener('click',function(e){
+  var am=document.getElementById('acct-menu');
+  if(am&&am.classList.contains('on')&&!am.closest('.acct-wrap').contains(e.target))closeAcct();
+  var open=document.querySelectorAll('.tk-menu.on');
+  for(var i=0;i<open.length;i++){
+    var host=open[i].closest('.tk');
+    if(host&&!host.contains(e.target)){open[i].classList.remove('on');host.classList.remove('focus')}
+  }
+},true);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){var m=document.querySelectorAll('.modal-veil.on');for(var i=0;i<m.length;i++)closeModal(m[i].id)}});
+
+/* ============ AUTH ============ */
+document.getElementById('role-pick').innerHTML=ROLE_TYPES.map(function(r){
+  return '<button class="role-opt" data-rk="'+r.k+'" onclick="pickRole(this,\''+r.k+'\')"><span class="rk">'+r.i+'</span><span><b>'+r.n+'</b><p>'+r.d+'</p></span></button>';
+}).join('');
+function pickRole(el,k){
+  var all=document.querySelectorAll('.role-opt');
+  for(var i=0;i<all.length;i++)all[i].classList.remove('sel');
+  el.classList.add('sel'); pendingRole=k;
+  document.getElementById('au-next1').disabled=false;
+}
+function auStep(n){
+  var s=document.querySelectorAll('[data-au]');
+  for(var i=0;i<s.length;i++)s[i].classList.toggle('on',+s[i].dataset.au===n);
+  if(n===2){
+    var rt=ROLE_TYPES.filter(function(r){return r.k===pendingRole})[0];
+    document.getElementById('au-role-echo').textContent='Signing in as '+(rt?rt.n:'Freelancer')+'.';
+  }
+}
+function auPhoneCheck(){
+  var p=document.getElementById('au-phone').value.replace(/\D/g,'');
+  document.getElementById('au-phone').value=p;
+  var n=document.getElementById('au-name').value.trim();
+  document.getElementById('au-next2').disabled=!(p.length>=10&&n.length>1);
+}
+function auSendOtp(){
+  document.getElementById('au-sent-to').textContent='Sent to '+document.getElementById('au-cc').value+' '+document.getElementById('au-phone').value+'.';
+  auStep(3); setTimeout(function(){document.getElementById('o1').focus()},80);
+}
+function otpHop(el,next){
+  el.value=el.value.replace(/\D/g,'');
+  if(el.value&&next)document.getElementById(next).focus();
+  var full=['o1','o2','o3','o4'].every(function(i){return document.getElementById(i).value});
+  document.getElementById('au-verify').disabled=!full;
+}
+function auVerify(){
+  signIn(pendingRole||'freelancer',document.getElementById('au-name').value.trim()||'Guest User');
+}
+function demoLogin(k){
+  var names={freelancer:"Keerti Sharma",client:"Aditya Mehra",indie:"Rhea Kapoor",admin:"Admin Desk"};
+  signIn(k,names[k]);
+}
+function signIn(role,name){
+  SESSION={role:role,name:name,rid:role==='client'?'brightloop':role==='indie'?'indie':null};
+  renderNav();
+  toast('Signed in as '+name+'.');
+  home();
+}
+function resetAuth(){
+  auStep(1); pendingRole=null;
+  var all=document.querySelectorAll('.role-opt');
+  for(var i=0;i<all.length;i++)all[i].classList.remove('sel');
+  document.getElementById('au-next1').disabled=true;
+  document.getElementById('au-next2').disabled=true;
+  document.getElementById('au-verify').disabled=true;
+  ['au-phone','au-name','o1','o2','o3','o4'].forEach(function(id){var e=document.getElementById(id);if(e)e.value=''});
+}
+function toggleAcct(e){
+  if(e)e.stopPropagation();
+  var m=document.getElementById('acct-menu'); if(!m)return;
+  var on=m.classList.toggle('on');
+  var btn=document.querySelector('.acct'); if(btn)btn.setAttribute('aria-expanded',on?'true':'false');
+}
+function closeAcct(){
+  var m=document.getElementById('acct-menu'); if(m)m.classList.remove('on');
+  var btn=document.querySelector('.acct'); if(btn)btn.setAttribute('aria-expanded','false');
+}
+function signOut(){SESSION=null;pendingRole=null;renderNav();go('landing');toast('Signed out.')}
+
+/* ============ PROJECT CARDS / EXPLORE ============ */
+function payBadge(r){return r.paid==='Unpaid'?'<span class="badge b-unpaid">Unpaid · disclosed</span>':'<span class="badge b-paid">'+r.paid+'</span>'}
+function roleCard(r){
+  var rec=RECRUITERS[r.rid];
+  return '<div class="role-card glass" role="button" tabindex="0" onclick="openDetail('+r.id+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openDetail('+r.id+')}">'
+   +'<div class="top"><div><h4>'+esc(r.role)+'</h4><p class="proj">'+esc(r.project)+' · '+esc(r.format)+'</p></div></div>'
+   +'<div class="chip-row"><span class="badge b-verify">✓ '+rec.verify+'</span>'+payBadge(r)+'</div>'
+   +'<div class="chip-row">'+r.langs.map(function(l){return '<span class="badge b-unpaid">'+esc(l)+'</span>'}).join('')+'<span class="badge b-unpaid">'+esc(r.age)+'</span></div>'
+   +'<div class="foot"><span class="meta">'+esc(r.city)+'</span>'+scoreInline(r.rid)+'</div></div>';
+}
+document.getElementById('landing-roles').innerHTML=ROLES.slice(0,3).map(roleCard).join('');
+var FILTERS={city:null,paid:false,rated:false};
+function renderFilters(){
+  var f=document.getElementById('filters');
+  var cs=["Remote","Mumbai","Delhi NCR","Hyderabad"];
+  f.innerHTML=cs.map(function(c){return '<button class="chip '+(FILTERS.city===c?'sel':'')+'" onclick="setF(\'city\',\''+c+'\')">'+c+'</button>'}).join('')
+   +'<button class="chip '+(FILTERS.paid?'sel':'')+'" onclick="setF(\'paid\')">Paid only</button>'
+   +'<button class="chip '+(FILTERS.rated?'sel':'')+'" onclick="setF(\'rated\')">Rated 4.0+</button>';
+}
+function setF(k,v){ if(k==='city')FILTERS.city=FILTERS.city===v?null:v; else FILTERS[k]=!FILTERS[k]; renderFilters(); renderExplore(); }
+function renderExplore(){
+  var si=document.getElementById('search'); var q=(si&&si.value||'').toLowerCase();
+  var out=ROLES.filter(function(r){
+    if(FILTERS.city&&r.city!==FILTERS.city)return false;
+    if(FILTERS.paid&&r.paid==='Unpaid')return false;
+    if(FILTERS.rated){var a=agg(r.rid); if(!a.n||parseFloat(a.avg)<4)return false}
+    if(q&&(r.role+r.project+r.city+r.format+r.langs.join(' ')+RECRUITERS[r.rid].org).toLowerCase().indexOf(q)<0)return false;
+    return true;
+  });
+  document.getElementById('results-meta').textContent=out.length+' open project'+(out.length===1?'':'s');
+  document.getElementById('explore-cards').innerHTML=out.length?out.map(roleCard).join(''):'<div class="empty glass" style="border-radius:var(--r);grid-column:1/-1"><b>No projects match.</b><br>Clear a filter or search.</div>';
+}
+
+/* ============ DETAIL ============ */
+var currentRole=null;
+function openDetail(id){ showDetail(id); push('#role-'+id); }
+function hasApplied(id){return MYAPPS.some(function(a){return a.roleId===id})}
+function showDetail(id){
+  var r=ROLES.filter(function(x){return x.id===id})[0]; currentRole=r;
+  var rec=RECRUITERS[r.rid];
+  document.getElementById('detail-body').innerHTML=
+   '<button class="back-link" onclick="go(\'explore\')">← Back to projects</button>'
+  +'<div class="detail-hero glass-strong">'
+   +'<div class="chip-row"><span class="badge b-verify">✓ '+rec.verify+'</span>'+payBadge(r)+'<span class="badge b-unpaid">'+esc(r.format)+'</span>'+scoreInline(r.rid)+'</div>'
+   +'<h1 class="display">'+esc(r.role)+'</h1><p class="lead">'+esc(r.project)+' · '+esc(rec.org)+' · '+esc(r.city)+'</p>'
+   +'<div style="display:flex;gap:.7rem;margin-top:1.3rem;flex-wrap:wrap">'
+    +(hasApplied(r.id)?'<button class="btn btn-ghost" onclick="go(\'myapps\')">Applied · view status</button>':'<button class="btn btn-primary" onclick="tryApply()">Apply</button>')
+    +'<button class="btn btn-ghost" onclick="openShare('+r.id+')">Share</button></div></div>'
+  +'<div class="detail-grid"><div style="display:flex;flex-direction:column;gap:1.2rem">'
+   +'<div class="panel glass"><h3>About the project</h3><p>'+esc(r.desc)+'</p></div>'
+   +'<div class="panel glass"><h3>Requirements</h3>'
+    +'<div class="kv"><span>Budget</span><b>'+esc(r.age)+'</b></div>'
+    +'<div class="kv"><span>Experience level</span><b>'+esc(r.gender)+'</b></div>'
+    +'<div class="kv"><span>Skills &amp; tools</span><b>'+r.langs.join(', ')+'</b></div>'
+    +(r.skills.length?'<div class="kv"><span>Additional skills</span><b>'+r.skills.join(', ')+'</b></div>':'')+'</div></div>'
+   +'<div class="sticky-side">'
+    +'<div class="panel glass"><h3>Logistics</h3>'
+     +'<div class="kv"><span>Applications close</span><b>'+esc(r.deadline)+'</b></div>'
+     +'<div class="kv"><span>Timeline</span><b>'+esc(r.window)+'</b></div>'
+     +'<div class="kv"><span>Interview mode</span><b>'+esc(r.mode)+'</b></div>'
+     +'<div class="kv"><span>Compensation</span><b>'+esc(r.comp)+'</b></div></div>'
+    +'<div class="panel glass">'+ratingPanel(r.rid)+'</div>'
+    +'<div class="panel glass" style="font-size:.85rem;color:var(--muted)"><h3>Safety</h3><p>Applying is free under the no-fee policy. <b style="color:var(--warn)">Report this listing.</b></p></div>'
+   +'</div></div>';
+  showView('detail');
+}
+function tryApply(){
+  if(!SESSION){toast('Sign in as a freelancer to apply.');go('auth');return}
+  if(SESSION.role!=='freelancer'){toast('Only freelancer accounts can apply.');return}
+  if(currentRole&&hasApplied(currentRole.id)){toast('Already applied to this project.');return}
+  openModal('modal-apply');
+}
+function submitApply(){
+  closeModal('modal-apply');
+  if(currentRole&&!hasApplied(currentRole.id)){
+    MYAPPS.unshift({roleId:currentRole.id,status:"New",applied:"Today",rated:false});
+    toast('Application submitted.');
+    showDetail(currentRole.id);
+  } else toast('Already applied to this project.');
+  document.getElementById('ap-note').value='';document.getElementById('ap-tape').value='';
+}
+
+/* ============ CLIENT PROFILE / ALL RATINGS ============ */
+function openRProfile(rid){ showRProfile(rid); push('#team-'+rid); }
+function showRProfile(rid){
+  var r=RECRUITERS[rid],a=agg(rid);
+  var rows=r.ratings.map(function(x){
+    function f(v,y,n,na){return v===true?'<span class="fact y">'+y+'</span>':v===false?'<span class="fact n">'+n+'</span>':'<span class="fact na">'+na+'</span>'}
+    return '<div class="rating-row"><div class="rating-head"><b style="font-size:.9rem">'+esc(x.by)+'</b>'
+     +'<span class="score-inline"><span class="n">'+x.overall+'</span><em>/ 5 · '+x.date+'</em></span></div>'
+     +(x.note?'<p style="font-size:.88rem;color:var(--muted)">'+esc(x.note)+'</p>':'')
+     +'<div class="rating-facts">'+f(x.responded,'Responded','No response','—')
+      +f(x.described,'As described','Not as described','Never started')
+      +f(x.paid,'Paid as stated','Not paid as stated','Payment N/A')+'</div></div>';
+  }).join('');
+  document.getElementById('rprofile-body').innerHTML=
+   '<button class="back-link" onclick="go(\'explore\')">← Back to projects</button>'
+  +'<div class="detail-hero glass-strong"><div class="chip-row"><span class="badge b-verify">✓ '+r.verify+'</span><span class="badge b-unpaid">'+esc(r.city)+'</span></div>'
+   +'<h1 class="display">'+esc(r.org)+'</h1><p class="lead">'+esc(r.person)+' · on Brief since '+r.since+'</p></div>'
+  +'<div class="detail-grid"><div class="panel glass"><h3>Ratings from freelancers</h3>'+(rows||'<p class="meta">No ratings yet.</p>')+'</div>'
+  +'<div class="sticky-side"><div class="panel glass">'
+   +(a.n?'<div class="score-lg"><b>'+a.avg+'</b><span>/ 5 · '+a.n+' rating'+(a.n===1?'':'s')+'</span></div><div style="margin-top:1rem">'
+     +metricRow('Responded to applications',a.responded,a.respN)
+     +metricRow('Project as described',a.described,a.descN)
+     +metricRow('Paid as stated',a.paid,a.paidN)+'</div>'
+     :'<p class="meta">No ratings yet.</p>')
+   +'</div></div></div>';
+  showView('rprofile');
+}
+
+/* ============ FREELANCER: MY APPLICATIONS + RATING ============ */
+function statusPill(s){var m={New:'st-new',Shortlisted:'st-short',Closed:'st-closed',Rejected:'st-rej'};return '<span class="status-pill '+(m[s]||'st-closed')+'">'+s+'</span>'}
+function renderMyApps(){
+  var counts={New:0,Shortlisted:0,Closed:0};
+  MYAPPS.forEach(function(a){if(counts[a.status]!==undefined)counts[a.status]++});
+  var pend=MYAPPS.filter(function(a){return a.status==='Closed'&&!a.rated}).length;
+  document.getElementById('myapps-stats').innerHTML=
+    '<div class="stat glass"><b>'+MYAPPS.length+'</b><span>Total applications</span></div>'
+   +'<div class="stat glass"><b>'+counts.Shortlisted+'</b><span>Shortlisted</span></div>'
+   +'<div class="stat glass"><b>'+counts.Closed+'</b><span>Closed</span></div>'
+   +'<div class="stat glass"><b>'+pend+'</b><span>Awaiting your rating</span></div>';
+  document.getElementById('myapps-list').innerHTML=MYAPPS.map(function(a,i){
+    var r=ROLES.filter(function(x){return x.id===a.roleId})[0], rec=RECRUITERS[r.rid];
+    return '<div class="row-item glass"><div class="grow"><h4>'+esc(r.role)+'</h4>'
+     +'<p class="meta">'+esc(r.project)+' · '+esc(rec.org)+' · applied '+a.applied+'</p></div>'
+     +'<div class="row-actions">'+statusPill(a.status)
+     +(a.status==='Closed'&&!a.rated?'<button class="btn btn-primary btn-sm" onclick="openRate('+i+')">Rate client</button>':'')
+     +(a.rated?'<span class="status-pill st-short">Rated</span>':'')
+     +'<button class="mini" onclick="openDetail('+r.id+')">View project</button></div></div>';
+  }).join('')||'<div class="empty glass" style="border-radius:var(--r)"><b>No applications yet.</b><br>Open projects are listed under Projects.</div>';
+}
+var rateIdx=null;
+function ynSel(b){var s=b.parentElement.children;for(var i=0;i<s.length;i++)s[i].classList.remove('sel');b.classList.add('sel')}
+function ynVal(id){var s=document.querySelector('#'+id+' .sel');if(!s)return null;var t=s.textContent;
+  if(t==='Yes')return true; if(t==='No')return false; if(t==='Not applicable'||t==="Didn't start")return 'na'; return t}
+function openRate(i){
+  rateIdx=i;
+  var a=MYAPPS[i], r=ROLES.filter(function(x){return x.id===a.roleId})[0], rec=RECRUITERS[r.rid];
+  document.getElementById('rate-who').textContent=rec.org+' — '+r.project+'. Your rating is public and shown on their listings.';
+  ['rt-responded','rt-described','rt-paid','rt-overall'].forEach(function(g){
+    var s=document.querySelectorAll('#'+g+' button');for(var k=0;k<s.length;k++)s[k].classList.remove('sel');
+  });
+  document.getElementById('rt-note').value='';
+  openModal('modal-rate');
+}
+function submitRating(){
+  var ov=ynVal('rt-overall');
+  if(ov===null){toast('Select an overall score.');return}
+  if(ynVal('rt-responded')===null){toast('Answer whether they responded.');return}
+  if(rateIdx===null||MYAPPS[rateIdx].rated){closeModal('modal-rate');return}
+  var a=MYAPPS[rateIdx], r=ROLES.filter(function(x){return x.id===a.roleId})[0];
+  RECRUITERS[r.rid].ratings.unshift({
+    by:(SESSION?SESSION.name:'Freelancer'), date:"Jul 2026", overall:parseInt(ov,10),
+    responded:ynVal('rt-responded'), described:ynVal('rt-described'), paid:ynVal('rt-paid'),
+    note:document.getElementById('rt-note').value.trim()
+  });
+  a.rated=true;
+  closeModal('modal-rate'); renderMyApps(); renderExplore();
+  document.getElementById('landing-roles').innerHTML=ROLES.slice(0,3).map(roleCard).join('');
+  toast('Rating submitted.');
+}
+
+/* ============ CLIENT DASHBOARD ============ */
+function renderDash(){
+  var rid=(SESSION&&SESSION.rid)||'brightloop', rec=RECRUITERS[rid], a=agg(rid);
+  var mine=ROLES.filter(function(r){return r.rid===rid});
+  document.getElementById('dash-org').textContent=rec.org;
+  document.getElementById('dash-sub').textContent=rec.verify+' · on Brief since '+rec.since;
+  var total=APPS.new.length+APPS.short.length+APPS.maybe.length+APPS.rej.length;
+  document.getElementById('dash-stats').innerHTML=
+    '<div class="stat glass"><b>'+mine.length+'</b><span>Live projects</span></div>'
+   +'<div class="stat glass"><b>'+total+'</b><span>Applications</span></div>'
+   +'<div class="stat glass"><b>'+APPS.short.length+'</b><span>Shortlisted</span></div>'
+   +'<div class="stat glass"><b>'+(a.n?a.avg:'—')+'</b><span>Your rating</span></div>';
+  document.getElementById('dash-roles').innerHTML=mine.map(function(r){
+    return '<div class="row-item glass"><div class="grow"><h4>'+esc(r.role)+'</h4><p class="meta">'+esc(r.project)+' · closes '+r.deadline+'</p></div>'
+     +'<div class="row-actions"><span class="status-pill st-new">'+APPS.new.length+' new</span>'
+     +'<button class="mini" onclick="go(\'board\')">Applications</button>'
+     +'<button class="mini" onclick="openDetail('+r.id+')">View listing</button></div></div>';
+  }).join('')||'<div class="empty glass" style="border-radius:var(--r)"><b>No projects posted.</b><br>Use Post a project to publish your first listing.</div>';
+  document.getElementById('dash-rating').innerHTML=ratingPanel(rid);
+}
+
+/* ============ ADMIN ============ */
+function adminTab(el,k){
+  var t=document.querySelectorAll('#admin-tabs .tab');
+  for(var i=0;i<t.length;i++)t[i].classList.remove('sel');
+  el.classList.add('sel'); renderAdmin(k);
+}
+function renderAdmin(k){
+  k=k||'verif';
+  document.getElementById('admin-stats').innerHTML=
+    '<div class="stat glass"><b>'+VERIF_Q.length+'</b><span>Awaiting verification</span></div>'
+   +'<div class="stat glass"><b>'+REPORTS_Q.length+'</b><span>Open reports</span></div>'
+   +'<div class="stat glass"><b>'+ROLES.length+'</b><span>Live listings</span></div>'
+   +'<div class="stat glass"><b>'+Object.keys(RECRUITERS).length+'</b><span>Client accounts</span></div>';
+  var b=document.getElementById('admin-body'), h='';
+  if(k==='verif'){
+    h=VERIF_Q.map(function(v,i){
+      return '<div class="row-item glass"><div class="grow"><h4>'+esc(v.who)+'</h4><p class="meta">'+esc(v.org)+' · '+esc(v.docs)+' · '+v.when+'</p></div>'
+       +'<div class="row-actions"><button class="mini act" onclick="adminAct('+i+',\'verif\',\'Verified\')">Approve</button>'
+       +'<button class="mini" onclick="adminAct('+i+',\'verif\',\'Rejected\')">Reject</button></div></div>';
+    }).join('')||'<div class="empty glass" style="border-radius:var(--r)"><b>Queue clear.</b></div>';
+  } else if(k==='reports'){
+    h=REPORTS_Q.map(function(v,i){
+      return '<div class="row-item glass"><div class="grow"><h4>'+esc(v.what)+'</h4><p class="meta">'+esc(v.why)+' · reported by '+v.by+'</p></div>'
+       +'<div class="row-actions"><span class="status-pill '+(v.sev==='high'?'st-rej':'st-closed')+'">'+v.sev+'</span>'
+       +'<button class="mini act" onclick="adminAct('+i+',\'reports\',\'Removed\')">Remove listing</button>'
+       +'<button class="mini" onclick="adminAct('+i+',\'reports\',\'Dismissed\')">Dismiss</button></div></div>';
+    }).join('')||'<div class="empty glass" style="border-radius:var(--r)"><b>No open reports.</b></div>';
+  } else {
+    h=ROLES.map(function(r){
+      return '<div class="row-item glass"><div class="grow"><h4>'+esc(r.role)+'</h4><p class="meta">'+esc(RECRUITERS[r.rid].org)+' · '+esc(r.city)+' · '+esc(r.paid)+'</p></div>'
+       +'<div class="row-actions"><span class="status-pill st-short">Live</span><button class="mini" onclick="openDetail('+r.id+')">View</button></div></div>';
+    }).join('');
+  }
+  b.innerHTML=h;
+}
+function adminAct(i,q,label){
+  if(q==='verif')VERIF_Q.splice(i,1); else REPORTS_Q.splice(i,1);
+  renderAdmin(q); toast(label+'.');
+}
+
+/* ============ FREELANCER ONBOARDING ============ */
+var obCur=1, OB_MAX=4, thumbCount=0;
+function segSel(b){var s=b.parentElement.children;for(var i=0;i<s.length;i++)s[i].classList.remove('sel');b.classList.add('sel')}
+function obValid(step){
+  clearErrors('#view-onboard');
+  var ok=true;
+  if(step===1){
+    if(!(document.getElementById('f-name').value||'').trim())ok=fail('f-name','Enter your display name.');
+    if(!tkGet('f-city').length)ok=fail('f-city','Select your base city.');
+    var dob=(document.getElementById('f-dob').value||'');
+    if(dob&&dob>today())ok=fail('f-dob','This date cannot be in the future.');
+  }
+  if(step===2){
+    var uz=document.querySelector('#view-onboard .upload-zone');
+    var old=document.getElementById('photo-err'); if(old)old.remove();
+    if(thumbCount<2){
+      var d=document.createElement('div'); d.className='err'; d.id='photo-err';
+      d.textContent='Add at least two portfolio pieces.';
+      uz.parentNode.insertBefore(d,uz.nextSibling);
+      uz.style.borderColor='var(--warn)';
+      ok=false;
+    } else { uz.style.borderColor='' }
+  }
+  if(step===3){
+    if(!tkGet('f-langs').length)ok=fail('f-langs','Select at least one skill or tool.');
+  }
+  if(!ok){
+    var bad=document.querySelector('#view-onboard .field.bad');
+    if(bad&&bad.scrollIntoView)bad.scrollIntoView({block:'center'});
+  }
+  return ok;
+}
+function obStep(d){
+  if(d>0&&obCur<=OB_MAX&&!obValid(obCur))return;
+  if(obCur===OB_MAX&&d>0)obCur=5; else obCur=Math.min(Math.max(obCur+d,1),OB_MAX);
+  var s=document.querySelectorAll('[data-ob]');
+  for(var i=0;i<s.length;i++)s[i].classList.toggle('on',+s[i].dataset.ob===obCur);
+  var done=obCur>OB_MAX;
+  document.getElementById('ob-nav').style.display=done?'none':'flex';
+  if(!done){
+    document.getElementById('ob-step-label').textContent='Step '+obCur+' of '+OB_MAX;
+    document.getElementById('ob-progress').style.width=(obCur/OB_MAX*100)+'%';
+    document.getElementById('ob-back').disabled=obCur===1;
+    document.getElementById('ob-next').textContent=obCur===OB_MAX?'Publish profile':'Continue';
+  } else toast('Profile published.');
+  if(obCur===OB_MAX)fillReview();
+  syncPreview();
+}
+function addThumb(){if(thumbCount>=4){toast('Maximum four pieces.');return}thumbCount++;renderThumbs();syncPreview()}
+function rmThumb(){thumbCount=Math.max(0,thumbCount-1);renderThumbs();syncPreview()}
+function renderThumbs(){
+  var h='';
+  for(var i=0;i<thumbCount;i++)h+='<div class="thumb"><button class="x" onclick="rmThumb()" aria-label="Remove piece">✕</button></div>';
+  for(var j=thumbCount;j<4;j++)h+='<div class="thumb empty-t"></div>';
+  document.getElementById('thumbs').innerHTML=h;
+}
+function syncPreview(){
+  var name=(document.getElementById('f-name')||{}).value||'';
+  var city=tkGet('f-city')[0]||'Mumbai';
+  var age=(document.getElementById('f-age')||{}).value||'₹1,000–2,500/hr';
+  var bio=(document.getElementById('f-bio')||{}).value||'';
+  var tape=(document.getElementById('f-tape')||{}).value||'';
+  var langs=tkGet('f-langs'), skills=tkGet('f-skills');
+  document.getElementById('pv-name').textContent=name.trim()||'Your name';
+  document.getElementById('pv-meta').textContent=city+' · '+age;
+  document.getElementById('pv-bio').textContent=bio.trim()||'Your one-line tagline appears here.';
+  var chips=langs.slice(0,4).concat(skills.slice(0,3));
+  document.getElementById('pv-chips').innerHTML=chips.map(function(c){return '<span class="badge b-unpaid">'+esc(c)+'</span>'}).join('')||'<span class="meta">Skills and tools appear here</span>';
+  var flags=[!!name.trim(),!!bio.trim(),thumbCount>0,!!tape.trim(),langs.length>0,skills.length>0];
+  var done=flags.filter(Boolean).length;
+  var p=Math.round(10+done/6*90);
+  document.getElementById('ring').style.setProperty('--p',p);
+  document.getElementById('ring-label').textContent=p+'%';
+  document.getElementById('ring-hint').textContent=done+' of 6 fields complete';
+}
+function fillReview(){
+  document.getElementById('rv-name').textContent=(document.getElementById('f-name').value||'—');
+  document.getElementById('rv-cityage').textContent=(tkGet('f-city')[0]||'—')+' · '+document.getElementById('f-age').value;
+  document.getElementById('rv-langs').textContent=tkGet('f-langs').join(', ')||'—';
+  document.getElementById('rv-skills').textContent=tkGet('f-skills').join(', ')||'—';
+  document.getElementById('rv-tape').textContent=document.getElementById('f-tape').value?'Link added':'Not added';
+}
+function shareProfile(){
+  document.getElementById('share-card-body').innerHTML=
+   '<span class="sig-tag">Freelancer on Brief</span><h3>'+esc(document.getElementById('f-name').value||'Your name')+'</h3>'
+  +'<p class="role-line">'+(tkGet('f-city')[0]||'Mumbai')+' · '+document.getElementById('f-age').value+'</p>'
+  +'<div class="sig-meta">'+tkGet('f-langs').slice(0,3).map(function(l){return '<span class="badge b-unpaid">'+esc(l)+'</span>'}).join('')+'<span class="badge b-verify">✓ Brief profile</span></div>'
+  +'<div class="sig-foot"><span class="sig-link">brief.work/f/profile<br><b style="color:var(--ink)">View full profile</b></span><div class="qr"></div></div>';
+  openModal('modal-share');
+}
+
+/* ============ POST A PROJECT ============ */
+var pcCur=1, PC_MAX=5;
+function feeGuard(bad){document.getElementById('fee-guard').classList.toggle('on',bad);document.getElementById('pc-next').disabled=bad}
+function pcValid(step){
+  clearErrors('#view-post');
+  var ok=true;
+  if(step===1){
+    if(!val('p-title',''))ok=fail('p-title','Enter the project title.');
+    if(!tkGet('p-format').length)ok=fail('p-format','Select a category.');
+    if(!tkGet('p-city').length)ok=fail('p-city','Select a city or Remote.');
+  }
+  if(step===2){
+    if(!val('p-role',''))ok=fail('p-role','Enter the position title.');
+    if(val('p-desc','').length<20)ok=fail('p-desc','Describe the project — at least 20 characters.');
+    var a1=parseInt(val('p-age1',''),10),a2=parseInt(val('p-age2',''),10);
+    if(isNaN(a1))ok=fail('p-age1','Required.');
+    if(isNaN(a2))ok=fail('p-age2','Required.');
+    if(!isNaN(a1)&&!isNaN(a2)&&a2<a1)ok=fail('p-age2','Must be the same or higher than the lower budget.');
+    if(!tkGet('p-langs').length)ok=fail('p-langs','Select at least one skill or tool.');
+  }
+  if(step===3){
+    var dl=val('p-deadline','');
+    if(!dl)ok=fail('p-deadline','Set the closing date.');
+    else if(dl<today())ok=fail('p-deadline','Closing date cannot be in the past.');
+    if(!document.getElementById('p-flex').checked){
+      var st=val('p-start',''),en=val('p-end','');
+      if(!st)ok=fail('p-start','Set a project start date, or tick “Dates not locked yet”.');
+      if(!en)ok=fail('p-end','Set a project end date, or tick “Dates not locked yet”.');
+      if(st&&en&&en<st)ok=fail('p-end','End date is before the start date.');
+      if(st&&dl&&st<dl)ok=fail('p-start','Project starts before applications close.');
+    }
+  }
+  if(step===4){
+    if(!val('p-comp-text',''))ok=fail('p-comp-text','State the rate, or what is covered if unpaid.');
+    if(segVal('p-fee')==='Yes'){feeGuard(true);ok=false}
+  }
+  if(!ok){
+    var bad=document.querySelector('#view-post .field.bad');
+    if(bad&&bad.scrollIntoView)bad.scrollIntoView({block:'center'});
+    toast('Check the highlighted fields.');
+  }
+  return ok;
+}
+function pcStep(d){
+  if(d>0&&pcCur<=PC_MAX&&!pcValid(pcCur))return;
+  if(pcCur===PC_MAX&&d>0)pcCur=6; else pcCur=Math.min(Math.max(pcCur+d,1),PC_MAX);
+  var s=document.querySelectorAll('[data-pc]');
+  for(var i=0;i<s.length;i++)s[i].classList.toggle('on',+s[i].dataset.pc===pcCur);
+  var done=pcCur>PC_MAX;
+  document.getElementById('pc-nav').style.display=done?'none':'flex';
+  if(!done){
+    document.getElementById('pc-step-label').textContent='Step '+pcCur+' of '+PC_MAX;
+    document.getElementById('pc-progress').style.width=(pcCur/PC_MAX*100)+'%';
+    document.getElementById('pc-back').disabled=pcCur===1;
+    document.getElementById('pc-next').textContent=pcCur===PC_MAX?'Publish project':'Continue';
+  } else toast('Published. Verification badge pending.');
+  if(pcCur===PC_MAX)fillPcReview();
+}
+function val(id,fb){var e=document.getElementById(id);return (e&&(''+e.value).trim())||fb}
+function segVal(id){var s=document.querySelector('#'+id+' .sel');return s?s.textContent:'—'}
+function fmtDate(id){
+  var v=val(id,'');if(!v)return '';
+  var p=v.split('-'); if(p.length!==3)return v;
+  var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  return parseInt(p[2],10)+' '+M[parseInt(p[1],10)-1]+' '+p[0];
+}
+function windowText(){
+  if(document.getElementById('p-flex').checked)return 'Dates not locked';
+  var a=fmtDate('p-start'), b=fmtDate('p-end');
+  return a&&b?a+' – '+b:(a||b||'—');
+}
+function budgetText(){var a=val('p-age1',''),b=val('p-age2','');return a&&b?'₹'+a+'–'+b:(a||b||'—')}
+function syncSummary(){
+  document.getElementById('sum-title').textContent=val('p-title','Untitled project');
+  document.getElementById('sum-sub').textContent=(tkGet('p-format')[0]||'—')+' · '+(tkGet('p-city')[0]||'—');
+  document.getElementById('sum-role').textContent=val('p-role','—');
+  document.getElementById('sum-agelang').textContent=budgetText()+' · '+(tkGet('p-langs').join(', ')||'—');
+  document.getElementById('sum-deadline').textContent=fmtDate('p-deadline')||'—';
+  document.getElementById('sum-window').textContent=windowText();
+  document.getElementById('sum-comp').textContent=segVal('p-comp')+(val('p-comp-text','')?' · '+val('p-comp-text',''):'');
+}
+function fillPcReview(){
+  document.getElementById('pc-review').innerHTML=
+   '<div class="kv"><span>Project</span><b>'+esc(val('p-title','—'))+' ('+esc(tkGet('p-format')[0]||'—')+')</b></div>'
+  +'<div class="kv"><span>Position</span><b>'+esc(val('p-role','—'))+'</b></div>'
+  +'<div class="kv"><span>City</span><b>'+esc(tkGet('p-city')[0]||'—')+'</b></div>'
+  +'<div class="kv"><span>Budget · Experience</span><b>'+budgetText()+' · '+segVal('p-gender')+'</b></div>'
+  +'<div class="kv"><span>Skills &amp; tools</span><b>'+(tkGet('p-langs').join(', ')||'—')+'</b></div>'
+  +'<div class="kv"><span>Additional skills</span><b>'+(tkGet('p-skills').join(', ')||'None specified')+'</b></div>'
+  +'<div class="kv"><span>Applications close</span><b>'+(fmtDate('p-deadline')||'—')+'</b></div>'
+  +'<div class="kv"><span>Timeline</span><b>'+windowText()+'</b></div>'
+  +'<div class="kv"><span>Interview mode</span><b>'+segVal('p-mode')+'</b></div>'
+  +'<div class="kv"><span>Compensation</span><b>'+segVal('p-comp')+(val('p-comp-text','')?' · '+esc(val('p-comp-text','')):'')+'</b></div>'
+  +'<div class="kv"><span>Fees to freelancers</span><b style="color:var(--ok)">None — policy confirmed</b></div>';
+}
+
+/* ============ SHARE ============ */
+function openShare(id){
+  var r=ROLES.filter(function(x){return x.id===id})[0]||ROLES[0];
+  document.getElementById('share-card-body').innerHTML=
+   '<span class="sig-tag">✓ Now hiring</span><h3>'+esc(r.project)+'</h3>'
+  +'<p class="role-line">'+esc(r.role)+' · '+esc(r.age)+' · '+esc(r.format)+'</p>'
+  +'<div class="sig-meta"><span class="badge b-verify">✓ '+RECRUITERS[r.rid].verify+'</span>'+payBadge(r)+'<span class="badge b-unpaid">'+esc(r.city)+'</span>'+scoreInline(r.rid)+'</div>'
+  +'<div class="sig-foot"><span class="sig-link">brief.work/p/'+r.project.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'<br><b style="color:var(--ink)">Apply on Brief</b></span><div class="qr"></div></div>';
+  openModal('modal-share');
+}
+
+/* ============ BOARD ============ */
+var LANES=[['new','New'],['short','Shortlisted'],['maybe','Maybe'],['rej','Rejected']];
+function initials(n){return n.split(' ').map(function(w){return w[0]}).join('').slice(0,2)}
+function renderBoard(){
+  document.getElementById('board').innerHTML=LANES.map(function(L){
+    var k=L[0];
+    return '<div class="lane glass"><div class="lane-head"><b>'+L[1]+'</b><span class="lane-count">'+APPS[k].length+'</span></div>'
+     +(APPS[k].map(function(a,i){
+        return '<div class="app-card"><div class="app-top"><div class="avatar">'+initials(a.n)+'</div><div><b>'+esc(a.n)+'</b><span class="meta">'+esc(a.c)+'</span></div></div>'
+         +'<p class="app-note">'+esc(a.note)+'</p><div class="app-actions">'
+         +(k!=='short'?'<button class="mini act" onclick="moveApp(\''+k+'\','+i+',\'short\')">Shortlist</button>':'')
+         +(k!=='maybe'?'<button class="mini" onclick="moveApp(\''+k+'\','+i+',\'maybe\')">Maybe</button>':'')
+         +(k!=='rej'?'<button class="mini" onclick="moveApp(\''+k+'\','+i+',\'rej\')">Pass</button>':'')
+         +(k!=='new'?'<button class="mini" onclick="moveApp(\''+k+'\','+i+',\'new\')">↺</button>':'')+'</div></div>';
+      }).join('')||'<p class="meta" style="text-align:center;padding:1.2rem 0">Empty</p>')+'</div>';
+  }).join('');
+}
+function moveApp(from,i,to){
+  var a=APPS[from].splice(i,1)[0]; APPS[to].unshift(a); renderBoard();
+  toast(a.n+' → '+LANES.filter(function(l){return l[0]===to})[0][1]);
+}
+
+/* ============ INIT ============ */
+try{
+  TokenField('f-city',CITIES,'Select or type a city',['Mumbai']);
+  TokenField('f-langs',LANGS,'Select or type to add');
+  TokenField('f-skills',SKILLS,'Select or type to add');
+  TokenField('p-city',CITIES,'Select or type a city');
+  TokenField('p-format',FORMATS,'Select or type a category');
+  TokenField('p-langs',LANGS,'Select or type to add');
+  TokenField('p-skills',SKILLS,'Select or type to add');
+}catch(e){console.error(e)}
+try{
+  var t=today();
+  ['p-deadline','p-start','p-end','f-avail'].forEach(function(id){var e=document.getElementById(id);if(e)e.min=t});
+  var dob=document.getElementById('f-dob'); if(dob)dob.max=t;
+  var ps=document.getElementById('p-start');
+  if(ps)ps.addEventListener('change',function(){var pe=document.getElementById('p-end');if(pe)pe.min=ps.value||t});
+  var pd=document.getElementById('p-deadline');
+  if(pd)pd.addEventListener('change',function(){if(ps)ps.min=pd.value||t});
+}catch(e){console.error(e)}
+try{
+  var _i=0;
+  var fields=document.querySelectorAll('.field');
+  for(var q=0;q<fields.length;q++){
+    var lab=fields[q].querySelector('label');
+    var ctl=fields[q].querySelector('input:not(.tk input),select,textarea');
+    if(!lab||!ctl)continue;
+    if(!ctl.id)ctl.id='ctl-'+(++_i);
+    if(!lab.htmlFor)lab.htmlFor=ctl.id;
+  }
+  var tks=document.querySelectorAll('.tk input');
+  for(var w=0;w<tks.length;w++){
+    var fl=tks[w].closest('.field');
+    var t=fl&&fl.querySelector('label');
+    tks[w].setAttribute('aria-label',t?t.textContent.replace(/—.*$/,'').trim():'Select or add');
+  }
+  ['o1','o2','o3','o4'].forEach(function(id,ix){
+    var e=document.getElementById(id); if(e)e.setAttribute('aria-label','Verification code digit '+(ix+1));
+  });
+  var sr=document.getElementById('search'); if(sr)sr.setAttribute('aria-label','Search projects');
+}catch(e){console.error(e)}
+try{renderNav()}catch(e){console.error(e)}
+try{renderFilters();renderExplore()}catch(e){console.error(e)}
+try{renderThumbs();syncPreview()}catch(e){console.error(e)}
+try{syncSummary()}catch(e){console.error(e)}
+try{renderBoard()}catch(e){console.error(e)}
+if(HISTORY_OK){
+  try{
+    history.replaceState({h:location.hash||'#landing'},'',location.hash||'#landing');
+    if(location.hash&&location.hash!=='#landing')applyHash(location.hash);
+  }catch(e){ HISTORY_OK=false; }
+}
+</script>
+</body>
+</html>
