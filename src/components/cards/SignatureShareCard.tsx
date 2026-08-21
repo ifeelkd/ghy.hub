@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import { Project } from "@/types";
 import { useMarketplace } from "@/lib/store/marketplace-store";
@@ -25,12 +25,20 @@ export default function SignatureShareCard({
 }: SignatureShareCardProps) {
   const { clients, aggregateRatings } = useMarketplace();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [origin, setOrigin] = useState("");
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setOrigin(window.location.origin);
+    }
+  }, []);
+
+  const baseOrigin = origin || "https://brief.work";
   const shareUrl = isFreelancer
-    ? "https://brief.work/f/profile"
+    ? `${baseOrigin}/onboarding`
     : project
-    ? `https://brief.work/p/${project.project.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`
-    : "https://brief.work/p/bloom-grocery-app";
+    ? `${baseOrigin}/projects/${project.id}`
+    : `${baseOrigin}/explore`;
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -49,7 +57,7 @@ export default function SignatureShareCard({
     return (
       <div className="sig-card glass-strong" role="img" aria-label="Freelancer share card">
         <span className="sig-tag">Freelancer on Brief</span>
-        <h3>{freelancerName || "Your name"}</h3>
+        <h3>{freelancerName || "Verified Specialist"}</h3>
         <p className="role-line">
           {freelancerCity || "Mumbai"} · {freelancerRate || "₹1,000–2,500/hr"}
         </p>
@@ -63,7 +71,7 @@ export default function SignatureShareCard({
         </div>
         <div className="sig-foot">
           <span className="sig-link">
-            brief.work/f/profile
+            {shareUrl.replace(/^https?:\/\//, "")}
             <br />
             <b style={{ color: "var(--ink)" }}>View full profile</b>
           </span>
@@ -122,7 +130,7 @@ export default function SignatureShareCard({
       </div>
       <div className="sig-foot">
         <span className="sig-link">
-          {shareUrl.replace("https://", "")}
+          {shareUrl.replace(/^https?:\/\//, "")}
           <br />
           <b style={{ color: "var(--ink)" }}>Apply on Brief</b>
         </span>

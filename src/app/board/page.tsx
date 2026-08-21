@@ -1,10 +1,19 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import Link from "next/link";
 import { useMarketplace } from "@/lib/store/marketplace-store";
 
 export default function BoardPage() {
-  const { applicantLanes, moveApplicant, showToast } = useMarketplace();
+  const { session, projects, applicantLanes, moveApplicant, showToast } = useMarketplace();
+
+  const rid = session?.rid || "brightloop";
+  const myProjects = projects.filter((p) => p.rid === rid || !session?.rid);
+  const [selectedProjectId, setSelectedProjectId] = useState<number>(
+    myProjects.length > 0 ? myProjects[0].id : 0
+  );
+
+  const activeProject = projects.find((p) => p.id === selectedProjectId) || myProjects[0] || projects[0];
 
   const lanes = [
     { key: "new", title: "New" },
@@ -35,21 +44,44 @@ export default function BoardPage() {
           }}
         >
           <div>
-            <span className="eyebrow">Applications</span>
+            <span className="eyebrow">Applications Pipeline</span>
             <h1 className="display" style={{ fontSize: "clamp(1.9rem, 4vw, 2.7rem)" }}>
-              Bloom Grocery App — Frontend Developer
+              {activeProject ? `${activeProject.project} — ${activeProject.role}` : "Applicant Board"}
             </h1>
             <p className="meta" style={{ marginTop: "0.3rem" }}>
-              Closes 9 Aug · Closing notifies all applicants automatically
+              Closes {activeProject?.deadline || "Soon"} · Closing notifies all applicants automatically
             </p>
           </div>
 
-          <button
-            className="btn btn-ghost btn-sm"
-            onClick={() => showToast("Project closed. Applicants notified.")}
-          >
-            Close project
-          </button>
+          <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+            {myProjects.length > 1 && (
+              <select
+                value={selectedProjectId}
+                onChange={(e) => setSelectedProjectId(parseInt(e.target.value, 10))}
+                style={{
+                  padding: "0.4rem 0.8rem",
+                  borderRadius: "var(--r-sm)",
+                  border: "1px solid var(--line)",
+                  background: "#fff",
+                  fontSize: "0.85rem",
+                  fontWeight: 600,
+                }}
+              >
+                {myProjects.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.project}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            <button
+              className="btn btn-ghost btn-sm"
+              onClick={() => showToast("Project closed. Applicants notified.")}
+            >
+              Close project
+            </button>
+          </div>
         </div>
 
         {/* KANBAN BOARD */}
@@ -115,7 +147,7 @@ export default function BoardPage() {
                   ))
                 ) : (
                   <p className="meta" style={{ textAlign: "center", padding: "1.5rem 0" }}>
-                    Empty lane
+                    No candidates in {lane.title.toLowerCase()}
                   </p>
                 )}
               </div>

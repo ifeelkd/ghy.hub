@@ -24,37 +24,22 @@ export default function OnboardingPage() {
   const { session, updateFreelancerProfile, showToast } = useMarketplace();
 
   const [step, setStep] = useState(1);
-  const [name, setName] = useState(session?.name || "Keerti Sharma");
-  const [city, setCity] = useState<string[]>(["Mumbai"]);
+  const [name, setName] = useState(session?.name || "");
+  const [city, setCity] = useState<string[]>([]);
   const [sinceDate, setSinceDate] = useState("");
   const [rateRange, setRateRange] = useState("₹1,000–2,500/hr");
-  const [tagline, setTagline] = useState("Full-stack developer specialising in React and Next.js");
-  const [portfolioUrl, setPortfolioUrl] = useState("https://github.com/keerti");
+  const [tagline, setTagline] = useState("");
+  const [portfolioUrl, setPortfolioUrl] = useState("");
   
-  // Real optimized portfolio pieces
-  const [portfolioPieces, setPortfolioPieces] = useState<PortfolioPiece[]>([
-    {
-      id: "p1",
-      url: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=400&q=80",
-      originalSize: 2400000,
-      optimizedSize: 62000,
-      reductionPercentage: 97,
-    },
-    {
-      id: "p2",
-      url: "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=400&q=80",
-      originalSize: 3100000,
-      optimizedSize: 74000,
-      reductionPercentage: 98,
-    },
-  ]);
+  // Real optimized portfolio pieces (clean state)
+  const [portfolioPieces, setPortfolioPieces] = useState<PortfolioPiece[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const [tools, setTools] = useState<string[]>(["React", "Next.js", "TypeScript"]);
-  const [specializations, setSpecializations] = useState<string[]>(["API Integration", "UI Prototyping"]);
+  const [tools, setTools] = useState<string[]>([]);
+  const [specializations, setSpecializations] = useState<string[]>([]);
   const [availableFrom, setAvailableFrom] = useState("");
-  const [experience, setExperience] = useState("1–10 projects");
+  const [experience, setExperience] = useState("New freelancer");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
@@ -91,7 +76,7 @@ export default function OnboardingPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!validateStep(step)) {
       showToast("Please check the highlighted fields.");
       return;
@@ -99,7 +84,7 @@ export default function OnboardingPage() {
     if (step < 4) {
       setStep(step + 1);
     } else if (step === 4) {
-      updateFreelancerProfile({
+      await updateFreelancerProfile({
         name,
         city: city[0] || "Mumbai",
         rate_range: rateRange,
@@ -200,7 +185,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Keerti Sharma"
+                    placeholder="Enter your full name"
                   />
                   {errors.name && <div className="err">{errors.name}</div>}
                 </div>
@@ -255,7 +240,7 @@ export default function OnboardingPage() {
                     type="text"
                     value={tagline}
                     onChange={(e) => setTagline(e.target.value)}
-                    placeholder="Full-stack developer specialising in React and Shopify"
+                    placeholder="E.g. Full-stack developer specialising in React and Next.js"
                   />
                 </div>
               </div>
@@ -506,7 +491,7 @@ export default function OnboardingPage() {
             </div>
 
             <p className="meta">
-              {city[0] || "Mumbai"} · {rateRange}
+              {city[0] || "Select city"} · {rateRange}
             </p>
             <p style={{ fontSize: "0.9rem", color: "var(--muted)", marginTop: "0.3rem" }}>
               {tagline.trim() || "Your one-line tagline appears here."}

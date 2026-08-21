@@ -20,28 +20,26 @@ export default function PostProjectPage() {
   const router = useRouter();
 
   const [step, setStep] = useState(1);
-  const [title, setTitle] = useState("Bloom Grocery App Rebuild");
-  const [format, setFormat] = useState<string[]>(["Web Development"]);
-  const [city, setCity] = useState<string[]>(["Remote"]);
+  const [title, setTitle] = useState("");
+  const [format, setFormat] = useState<string[]>([]);
+  const [city, setCity] = useState<string[]>([]);
 
-  const [roleTitle, setRoleTitle] = useState("Frontend Developer — React");
-  const [desc, setDesc] = useState(
-    "Rebuild the checkout flow and product catalogue for a grocery delivery app. Clean component architecture over cleverness."
-  );
-  const [budgetMin, setBudgetMin] = useState(60000);
-  const [budgetMax, setBudgetMax] = useState(90000);
+  const [roleTitle, setRoleTitle] = useState("");
+  const [desc, setDesc] = useState("");
+  const [budgetMin, setBudgetMin] = useState<number | "">("");
+  const [budgetMax, setBudgetMax] = useState<number | "">("");
   const [experience, setExperience] = useState("Any");
-  const [tools, setTools] = useState<string[]>(["React", "Next.js"]);
-  const [additionalSkills, setAdditionalSkills] = useState<string[]>(["API Integration"]);
+  const [tools, setTools] = useState<string[]>([]);
+  const [additionalSkills, setAdditionalSkills] = useState<string[]>([]);
 
-  const [deadline, setDeadline] = useState("2026-08-09");
-  const [startDate, setStartDate] = useState("2026-09-01");
-  const [endDate, setEndDate] = useState("2026-10-31");
+  const [deadline, setDeadline] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [isFlexibleDates, setIsFlexibleDates] = useState(false);
   const [interviewMode, setInterviewMode] = useState("Async");
 
   const [compType, setCompType] = useState<"Fixed price" | "Hourly" | "Unpaid">("Fixed price");
-  const [compDetails, setCompDetails] = useState("₹80,000 fixed, paid in 2 milestones");
+  const [compDetails, setCompDetails] = useState("");
   const [chargesFee, setChargesFee] = useState<"No" | "Yes">("No");
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -60,9 +58,17 @@ export default function PostProjectPage() {
       if (desc.trim().length < 20) {
         newErrors.desc = "Describe the project — at least 20 characters.";
       }
-      if (budgetMin < 0 || isNaN(budgetMin)) newErrors.budgetMin = "Required.";
-      if (budgetMax < 0 || isNaN(budgetMax)) newErrors.budgetMax = "Required.";
-      if (budgetMax < budgetMin) {
+      if (budgetMin === "" || isNaN(Number(budgetMin)) || Number(budgetMin) < 0) {
+        newErrors.budgetMin = "Required.";
+      }
+      if (budgetMax === "" || isNaN(Number(budgetMax)) || Number(budgetMax) < 0) {
+        newErrors.budgetMax = "Required.";
+      }
+      if (
+        budgetMin !== "" &&
+        budgetMax !== "" &&
+        Number(budgetMax) < Number(budgetMin)
+      ) {
         newErrors.budgetMax = "Must be the same or higher than minimum budget.";
       }
       if (!tools.length) newErrors.tools = "Select at least one skill or tool.";
@@ -92,7 +98,7 @@ export default function PostProjectPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!validateStep(step)) {
       showToast("Please check the highlighted fields.");
       return;
@@ -100,8 +106,11 @@ export default function PostProjectPage() {
     if (step < 5) {
       setStep(step + 1);
     } else if (step === 5) {
-      const budgetText = `₹${budgetMin.toLocaleString("en-IN")}–${budgetMax.toLocaleString("en-IN")}`;
-      const newId = postProject({
+      const minNum = Number(budgetMin) || 0;
+      const maxNum = Number(budgetMax) || 0;
+      const budgetText = `₹${minNum.toLocaleString("en-IN")}–${maxNum.toLocaleString("en-IN")}`;
+      
+      const newId = await postProject({
         rid: session?.rid || "brightloop",
         role: roleTitle,
         project: title,
@@ -109,8 +118,8 @@ export default function PostProjectPage() {
         city: city[0] || "Remote",
         paid: compType === "Unpaid" ? "Unpaid" : compType === "Hourly" ? "Hourly" : "Paid",
         comp: compDetails,
-        deadline: new Date(deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" }),
-        window: isFlexibleDates ? "Dates not locked" : `${new Date(startDate).toLocaleDateString("en-GB", { month: "short" })}–${new Date(endDate).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}`,
+        deadline: deadline ? new Date(deadline).toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "Open",
+        window: isFlexibleDates ? "Dates not locked" : `${startDate ? new Date(startDate).toLocaleDateString("en-GB", { month: "short" }) : ""}–${endDate ? new Date(endDate).toLocaleDateString("en-GB", { month: "short", year: "numeric" }) : ""}`,
         langs: tools,
         age: budgetText,
         gender: experience,
@@ -178,7 +187,7 @@ export default function PostProjectPage() {
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Bloom Grocery App Rebuild"
+                    placeholder="E.g. E-Commerce Mobile App or Brand Redesign"
                   />
                   {errors.title && <div className="err">{errors.title}</div>}
                 </div>
@@ -223,7 +232,7 @@ export default function PostProjectPage() {
                     type="text"
                     value={roleTitle}
                     onChange={(e) => setRoleTitle(e.target.value)}
-                    placeholder="Frontend Developer — React"
+                    placeholder="E.g. Senior Frontend Engineer or UI/UX Designer"
                   />
                   {errors.roleTitle && <div className="err">{errors.roleTitle}</div>}
                 </div>
@@ -233,7 +242,7 @@ export default function PostProjectPage() {
                   <textarea
                     value={desc}
                     onChange={(e) => setDesc(e.target.value)}
-                    placeholder="Rebuild the checkout flow and product catalogue for a grocery delivery app…"
+                    placeholder="Describe the deliverables, timeline, milestones, and what success looks like…"
                   />
                   {errors.desc && <div className="err">{errors.desc}</div>}
                 </div>
@@ -245,7 +254,8 @@ export default function PostProjectPage() {
                       type="number"
                       min={0}
                       value={budgetMin}
-                      onChange={(e) => setBudgetMin(parseInt(e.target.value, 10) || 0)}
+                      onChange={(e) => setBudgetMin(e.target.value === "" ? "" : parseInt(e.target.value, 10))}
+                      placeholder="50000"
                     />
                     {errors.budgetMin && <div className="err">{errors.budgetMin}</div>}
                   </div>
@@ -256,7 +266,8 @@ export default function PostProjectPage() {
                       type="number"
                       min={0}
                       value={budgetMax}
-                      onChange={(e) => setBudgetMax(parseInt(e.target.value, 10) || 0)}
+                      onChange={(e) => setBudgetMax(e.target.value === "" ? "" : parseInt(e.target.value, 10))}
+                      placeholder="80000"
                     />
                     {errors.budgetMax && <div className="err">{errors.budgetMax}</div>}
                   </div>
@@ -279,7 +290,7 @@ export default function PostProjectPage() {
                     options={LANGS}
                     selected={tools}
                     onChange={setTools}
-                    placeholder="Select required tools"
+                    placeholder="Select required tools (e.g. React, Figma, Next.js)"
                   />
                   {errors.tools && <div className="err">{errors.tools}</div>}
                 </div>
@@ -379,7 +390,7 @@ export default function PostProjectPage() {
                     type="text"
                     value={compDetails}
                     onChange={(e) => setCompDetails(e.target.value)}
-                    placeholder="₹80,000 fixed, paid in 2 milestones"
+                    placeholder="E.g. ₹80,000 fixed, paid in 2 milestones"
                   />
                   {errors.compDetails && <div className="err">{errors.compDetails}</div>}
                 </div>
@@ -427,7 +438,7 @@ export default function PostProjectPage() {
                   <div className="kv">
                     <span>Budget · Experience</span>
                     <b>
-                      ₹{budgetMin.toLocaleString("en-IN")}–{budgetMax.toLocaleString("en-IN")} · {experience}
+                      ₹{Number(budgetMin).toLocaleString("en-IN")}–{Number(budgetMax).toLocaleString("en-IN")} · {experience}
                     </b>
                   </div>
                   <div className="kv">
@@ -514,7 +525,7 @@ export default function PostProjectPage() {
               {title.trim() || "Untitled project"}
             </h3>
             <p className="meta">
-              {format[0] || "—"} · {city[0] || "—"}
+              {format[0] || "Select category"} · {city[0] || "Select city"}
             </p>
 
             <div className="sum-list" style={{ marginTop: "0.9rem" }}>
@@ -525,7 +536,7 @@ export default function PostProjectPage() {
               <div className="kv">
                 <span>Budget · Tools</span>
                 <b>
-                  ₹{budgetMin.toLocaleString("en-IN")}–{budgetMax.toLocaleString("en-IN")} · {tools.join(", ") || "—"}
+                  {budgetMin !== "" && budgetMax !== "" ? `₹${Number(budgetMin).toLocaleString("en-IN")}–${Number(budgetMax).toLocaleString("en-IN")}` : "—"} · {tools.join(", ") || "—"}
                 </b>
               </div>
               <div className="kv">
@@ -557,16 +568,16 @@ export default function PostProjectPage() {
               project={{
                 id: createdProjectId || 0,
                 rid: session?.rid || "brightloop",
-                role: roleTitle,
-                project: title,
+                role: roleTitle || "Position Title",
+                project: title || "Project Title",
                 format: format[0] || "Web Development",
                 city: city[0] || "Remote",
                 paid: compType === "Unpaid" ? "Unpaid" : compType === "Hourly" ? "Hourly" : "Paid",
-                comp: compDetails,
-                deadline: deadline,
+                comp: compDetails || "Competitive",
+                deadline: deadline || "Open",
                 window: formatWindowText(),
                 langs: tools,
-                age: `₹${budgetMin.toLocaleString("en-IN")}–${budgetMax.toLocaleString("en-IN")}`,
+                age: `₹${Number(budgetMin).toLocaleString("en-IN")}–${Number(budgetMax).toLocaleString("en-IN")}`,
                 gender: experience,
                 mode: interviewMode,
                 skills: additionalSkills,
