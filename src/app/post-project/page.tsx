@@ -9,6 +9,8 @@ import {
   CITIES,
   LANGS,
   SKILLS,
+  TEACHING_SUBJECTS,
+  TEACHING_TOOLS,
 } from "@/lib/store/marketplace-store";
 import TokenInput from "@/components/ui/TokenInput";
 import SegmentedControl from "@/components/ui/SegmentedControl";
@@ -284,13 +286,24 @@ export default function PostProjectPage() {
 
                 <div className={`field ${errors.tools ? "bad" : ""}`}>
                   <label>
-                    Skills &amp; tools required <span className="sub">— select or type</span>
+                    {format[0]?.includes("Teaching") || format[0]?.includes("Tutoring")
+                      ? "Subjects & tools required"
+                      : "Skills & tools required"}{" "}
+                    <span className="sub">— select or type</span>
                   </label>
                   <TokenInput
-                    options={LANGS}
+                    options={
+                      format[0]?.includes("Teaching") || format[0]?.includes("Tutoring")
+                        ? [...TEACHING_SUBJECTS, ...TEACHING_TOOLS]
+                        : LANGS
+                    }
                     selected={tools}
                     onChange={setTools}
-                    placeholder="Select required tools (e.g. React, Figma, Next.js)"
+                    placeholder={
+                      format[0]?.includes("Teaching") || format[0]?.includes("Tutoring")
+                        ? "Select subjects & tools (e.g. Mathematics, Physics, Zoom)"
+                        : "Select required tools (e.g. React, Figma, Next.js)"
+                    }
                   />
                   {errors.tools && <div className="err">{errors.tools}</div>}
                 </div>

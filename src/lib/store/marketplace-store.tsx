@@ -76,6 +76,10 @@ export const CITIES = [
 ];
 
 export const FORMATS = [
+  "Teaching & Tutoring",
+  "Academic Mentorship",
+  "Test Prep Coaching",
+  "Language Instruction",
   "Web Development",
   "Mobile Development",
   "UI/UX Design",
@@ -90,6 +94,101 @@ export const FORMATS = [
   "3D & Motion Graphics",
   "WordPress / Shopify",
   "Web3 / Blockchain",
+];
+
+export const TEACHING_SUBJECTS = [
+  "Mathematics",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Computer Science & Coding",
+  "English Literature & Grammar",
+  "Economics",
+  "Commerce & Accountancy",
+  "Social Science & History",
+  "Geography",
+  "Hindi",
+  "French",
+  "German",
+  "Spanish",
+  "Sanskrit",
+  "Test Prep: JEE Main/Advanced",
+  "Test Prep: NEET",
+  "Test Prep: SAT / ACT",
+  "Test Prep: CUET",
+  "Test Prep: IELTS / TOEFL",
+  "Music (Vocal / Instrumental)",
+  "Art & Painting",
+];
+
+export const EDUCATION_LEVELS = [
+  "Primary School (Grades 1–5)",
+  "Middle School (Grades 6–8)",
+  "Secondary (Grades 9–10)",
+  "Senior Secondary (Grades 11–12)",
+  "College / Undergraduate",
+  "Postgraduate / Research",
+  "Competitive Exam Aspirants",
+  "Adult Learners",
+];
+
+export const EDUCATION_BOARDS = [
+  "CBSE",
+  "ICSE / ISC",
+  "State Board",
+  "IB (International Baccalaureate)",
+  "Cambridge (IGCSE / A Levels)",
+  "AP (Advanced Placement)",
+  "University Curriculum",
+  "General / All Boards",
+];
+
+export const TEACHER_QUALIFICATIONS = [
+  "B.Ed (Bachelor of Education)",
+  "M.Ed (Master of Education)",
+  "B.Sc / M.Sc in Subject",
+  "B.Tech / M.Tech in Engineering",
+  "B.A. / M.A. in Humanities/Language",
+  "Ph.D. / Doctorate Scholar",
+  "CTET / State TET Qualified",
+  "Professional Certified Tutor",
+  "Graduate / Subject Specialist",
+];
+
+export const TEACHING_MODES = [
+  "Online 1-on-1",
+  "Online Small Group (2–5 students)",
+  "Online Batch (6+ students)",
+  "In-Person / Home Tutoring",
+  "Hybrid (Online + In-Person)",
+];
+
+export const TEACHING_TOOLS = [
+  "Zoom",
+  "Google Meet",
+  "Miro Whiteboard",
+  "GeoGebra",
+  "LaTeX",
+  "Google Classroom",
+  "Kahoot",
+  "Khan Academy",
+  "OneNote / Digital Pen",
+  "Notion",
+  "PhET Interactive Simulations",
+];
+
+export const LANGUAGES_OF_INSTRUCTION = [
+  "English",
+  "Hindi",
+  "Bilingual (English + Hindi)",
+  "Bengali",
+  "Marathi",
+  "Tamil",
+  "Telugu",
+  "Kannada",
+  "Malayalam",
+  "Gujarati",
+  "Punjabi",
 ];
 
 export interface Session {
@@ -164,6 +263,7 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
         const { data: dbProjects, error: projErr } = await supabase
           .from("projects")
           .select("*")
+          .eq("status", "active")
           .order("created_at", { ascending: false });
 
         if (!projErr) {
@@ -562,19 +662,47 @@ export function MarketplaceProvider({ children }: { children: React.ReactNode })
     const supabase = createClient();
     if (supabase) {
       try {
-        await supabase.from("profiles").upsert({
+        const payload: Record<string, unknown> = {
           name: profileData.name || session.name,
           city: profileData.city || "Mumbai",
           rate_range: profileData.rate_range || "₹1,000–2,500/hr",
           tagline: profileData.tagline,
           portfolio_url: profileData.portfolio_url,
-          tools: profileData.tools,
-          skills: profileData.skills,
+          tools: profileData.tools || [],
+          skills: profileData.skills || [],
           experience_level: profileData.experience_level,
           role: "freelancer",
-        });
+        };
+
+        if (profileData.is_teacher) {
+          payload.is_teacher = true;
+          payload.subjects = profileData.subjects || [];
+          payload.grades = profileData.grades || [];
+          payload.boards = profileData.boards || [];
+          payload.qualification = profileData.qualification || "";
+          payload.teaching_mode = profileData.teaching_mode || "Online 1-on-1";
+          payload.languages_spoken = profileData.languages_spoken || [];
+          payload.demo_video_url = profileData.demo_video_url || "";
+        }
+
+        const { error: upsertErr } = await supabase.from("profiles").upsert(payload);
+        if (upsertErr) {
+          // If custom teacher columns aren't in schema yet, fallback to base payload
+          console.warn("Supabase upsert warning, retrying with base fields:", upsertErr);
+          await supabase.from("profiles").upsert({
+            name: profileData.name || session.name,
+            city: profileData.city || "Mumbai",
+            rate_range: profileData.rate_range || "₹1,000–2,500/hr",
+            tagline: profileData.tagline,
+            portfolio_url: profileData.portfolio_url,
+            tools: profileData.tools || [],
+            skills: profileData.skills || [],
+            experience_level: profileData.experience_level,
+            role: "freelancer",
+          });
+        }
       } catch (err) {
-        console.warn("Supabase profile upsert:", err);
+        console.warn("Supabase profile upsert error:", err);
       }
     }
 

@@ -25,6 +25,15 @@ export interface Profile {
   verified_tier: VerifiedTier;
   verified_since: string;
   created_at: string;
+  // Teacher & Educator fields
+  is_teacher?: boolean;
+  subjects?: string[];
+  grades?: string[];
+  boards?: string[];
+  qualification?: string;
+  teaching_mode?: string;
+  languages_spoken?: string[];
+  demo_video_url?: string;
 }
 
 export interface RecruiterRating {

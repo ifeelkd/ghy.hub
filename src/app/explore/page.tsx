@@ -9,13 +9,23 @@ export default function ExplorePage() {
   const { projects, aggregateRatings, clients } = useMarketplace();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [paidOnly, setPaidOnly] = useState(false);
   const [ratedOnly, setRatedOnly] = useState(false);
 
   const cityOptions = ["Remote", "Mumbai", "Delhi NCR", "Hyderabad", "Bengaluru", "Pune"];
+  const categoryOptions = [
+    "Teaching & Tutoring",
+    "Academic Mentorship",
+    "Web Development",
+    "UI/UX Design",
+    "Content Writing",
+    "Video Editing",
+  ];
 
   const filteredProjects = projects.filter((r) => {
     if (selectedCity && r.city !== selectedCity) return false;
+    if (selectedCategory && r.format !== selectedCategory) return false;
     if (paidOnly && r.paid === "Unpaid") return false;
     if (ratedOnly) {
       const a = aggregateRatings(r.rid);
@@ -24,7 +34,7 @@ export default function ExplorePage() {
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       const recruiter = clients[r.rid];
-      const matchString = `${r.role} ${r.project} ${r.city} ${r.format} ${r.langs.join(" ")} ${
+      const matchString = `${r.role} ${r.project} ${r.city} ${r.format} ${r.langs.join(" ")} ${r.skills.join(" ")} ${
         recruiter?.org || ""
       }`.toLowerCase();
       if (!matchString.includes(q)) return false;
@@ -38,7 +48,7 @@ export default function ExplorePage() {
         <div className="explore-head">
           <span className="eyebrow">Explore</span>
           <h1 className="display" style={{ fontSize: "clamp(1.9rem, 4vw, 2.7rem)" }}>
-            Open projects
+            Open projects &amp; gigs
           </h1>
 
           {/* SEARCH BAR */}
@@ -46,15 +56,35 @@ export default function ExplorePage() {
             <Search size={18} />
             <input
               type="text"
-              placeholder="Search projects, clients, cities, skills..."
+              placeholder="Search projects, subjects (Math, Physics, CBSE), clients, cities..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               aria-label="Search projects"
             />
           </div>
 
-          {/* FILTER CHIPS */}
-          <div className="filters">
+          {/* CATEGORY & FILTER CHIPS */}
+          <div className="filters" style={{ flexWrap: "wrap", gap: "0.4rem" }}>
+            <button
+              type="button"
+              className={`chip ${!selectedCategory ? "sel" : ""}`}
+              onClick={() => setSelectedCategory(null)}
+            >
+              All formats
+            </button>
+            {categoryOptions.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                className={`chip ${selectedCategory === cat ? "sel" : ""}`}
+                onClick={() => setSelectedCategory(selectedCategory === cat ? null : cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="filters" style={{ marginTop: "0.5rem" }}>
             {cityOptions.map((c) => (
               <button
                 key={c}

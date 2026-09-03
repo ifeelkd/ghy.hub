@@ -13,6 +13,10 @@ interface SignatureShareCardProps {
   freelancerRate?: string;
   freelancerSkills?: string[];
   isFreelancer?: boolean;
+  isTeacher?: boolean;
+  teacherSubjects?: string[];
+  teacherQualification?: string;
+  teacherMode?: string;
 }
 
 export default function SignatureShareCard({
@@ -22,6 +26,10 @@ export default function SignatureShareCard({
   freelancerRate,
   freelancerSkills,
   isFreelancer = false,
+  isTeacher = false,
+  teacherSubjects,
+  teacherQualification,
+  teacherMode,
 }: SignatureShareCardProps) {
   const { clients, aggregateRatings } = useMarketplace();
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,20 +62,29 @@ export default function SignatureShareCard({
   }, [shareUrl]);
 
   if (isFreelancer) {
+    const displaySkills = isTeacher && teacherSubjects?.length
+      ? teacherSubjects
+      : freelancerSkills || ["React", "Next.js", "UI Design"];
+
     return (
-      <div className="sig-card glass-strong" role="img" aria-label="Freelancer share card">
-        <span className="sig-tag">Freelancer on Brief</span>
-        <h3>{freelancerName || "Verified Specialist"}</h3>
+      <div className="sig-card glass-strong" role="img" aria-label={isTeacher ? "Educator share card" : "Freelancer share card"}>
+        <span className="sig-tag" style={{ background: isTeacher ? "rgba(16, 185, 129, 0.12)" : undefined, color: isTeacher ? "#059669" : undefined }}>
+          {isTeacher ? "Educator on Brief" : "Freelancer on Brief"}
+        </span>
+        <h3>{freelancerName || (isTeacher ? "Verified Educator" : "Verified Specialist")}</h3>
         <p className="role-line">
-          {freelancerCity || "Mumbai"} · {freelancerRate || "₹1,000–2,500/hr"}
+          {freelancerCity || "Remote"} · {freelancerRate || "₹1,000–2,500/hr"} {teacherMode ? `· ${teacherMode}` : ""}
         </p>
         <div className="sig-meta">
-          {(freelancerSkills || ["React", "Next.js", "UI Design"]).slice(0, 3).map((s) => (
+          {displaySkills.slice(0, 3).map((s) => (
             <Badge key={s} variant="unpaid">
               {s}
             </Badge>
           ))}
-          <Badge variant="verify">✓ Brief profile</Badge>
+          {teacherQualification && (
+            <Badge variant="paid">{teacherQualification}</Badge>
+          )}
+          <Badge variant="verify">{isTeacher ? "✓ Verified Educator" : "✓ Brief profile"}</Badge>
         </div>
         <div className="sig-foot">
           <span className="sig-link">

@@ -21,7 +21,7 @@ export default function LandingPage() {
           <div className="hero-grid">
             <div>
               <span className="eyebrow">
-                Dev · Design · Photo · Video · Content
+                Dev · Design · Teaching &amp; Tutoring · Video · Content
               </span>
               <h1 className="display">
                 Freelance work,
