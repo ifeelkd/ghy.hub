@@ -1,11 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMarketplace } from "@/lib/store/marketplace-store";
 import { createClient } from "@/lib/supabase/client";
 import { RoleType } from "@/types";
-import { Mail, Lock, User, ArrowLeft, Loader2, CheckCircle2 } from "lucide-react";
+import {
+  Mail,
+  Lock,
+  User,
+  ArrowLeft,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+  Link2,
+} from "lucide-react";
 
 const ROLE_OPTIONS: { k: RoleType; n: string; d: string; i: string }[] = [
   {
@@ -22,7 +31,7 @@ const ROLE_OPTIONS: { k: RoleType; n: string; d: string; i: string }[] = [
   },
   {
     k: "indie",
-    n: "Independent client / Parent",
+    n: "Independent / Parent",
     d: "Hire teachers or freelancers as an individual.",
     i: "I",
   },
@@ -34,41 +43,73 @@ const ROLE_OPTIONS: { k: RoleType; n: string; d: string; i: string }[] = [
   },
 ];
 
-export default function AuthPage() {
+function AuthPageInner() {
   const { signIn, showToast } = useMarketplace();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [selectedRole, setSelectedRole] = useState<RoleType | null>(null);
-  const [authMethod, setAuthMethod] = useState<"otp" | "password">("otp");
-  
+  const [authMethod, setAuthMethod] = useState<"magic" | "password">("magic");
+
   // Credentials
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  // State flags
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  
-  // 6-digit real OTP
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const [authError, setAuthError] = useState("");
 
-  const handleRoleSelect = (role: RoleType) => {
-    setSelectedRole(role);
-  };
+  // Show error from callback redirect
+  useEffect(() => {
+    const err = searchParams.get("error");
+    if (err === "auth_failed") setAuthError("Authentication failed. Please try again.");
+    if (err === "no_user") setAuthError("Could not verify your identity. Please try again.");
+  }, [searchParams]);
 
-  const routeUser = (role: RoleType) => {
-    if (role === "freelancer") {
-      router.push("/explore");
-    } else if (role === "admin") {
-      router.push("/admin");
+  const routeUser = async (supabase: ReturnType<typeof createClient>) => {
+    if (!supabase) return;
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      setAuthError("Could not load user. Please try again.");
+      return;
+    }
+
+    // Check if this user already has a profile
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("id, role, name")
+      .eq("id", user.id)
+      .single();
+
+    if (profile) {
+      // Existing / returning user
+      const role = (profile.role as RoleType) || "freelancer";
+      const userName = (profile.name as string) || user.email || "Member";
+      signIn(role, userName);
+      showToast(`Welcome back, ${userName}! 👋`);
+      if (role === "admin") router.push("/admin");
+      else if (role === "freelancer") router.push("/explore");
+      else router.push("/dashboard");
     } else {
-      router.push("/dashboard");
+      // Brand new user — must complete onboarding
+      const userRole = selectedRole || (user.user_metadata?.role as RoleType) || "freelancer";
+      const userName = name.trim() || user.user_metadata?.name || user.email || "Member";
+      signIn(userRole, userName);
+      showToast("Account created! Let's set up your profile. 🎉");
+      router.push("/onboarding");
     }
   };
 
-  // 1. Handle Send Real Email OTP
-  const handleSendOtp = async () => {
+  // ── MAGIC LINK ──────────────────────────────────────────
+  const handleSendMagicLink = async () => {
     if (!email.trim() || !email.includes("@")) {
       setAuthError("Please enter a valid email address.");
       return;
@@ -87,6 +128,8 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim().toLowerCase(),
         options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          shouldCreateUser: true,
           data: {
             name: name.trim() || "User",
             role: selectedRole || "freelancer",
@@ -97,67 +140,33 @@ export default function AuthPage() {
       if (error) {
         setAuthError(error.message);
       } else {
-        setStep(3);
-        showToast("6-digit verification code sent to your email.");
+        setMagicLinkSent(true);
+        showToast("Magic link sent! Check your inbox.");
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Failed to send verification code.";
+      const msg = err instanceof Error ? err.message : "Failed to send link.";
       setAuthError(msg);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // 2. Handle Verify Real Email OTP
-  const handleVerifyOtp = async () => {
-    const code = otp.join("").trim();
-    if (code.length < 6) {
-      setAuthError("Please enter all 6 digits of the code.");
-      return;
-    }
-
-    setAuthError("");
-    setIsLoading(true);
-
-    const supabase = createClient();
-    if (!supabase) {
-      setAuthError("Supabase connection not configured.");
-      setIsLoading(false);
-      return;
-    }
-
-    try {
-      const { data, error } = await supabase.auth.verifyOtp({
-        email: email.trim().toLowerCase(),
-        token: code,
-        type: "email",
-      });
-
-      if (error) {
-        setAuthError(error.message);
-      } else if (data.session) {
-        const userRole = selectedRole || "freelancer";
-        const userName = name.trim() || data.user?.user_metadata?.name || "Member";
-        signIn(userRole, userName);
-        showToast("Verified & signed in successfully.");
-        routeUser(userRole);
-      } else {
-        setAuthError("Verification failed. Please request a new code.");
-      }
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Verification failed.";
-      setAuthError(msg);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // 3. Handle Email + Password Sign In / Sign Up
+  // ── PASSWORD AUTH ────────────────────────────────────────
   const handlePasswordAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !password) {
       setAuthError("Email and password are required.");
       return;
+    }
+    if (isSignUp) {
+      if (password.length < 6) {
+        setAuthError("Password must be at least 6 characters.");
+        return;
+      }
+      if (password !== confirmPassword) {
+        setAuthError("Passwords do not match.");
+        return;
+      }
     }
 
     setAuthError("");
@@ -172,42 +181,76 @@ export default function AuthPage() {
 
     try {
       if (isSignUp) {
-        // Sign Up
-        const { data, error } = await supabase.auth.signUp({
+        // ── SIGN UP ──
+        if (!name.trim()) {
+          setAuthError("Please enter your full name.");
+          setIsLoading(false);
+          return;
+        }
+        const { error } = await supabase.auth.signUp({
           email: email.trim().toLowerCase(),
           password,
           options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
             data: {
-              name: name.trim() || "User",
+              name: name.trim(),
               role: selectedRole || "freelancer",
             },
           },
         });
 
         if (error) {
-          setAuthError(error.message);
+          if (error.message.toLowerCase().includes("already registered")) {
+            setAuthError("This email is already registered. Please sign in instead.");
+            setIsSignUp(false);
+          } else {
+            setAuthError(error.message);
+          }
         } else {
-          const userRole = selectedRole || "freelancer";
-          const userName = name.trim() || "Member";
-          signIn(userRole, userName);
-          showToast("Account created successfully!");
-          routeUser(userRole);
+          // Supabase sends a confirmation email; try to sign in directly too
+          // (works when email confirm is disabled in project settings)
+          const { data: loginData, error: loginErr } = await supabase.auth.signInWithPassword({
+            email: email.trim().toLowerCase(),
+            password,
+          });
+          if (!loginErr && loginData.session) {
+            await routeUser(supabase);
+          } else {
+            // Email confirmation required
+            setMagicLinkSent(true);
+            showToast("Check your email to confirm your account.");
+          }
         }
       } else {
-        // Sign In
+        // ── SIGN IN ──
         const { data, error } = await supabase.auth.signInWithPassword({
           email: email.trim().toLowerCase(),
           password,
         });
 
         if (error) {
-          setAuthError(error.message);
+          if (
+            error.message.toLowerCase().includes("invalid login credentials") ||
+            error.message.toLowerCase().includes("invalid credentials")
+          ) {
+            // Check if user exists at all
+            // We try signInWithOtp with shouldCreateUser:false to detect
+            const checkRes = await supabase.auth.signInWithOtp({
+              email: email.trim().toLowerCase(),
+              options: { shouldCreateUser: false },
+            });
+            if (checkRes.error?.message?.toLowerCase().includes("signups not allowed")) {
+              // User does NOT exist → prompt sign up
+              setIsSignUp(true);
+              setAuthError("No account found for this email. Fill in your details to create one.");
+            } else {
+              setAuthError("Incorrect password. Please try again or use a magic link.");
+            }
+          } else {
+            setAuthError(error.message);
+          }
         } else if (data.session) {
-          const userRole = selectedRole || (data.user?.user_metadata?.role as RoleType) || "freelancer";
-          const userName = data.user?.user_metadata?.name || name.trim() || "Member";
-          signIn(userRole, userName);
-          showToast(`Welcome back, ${userName}!`);
-          routeUser(userRole);
+          await routeUser(supabase);
         }
       }
     } catch (err: unknown) {
@@ -218,18 +261,6 @@ export default function AuthPage() {
     }
   };
 
-  const handleOtpChange = (index: number, val: string) => {
-    const numeric = val.replace(/\D/g, "").slice(-1);
-    const updated = [...otp];
-    updated[index] = numeric;
-    setOtp(updated);
-
-    if (numeric && index < 5) {
-      const nextInput = document.getElementById(`otp-${index + 1}`);
-      nextInput?.focus();
-    }
-  };
-
   return (
     <main className="animate-view-in">
       <div className="auth-wrap">
@@ -237,11 +268,11 @@ export default function AuthPage() {
           {/* STEP 1: ROLE SELECTION */}
           {step === 1 && (
             <div className="fstep on">
-              <span className="eyebrow">Brief Authentication</span>
-              <h1 className="display" style={{ marginTop: "0.2rem" }}>Select Account Type</h1>
-              <p className="hint">
-                Choose how you want to participate on the platform.
-              </p>
+              <span className="eyebrow">Welcome to Brief</span>
+              <h1 className="display" style={{ marginTop: "0.2rem" }}>
+                Select Account Type
+              </h1>
+              <p className="hint">Choose how you want to participate on the platform.</p>
 
               <div className="role-pick" style={{ marginTop: "1rem" }}>
                 {ROLE_OPTIONS.map((opt) => (
@@ -249,7 +280,7 @@ export default function AuthPage() {
                     key={opt.k}
                     type="button"
                     className={`role-opt ${selectedRole === opt.k ? "sel" : ""}`}
-                    onClick={() => handleRoleSelect(opt.k)}
+                    onClick={() => setSelectedRole(opt.k)}
                   >
                     <span className="rk">{opt.i}</span>
                     <span>
@@ -266,7 +297,10 @@ export default function AuthPage() {
                 disabled={!selectedRole}
                 onClick={() => setStep(2)}
               >
-                Continue with {selectedRole ? ROLE_OPTIONS.find((r) => r.k === selectedRole)?.n : "Selection"}
+                Continue as{" "}
+                {selectedRole
+                  ? ROLE_OPTIONS.find((r) => r.k === selectedRole)?.n
+                  : "…"}
               </button>
             </div>
           )}
@@ -274,12 +308,19 @@ export default function AuthPage() {
           {/* STEP 2: CREDENTIALS */}
           {step === 2 && (
             <div className="fstep on">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <button
                   className="btn btn-quiet btn-sm"
                   onClick={() => {
                     setStep(1);
                     setAuthError("");
+                    setMagicLinkSent(false);
                   }}
                   style={{ gap: "0.3rem", padding: "0.2rem 0.5rem" }}
                 >
@@ -290,9 +331,13 @@ export default function AuthPage() {
                 </span>
               </div>
 
-              <h1 className="display" style={{ marginTop: "0.8rem" }}>Sign in to Brief</h1>
+              <h1 className="display" style={{ marginTop: "0.8rem" }}>
+                {isSignUp ? "Create Account" : "Sign In"}
+              </h1>
               <p className="hint">
-                Real authentication powered by Supabase.
+                {isSignUp
+                  ? "New to Brief? Set up your account below."
+                  : "Welcome back. Enter your credentials to continue."}
               </p>
 
               {/* METHOD TOGGLE */}
@@ -306,48 +351,37 @@ export default function AuthPage() {
                   margin: "1rem 0 1.2rem",
                 }}
               >
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthMethod("otp");
-                    setAuthError("");
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: "0.5rem 0.8rem",
-                    border: "none",
-                    borderRadius: "6px",
-                    background: authMethod === "otp" ? "#fff" : "transparent",
-                    color: authMethod === "otp" ? "var(--ink)" : "var(--muted)",
-                    fontWeight: authMethod === "otp" ? 700 : 500,
-                    cursor: "pointer",
-                    boxShadow: authMethod === "otp" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  Email One-Time Code
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setAuthMethod("password");
-                    setAuthError("");
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: "0.5rem 0.8rem",
-                    border: "none",
-                    borderRadius: "6px",
-                    background: authMethod === "password" ? "#fff" : "transparent",
-                    color: authMethod === "password" ? "var(--ink)" : "var(--muted)",
-                    fontWeight: authMethod === "password" ? 700 : 500,
-                    cursor: "pointer",
-                    boxShadow: authMethod === "password" ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
-                    fontSize: "0.85rem",
-                  }}
-                >
-                  Password Login
-                </button>
+                {(
+                  [
+                    { id: "magic" as const, label: "✉ Magic Link" },
+                    { id: "password" as const, label: "🔒 Password" },
+                  ] as const
+                ).map((m) => (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => {
+                      setAuthMethod(m.id);
+                      setAuthError("");
+                      setMagicLinkSent(false);
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: "0.5rem 0.8rem",
+                      border: "none",
+                      borderRadius: "6px",
+                      background: authMethod === m.id ? "#fff" : "transparent",
+                      color: authMethod === m.id ? "var(--ink)" : "var(--muted)",
+                      fontWeight: authMethod === m.id ? 700 : 500,
+                      cursor: "pointer",
+                      boxShadow:
+                        authMethod === m.id ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
+                      fontSize: "0.85rem",
+                    }}
+                  >
+                    {m.label}
+                  </button>
+                ))}
               </div>
 
               {authError && (
@@ -355,76 +389,148 @@ export default function AuthPage() {
                   style={{
                     padding: "0.6rem 0.8rem",
                     borderRadius: "var(--r-sm)",
-                    background: "rgba(220,38,38,0.1)",
+                    background: "rgba(220,38,38,0.08)",
                     color: "#dc2626",
                     fontSize: "0.85rem",
                     marginBottom: "1rem",
                     border: "1px solid rgba(220,38,38,0.2)",
+                    display: "flex",
+                    gap: "0.5rem",
+                    alignItems: "flex-start",
                   }}
                 >
+                  <AlertCircle size={15} style={{ flexShrink: 0, marginTop: "1px" }} />
                   {authError}
                 </div>
               )}
 
-              {/* OPTION A: REAL EMAIL OTP */}
-              {authMethod === "otp" ? (
+              {/* ── MAGIC LINK FLOW ── */}
+              {authMethod === "magic" && (
                 <div>
-                  <div className="field">
-                    <label>
-                      <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                        <User size={14} /> Full name
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g. Keerti Sharma"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
+                  {magicLinkSent ? (
+                    <div
+                      style={{
+                        textAlign: "center",
+                        padding: "2rem 1rem",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: "0.8rem",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "56px",
+                          height: "56px",
+                          borderRadius: "50%",
+                          background: "rgba(22,163,74,0.1)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <CheckCircle2 size={28} color="#16a34a" />
+                      </div>
+                      <h2 style={{ margin: 0, fontSize: "1.1rem" }}>Check your inbox</h2>
+                      <p className="hint" style={{ margin: 0, maxWidth: "280px" }}>
+                        We sent a sign-in link to <b>{email}</b>. Click the link in
+                        that email to continue — it opens this app automatically.
+                      </p>
+                      <p className="hint" style={{ fontSize: "0.8rem", margin: 0 }}>
+                        Didn&apos;t get it? Check spam, or{" "}
+                        <button
+                          type="button"
+                          className="btn btn-quiet btn-sm"
+                          style={{ fontSize: "0.8rem", display: "inline", padding: 0 }}
+                          onClick={() => {
+                            setMagicLinkSent(false);
+                            setAuthError("");
+                          }}
+                        >
+                          try again
+                        </button>
+                        .
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="field">
+                        <label>
+                          <span
+                            style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+                          >
+                            <User size={14} /> Full name (for new accounts)
+                          </span>
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Keerti Sharma"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                        />
+                      </div>
 
-                  <div className="field">
-                    <label>
-                      <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-                        <Mail size={14} /> Email address
-                      </span>
-                    </label>
-                    <input
-                      type="email"
-                      placeholder="name@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
+                      <div className="field">
+                        <label>
+                          <span
+                            style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+                          >
+                            <Mail size={14} /> Email address
+                          </span>
+                        </label>
+                        <input
+                          type="email"
+                          placeholder="name@example.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                        />
+                      </div>
 
-                  <button
-                    type="button"
-                    className="btn btn-primary"
-                    style={{ width: "100%", marginTop: "1rem" }}
-                    disabled={isLoading || !email.includes("@") || !name.trim()}
-                    onClick={handleSendOtp}
-                  >
-                    {isLoading ? (
-                      <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                        <Loader2 size={16} className="animate-spin" /> Sending verification code...
-                      </span>
-                    ) : (
-                      "Send 6-digit verification code"
-                    )}
-                  </button>
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        style={{ width: "100%", marginTop: "1rem" }}
+                        disabled={isLoading || !email.includes("@")}
+                        onClick={handleSendMagicLink}
+                      >
+                        {isLoading ? (
+                          <span
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              gap: "0.5rem",
+                            }}
+                          >
+                            <Loader2 size={16} className="animate-spin" /> Sending link…
+                          </span>
+                        ) : (
+                          <>
+                            <Link2 size={15} style={{ marginRight: "0.4rem" }} />
+                            Send Magic Link
+                          </>
+                        )}
+                      </button>
 
-                  <p className="auth-note">
-                    A real one-time 6-digit security code will be sent to your email inbox.
-                  </p>
+                      <p className="auth-note">
+                        A secure sign-in link will be emailed to you. No password needed.
+                        Works for both new &amp; existing accounts.
+                      </p>
+                    </>
+                  )}
                 </div>
-              ) : (
-                /* OPTION B: EMAIL & PASSWORD */
+              )}
+
+              {/* ── PASSWORD FLOW ── */}
+              {authMethod === "password" && (
                 <form onSubmit={handlePasswordAuth}>
                   {isSignUp && (
                     <div className="field">
                       <label>
-                        <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                        <span
+                          style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+                        >
                           <User size={14} /> Full name
                         </span>
                       </label>
@@ -440,7 +546,9 @@ export default function AuthPage() {
 
                   <div className="field">
                     <label>
-                      <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                      <span
+                        style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+                      >
                         <Mail size={14} /> Email address
                       </span>
                     </label>
@@ -448,14 +556,21 @@ export default function AuthPage() {
                       type="email"
                       placeholder="name@example.com"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        // Reset sign-up hint when email changes
+                        if (isSignUp) setIsSignUp(false);
+                        setAuthError("");
+                      }}
                       required
                     />
                   </div>
 
                   <div className="field">
                     <label>
-                      <span style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                      <span
+                        style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+                      >
                         <Lock size={14} /> Password
                       </span>
                     </label>
@@ -469,6 +584,26 @@ export default function AuthPage() {
                     />
                   </div>
 
+                  {isSignUp && (
+                    <div className="field">
+                      <label>
+                        <span
+                          style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}
+                        >
+                          <Lock size={14} /> Confirm Password
+                        </span>
+                      </label>
+                      <input
+                        type="password"
+                        placeholder="••••••••"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        minLength={6}
+                      />
+                    </div>
+                  )}
+
                   <button
                     type="submit"
                     className="btn btn-primary"
@@ -476,8 +611,15 @@ export default function AuthPage() {
                     disabled={isLoading || !email.includes("@") || password.length < 6}
                   >
                     {isLoading ? (
-                      <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                        <Loader2 size={16} className="animate-spin" /> Authenticating...
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "0.5rem",
+                        }}
+                      >
+                        <Loader2 size={16} className="animate-spin" /> Authenticating…
                       </span>
                     ) : isSignUp ? (
                       "Create Account"
@@ -486,108 +628,36 @@ export default function AuthPage() {
                     )}
                   </button>
 
-                  <div style={{ textAlign: "center", marginTop: "1rem" }}>
+                  <div style={{ textAlign: "center", marginTop: "0.8rem" }}>
                     <button
                       type="button"
                       className="btn btn-quiet btn-sm"
                       onClick={() => {
                         setIsSignUp(!isSignUp);
                         setAuthError("");
+                        setConfirmPassword("");
                       }}
                       style={{ fontSize: "0.82rem" }}
                     >
                       {isSignUp
                         ? "Already have an account? Sign in"
-                        : "Don't have an account? Create one"}
+                        : "New here? Create an account"}
                     </button>
                   </div>
                 </form>
               )}
             </div>
           )}
-
-          {/* STEP 3: REAL OTP VERIFICATION */}
-          {step === 3 && (
-            <div className="fstep on">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <button
-                  className="btn btn-quiet btn-sm"
-                  onClick={() => {
-                    setStep(2);
-                    setAuthError("");
-                  }}
-                  style={{ gap: "0.3rem", padding: "0.2rem 0.5rem" }}
-                >
-                  <ArrowLeft size={14} /> Back
-                </button>
-              </div>
-
-              <h1 className="display" style={{ marginTop: "0.8rem" }}>Enter 6-Digit Code</h1>
-              <p className="hint">
-                Code sent to <b>{email}</b>. Please check your inbox or spam folder.
-              </p>
-
-              {authError && (
-                <div
-                  style={{
-                    padding: "0.6rem 0.8rem",
-                    borderRadius: "var(--r-sm)",
-                    background: "rgba(220,38,38,0.1)",
-                    color: "#dc2626",
-                    fontSize: "0.85rem",
-                    marginBottom: "1rem",
-                    border: "1px solid rgba(220,38,38,0.2)",
-                  }}
-                >
-                  {authError}
-                </div>
-              )}
-
-              <div className="otp-row" style={{ marginTop: "1.2rem", justifyContent: "center" }}>
-                {otp.map((digit, idx) => (
-                  <input
-                    key={idx}
-                    id={`otp-${idx}`}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleOtpChange(idx, e.target.value)}
-                    aria-label={`Verification code digit ${idx + 1}`}
-                  />
-                ))}
-              </div>
-
-              <button
-                className="btn btn-primary"
-                style={{ width: "100%", marginTop: "1.2rem" }}
-                disabled={isLoading || otp.some((d) => !d)}
-                onClick={handleVerifyOtp}
-              >
-                {isLoading ? (
-                  <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>
-                    <Loader2 size={16} className="animate-spin" /> Verifying code...
-                  </span>
-                ) : (
-                  "Verify & Sign In"
-                )}
-              </button>
-
-              <div style={{ textAlign: "center", marginTop: "1rem" }}>
-                <button
-                  type="button"
-                  className="btn btn-quiet btn-sm"
-                  disabled={isLoading}
-                  onClick={handleSendOtp}
-                  style={{ fontSize: "0.82rem" }}
-                >
-                  Didn&apos;t receive it? Resend code
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </main>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<main className="animate-view-in"><div className="auth-wrap"><div className="auth-card glass-strong" /></div></main>}>
+      <AuthPageInner />
+    </Suspense>
   );
 }
