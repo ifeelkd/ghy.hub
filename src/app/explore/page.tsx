@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useMarketplace } from "@/lib/store/marketplace-store";
 import ProjectCard from "@/components/cards/ProjectCard";
-import { Search } from "lucide-react";
+import { Search, Briefcase } from "lucide-react";
 
 export default function ExplorePage() {
   const { projects, aggregateRatings, clients } = useMarketplace();
@@ -12,6 +12,8 @@ export default function ExplorePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [paidOnly, setPaidOnly] = useState(false);
   const [ratedOnly, setRatedOnly] = useState(false);
+
+  useEffect(() => { document.title = "Browse Projects — Brief"; }, []);
 
   const cityOptions = ["Remote", "Mumbai", "Delhi NCR", "Hyderabad", "Bengaluru", "Pune"];
   const categoryOptions = [
@@ -125,12 +127,37 @@ export default function ExplorePage() {
             ))
           ) : (
             <div
-              className="empty glass"
-              style={{ borderRadius: "var(--r)", gridColumn: "1/-1" }}
+              style={{
+                gridColumn: "1/-1",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "0.8rem",
+                padding: "3.5rem 1rem",
+                textAlign: "center",
+                borderRadius: "var(--r)",
+                background: "rgba(255,255,255,0.5)",
+                border: "1px dashed var(--line)",
+              }}
             >
-              <b>No projects match your criteria.</b>
-              <br />
-              Try clearing a filter or searching for another keyword.
+              <Briefcase size={36} style={{ opacity: 0.25 }} />
+              <b style={{ fontSize: "1.05rem" }}>No projects match your criteria</b>
+              <p style={{ color: "var(--muted)", fontSize: "0.88rem", maxWidth: "280px" }}>
+                Try clearing a filter, broadening your search, or check back later — new projects are posted daily.
+              </p>
+              <button
+                type="button"
+                className="btn btn-ghost btn-sm"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCity(null);
+                  setSelectedCategory(null);
+                  setPaidOnly(false);
+                  setRatedOnly(false);
+                }}
+              >
+                Clear all filters
+              </button>
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   useMarketplace,
@@ -48,6 +48,8 @@ export default function OnboardingPage() {
   const [profileCategory, setProfileCategory] = useState<"teacher" | "creative">("teacher");
 
   const [step, setStep] = useState(1);
+
+  useEffect(() => { document.title = "Build Your Profile — Brief"; }, []);
   const [name, setName] = useState(session?.name || "");
   const [city, setCity] = useState<string[]>([]);
   const [rateRange, setRateRange] = useState("₹800–1,500/hr");

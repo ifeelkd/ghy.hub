@@ -5,16 +5,18 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMarketplace } from "@/lib/store/marketplace-store";
 import OnboardingGuideModal from "../ui/OnboardingGuideModal";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const { session, signOut, loginAsDemo } = useMarketplace();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Close account dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -24,6 +26,22 @@ export default function Navbar() {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
+
+  // Close mobile nav on route change
+  useEffect(() => {
+    setIsMobileNavOpen(false);
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  // Prevent body scroll when mobile nav open
+  useEffect(() => {
+    if (isMobileNavOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isMobileNavOpen]);
 
   const getNavLinks = () => {
     if (!session) {
@@ -74,7 +92,8 @@ export default function Navbar() {
             Brief <small>Beta</small>
           </Link>
 
-          <div className="nav-links">
+          {/* Desktop nav links */}
+          <div className="nav-links" aria-hidden={isMobileNavOpen}>
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -96,12 +115,25 @@ export default function Navbar() {
               onClick={() => setIsGuideOpen(true)}
               title="Open Quick Start & Role Guide"
               style={{ background: "rgba(255,255,255,0.7)" }}
+              aria-label="Open guide"
             >
               <Sparkles size={13} color="var(--accent)" />
-              <span>Guide</span>
+              <span className="nav-guide-label">Guide</span>
             </button>
 
-            <div className="nav-cta" ref={menuRef}>
+            {/* Mobile hamburger */}
+            <button
+              type="button"
+              className="nav-hamburger"
+              onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+              aria-label={isMobileNavOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMobileNavOpen}
+            >
+              {isMobileNavOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+
+            {/* Desktop account / sign-in */}
+            <div className="nav-cta nav-cta-desktop" ref={menuRef}>
               {session ? (
                 <div className="acct-wrap">
                   <button
@@ -128,56 +160,24 @@ export default function Navbar() {
                       <div style={{ padding: "0.4rem 0.75rem", fontSize: "0.72rem", color: "var(--faint)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700 }}>
                         Switch Role / Demo
                       </div>
-                      <button
-                        role="menuitem"
-                        onClick={() => {
-                          loginAsDemo("freelancer");
-                          setIsMenuOpen(false);
-                          router.push("/explore");
-                        }}
-                      >
-                        👤 Freelancer (Keerti)
+                      <button role="menuitem" onClick={() => { loginAsDemo("freelancer"); setIsMenuOpen(false); router.push("/explore"); }}>
+                        👤 Freelancer
                       </button>
-                      <button
-                        role="menuitem"
-                        onClick={() => {
-                          loginAsDemo("client");
-                          setIsMenuOpen(false);
-                          router.push("/dashboard");
-                        }}
-                      >
-                        🏢 Client (Aditya)
+                      <button role="menuitem" onClick={() => { loginAsDemo("client"); setIsMenuOpen(false); router.push("/dashboard"); }}>
+                        🏢 Client
                       </button>
-                      <button
-                        role="menuitem"
-                        onClick={() => {
-                          loginAsDemo("indie");
-                          setIsMenuOpen(false);
-                          router.push("/dashboard");
-                        }}
-                      >
-                        🌱 Indie Client (Rhea)
+                      <button role="menuitem" onClick={() => { loginAsDemo("indie"); setIsMenuOpen(false); router.push("/dashboard"); }}>
+                        🌱 Indie Client
                       </button>
-                      <button
-                        role="menuitem"
-                        onClick={() => {
-                          loginAsDemo("admin");
-                          setIsMenuOpen(false);
-                          router.push("/admin");
-                        }}
-                      >
-                        🛡️ Admin Desk
+                      <button role="menuitem" onClick={() => { loginAsDemo("admin"); setIsMenuOpen(false); router.push("/admin"); }}>
+                        🛡️ Admin
                       </button>
 
                       <button
                         role="menuitem"
                         className="out"
                         style={{ marginTop: "0.3rem", borderTop: "1px solid var(--line)" }}
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          signOut();
-                          router.push("/");
-                        }}
+                        onClick={() => { setIsMenuOpen(false); signOut(); router.push("/"); }}
                       >
                         Sign out
                       </button>
@@ -192,6 +192,79 @@ export default function Navbar() {
             </div>
           </div>
         </nav>
+      </div>
+
+      {/* Mobile navigation drawer */}
+      {isMobileNavOpen && (
+        <div
+          className="mobile-nav-veil"
+          onClick={() => setIsMobileNavOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+      <div
+        className={`mobile-nav ${isMobileNavOpen ? "open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile navigation"
+      >
+        <div className="mobile-nav-inner">
+          {/* Links */}
+          <nav aria-label="Mobile navigation links">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`mobile-nav-link ${pathname === link.href ? "active" : ""}`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="mobile-nav-divider" />
+
+          {/* Account section */}
+          {session ? (
+            <div className="mobile-nav-account">
+              <div className="mobile-nav-user">
+                <span className="av" aria-hidden="true" style={{ width: 36, height: 36, fontSize: "0.8rem" }}>
+                  {session.name[0]}
+                </span>
+                <div>
+                  <b style={{ fontSize: "0.95rem" }}>{session.name}</b>
+                  <p style={{ fontSize: "0.78rem", color: "var(--faint)", margin: 0 }}>{getRoleDisplayName()}</p>
+                </div>
+              </div>
+              <button
+                className="btn btn-quiet btn-sm"
+                style={{ width: "100%", marginTop: "0.8rem", border: "1px solid var(--line)" }}
+                onClick={() => { setIsMobileNavOpen(false); signOut(); router.push("/"); }}
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <Link
+              href="/auth"
+              className="btn btn-primary"
+              style={{ width: "100%", textAlign: "center", justifyContent: "center" }}
+              onClick={() => setIsMobileNavOpen(false)}
+            >
+              Sign in
+            </Link>
+          )}
+
+          <button
+            type="button"
+            className="mini"
+            onClick={() => { setIsMobileNavOpen(false); setIsGuideOpen(true); }}
+            style={{ width: "100%", marginTop: "0.6rem", justifyContent: "center" }}
+          >
+            <Sparkles size={13} color="var(--accent)" />
+            Quick Start Guide
+          </button>
+        </div>
       </div>
 
       <OnboardingGuideModal

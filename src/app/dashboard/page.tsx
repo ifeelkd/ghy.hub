@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { useMarketplace } from "@/lib/store/marketplace-store";
 import StatusPill from "@/components/ui/StatusPill";
@@ -21,6 +21,8 @@ export default function ClientDashboardPage() {
     (applicantLanes.rej?.length || 0);
 
   const shortlistedCount = applicantLanes.short?.length || 0;
+
+  useEffect(() => { document.title = "Dashboard — Brief"; }, []);
 
   return (
     <main className="animate-view-in">
@@ -106,10 +108,27 @@ export default function ClientDashboardPage() {
             </div>
           ))
         ) : (
-          <div className="empty glass" style={{ borderRadius: "var(--r)" }}>
-            <b>No projects posted yet.</b>
-            <br />
-            Use the Post a project button to publish your first brief.
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.8rem",
+              padding: "3rem 1rem",
+              textAlign: "center",
+              borderRadius: "var(--r)",
+              background: "rgba(255,255,255,0.5)",
+              border: "1px dashed var(--line)",
+            }}
+          >
+            <span style={{ fontSize: "2rem" }}>📋</span>
+            <b style={{ fontSize: "1.05rem" }}>No projects posted yet</b>
+            <p style={{ color: "var(--muted)", fontSize: "0.88rem", maxWidth: "260px" }}>
+              Post your first project brief and start receiving applications from verified freelancers.
+            </p>
+            <Link href="/post-project" className="btn btn-primary btn-sm">
+              Post a project
+            </Link>
           </div>
         )}
 

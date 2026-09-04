@@ -5,9 +5,23 @@ import Toast from "@/components/ui/Toast";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
-  title: "Brief — Freelance work, verified",
+  title: {
+    default: "Brief — Freelance work, verified",
+    template: "%s — Brief",
+  },
   description:
     "Post projects. Apply with one profile. Review applicants in one place. Freelancers rate the clients they work with.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
+  themeColor: "#5B4E8F",
+  openGraph: {
+    siteName: "Brief",
+    type: "website",
+    title: "Brief — Freelance work, verified",
+    description: "Post projects. Apply with one profile. Review applicants in one place.",
+  },
 };
 
 export default function RootLayout({

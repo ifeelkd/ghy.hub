@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useMarketplace } from "@/lib/store/marketplace-store";
 import StatusPill from "@/components/ui/StatusPill";
@@ -19,6 +19,8 @@ export default function MyApplicationsPage() {
   const shortlistedCount = myApps.filter((a) => a.status === "Shortlisted").length;
   const closedCount = myApps.filter((a) => a.status === "Closed").length;
   const pendingRatingCount = myApps.filter((a) => a.status === "Closed" && !a.rated).length;
+
+  useEffect(() => { document.title = "My Applications — Brief"; }, []);
 
   const activeRatingProject = ratingModalRoleId !== null ? projects.find((p) => p.id === ratingModalRoleId) : null;
   const activeRecruiter = activeRatingProject ? clients[activeRatingProject.rid] : null;
@@ -127,10 +129,27 @@ export default function MyApplicationsPage() {
               );
             })
           ) : (
-            <div className="empty glass" style={{ borderRadius: "var(--r)" }}>
-              <b>No applications yet.</b>
-              <br />
-              Browse open listings on the Projects explore page.
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "0.8rem",
+                padding: "3rem 1rem",
+                textAlign: "center",
+                borderRadius: "var(--r)",
+                background: "rgba(255,255,255,0.5)",
+                border: "1px dashed var(--line)",
+              }}
+            >
+              <span style={{ fontSize: "2rem" }}>📬</span>
+              <b style={{ fontSize: "1.05rem" }}>No applications yet</b>
+              <p style={{ color: "var(--muted)", fontSize: "0.88rem", maxWidth: "260px" }}>
+                Start applying to open projects and tutoring roles. Your applications will appear here.
+              </p>
+              <Link href="/explore" className="btn btn-primary btn-sm">
+                Browse open projects
+              </Link>
             </div>
           )}
         </div>

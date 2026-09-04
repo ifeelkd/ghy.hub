@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useMarketplace } from "@/lib/store/marketplace-store";
 import ProjectCard from "@/components/cards/ProjectCard";
@@ -12,6 +12,8 @@ export default function LandingPage() {
   const { projects } = useMarketplace();
   const [isGuideOpen, setIsGuideOpen] = useState(false);
   const featuredProjects = projects.slice(0, 6);
+
+  useEffect(() => { document.title = "Brief — Freelance work, verified"; }, []);
 
   return (
     <main className="animate-view-in">
@@ -257,7 +259,10 @@ export default function LandingPage() {
           <p>
             Brief · Built for India&apos;s web, design &amp; creative freelancers
             <br />
-            Report a listing · Safety &amp; guidelines · Contact
+            <a href="mailto:support@ghyhub.vercel.app" style={{ color: "inherit", textDecoration: "underline" }}>Contact</a>
+            {" · "}
+            <a href="mailto:report@ghyhub.vercel.app" style={{ color: "inherit", textDecoration: "underline" }}>Report a listing</a>
+            {" · Safety &amp; guidelines"}
           </p>
         </footer>
       </div>

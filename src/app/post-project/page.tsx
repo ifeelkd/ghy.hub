@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -22,6 +22,8 @@ export default function PostProjectPage() {
   const router = useRouter();
 
   const [step, setStep] = useState(1);
+
+  useEffect(() => { document.title = "Post a Project — Brief"; }, []);
   const [title, setTitle] = useState("");
   const [format, setFormat] = useState<string[]>([]);
   const [city, setCity] = useState<string[]>([]);

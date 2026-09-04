@@ -1,5 +1,112 @@
 @import "./tokens.css";
 
+/* ============ MOBILE HAMBURGER ============ */
+.nav-hamburger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-sm);
+  background: rgba(30, 27, 41, 0.06);
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.nav-hamburger:hover {
+  background: rgba(30, 27, 41, 0.1);
+}
+
+.nav-guide-label {
+  display: inline;
+}
+
+/* Mobile nav veil (backdrop) */
+.mobile-nav-veil {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 27, 41, 0.3);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  z-index: 55;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Mobile nav drawer */
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 58;
+  transform: translateY(-110%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.mobile-nav.open {
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.mobile-nav-inner {
+  background: rgba(255, 255, 255, 0.97);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+  padding: calc(env(safe-area-inset-top) + 4.5rem) 1.2rem 1.4rem;
+  box-shadow: 0 8px 32px rgba(25, 18, 38, 0.14);
+}
+
+.mobile-nav-link {
+  display: block;
+  padding: 0.85rem 1rem;
+  border-radius: var(--r-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--muted);
+  transition: background 0.15s, color 0.15s;
+  margin-bottom: 0.2rem;
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+}
+
+.mobile-nav-divider {
+  height: 1px;
+  background: var(--line);
+  margin: 0.8rem 0;
+}
+
+.mobile-nav-account {
+  padding: 0.5rem 0.2rem;
+}
+
+.mobile-nav-user {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+@media (max-width: 639px) {
+  .nav-hamburger {
+    display: flex;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-cta-desktop {
+    display: none;
+  }
+  .nav-guide-label {
+    display: none;
+  }
+}
+
 /* ============ NAV ============ */
 .nav-wrap {
   position: fixed;

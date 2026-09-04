@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useMarketplace } from "@/lib/store/marketplace-store";
 
@@ -29,6 +29,8 @@ export default function BoardPage() {
       .join("")
       .slice(0, 2);
   };
+
+  useEffect(() => { document.title = "Applications Pipeline — Brief"; }, []);
 
   return (
     <main className="animate-view-in">
@@ -85,75 +87,101 @@ export default function BoardPage() {
         </div>
 
         {/* KANBAN BOARD */}
-        <div className="board">
-          {lanes.map((lane) => {
-            const list = applicantLanes[lane.key] || [];
-            return (
-              <div key={lane.key} className="lane glass">
-                <div className="lane-head">
-                  <b>{lane.title}</b>
-                  <span className="lane-count">{list.length}</span>
-                </div>
+        {myProjects.length === 0 ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "0.8rem",
+              padding: "4rem 1rem",
+              textAlign: "center",
+              borderRadius: "var(--r)",
+              background: "rgba(255,255,255,0.5)",
+              border: "1px dashed var(--line)",
+              marginTop: "1.4rem",
+            }}
+          >
+            <span style={{ fontSize: "2rem" }}>📥</span>
+            <b style={{ fontSize: "1.05rem" }}>No projects yet</b>
+            <p style={{ color: "var(--muted)", fontSize: "0.88rem", maxWidth: "260px" }}>
+              Post a project to start receiving and managing applications here.
+            </p>
+            <Link href="/post-project" className="btn btn-primary btn-sm">
+              Post a project
+            </Link>
+          </div>
+        ) : (
+          <div className="board">
+            {lanes.map((lane) => {
+              const list = applicantLanes[lane.key] || [];
+              return (
+                <div key={lane.key} className="lane glass">
+                  <div className="lane-head">
+                    <b>{lane.title}</b>
+                    <span className="lane-count">{list.length}</span>
+                  </div>
 
-                {list.length > 0 ? (
-                  list.map((candidate, i) => (
-                    <div key={i} className="app-card">
-                      <div className="app-top">
-                        <div className="avatar">{getInitials(candidate.n)}</div>
-                        <div>
-                          <b>{candidate.n}</b>
-                          <span className="meta">{candidate.c}</span>
+                  {list.length > 0 ? (
+                    list.map((candidate, i) => (
+                      <div key={i} className="app-card">
+                        <div className="app-top">
+                          <div className="avatar">{getInitials(candidate.n)}</div>
+                          <div>
+                            <b>{candidate.n}</b>
+                            <span className="meta">{candidate.c}</span>
+                          </div>
+                        </div>
+
+                        <p className="app-note">{candidate.note}</p>
+
+                        <div className="app-actions">
+                          {lane.key !== "short" && (
+                            <button
+                              className="mini act"
+                              onClick={() => moveApplicant(lane.key, i, "short")}
+                            >
+                              Shortlist
+                            </button>
+                          )}
+                          {lane.key !== "maybe" && (
+                            <button
+                              className="mini"
+                              onClick={() => moveApplicant(lane.key, i, "maybe")}
+                            >
+                              Maybe
+                            </button>
+                          )}
+                          {lane.key !== "rej" && (
+                            <button
+                              className="mini"
+                              onClick={() => moveApplicant(lane.key, i, "rej")}
+                            >
+                              Pass
+                            </button>
+                          )}
+                          {lane.key !== "new" && (
+                            <button
+                              className="mini"
+                              onClick={() => moveApplicant(lane.key, i, "new")}
+                              title="Reset to New"
+                            >
+                              ↺
+                            </button>
+                          )}
                         </div>
                       </div>
-
-                      <p className="app-note">{candidate.note}</p>
-
-                      <div className="app-actions">
-                        {lane.key !== "short" && (
-                          <button
-                            className="mini act"
-                            onClick={() => moveApplicant(lane.key, i, "short")}
-                          >
-                            Shortlist
-                          </button>
-                        )}
-                        {lane.key !== "maybe" && (
-                          <button
-                            className="mini"
-                            onClick={() => moveApplicant(lane.key, i, "maybe")}
-                          >
-                            Maybe
-                          </button>
-                        )}
-                        {lane.key !== "rej" && (
-                          <button
-                            className="mini"
-                            onClick={() => moveApplicant(lane.key, i, "rej")}
-                          >
-                            Pass
-                          </button>
-                        )}
-                        {lane.key !== "new" && (
-                          <button
-                            className="mini"
-                            onClick={() => moveApplicant(lane.key, i, "new")}
-                            title="Reset to New"
-                          >
-                            ↺
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="meta" style={{ textAlign: "center", padding: "1.5rem 0" }}>
-                    No candidates in {lane.title.toLowerCase()}
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                    ))
+                  ) : (
+                    <p className="meta" style={{ textAlign: "center", padding: "1.5rem 0", opacity: 0.6 }}>
+                      Empty
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </main>
   );
