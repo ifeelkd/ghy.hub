@@ -6,8 +6,25 @@ import { useMarketplace } from "@/lib/store/marketplace-store";
 import StatusPill from "@/components/ui/StatusPill";
 
 export default function AdminPage() {
-  const { verifQueue, reportsQueue, projects, clients, adminAction } = useMarketplace();
+  const { session, verifQueue, reportsQueue, projects, clients, adminAction } = useMarketplace();
   const [activeTab, setActiveTab] = useState<"verif" | "reports" | "listings">("verif");
+
+  if (!session || session.role !== "admin") {
+    return (
+      <main className="animate-view-in">
+        <div className="container" style={{ padding: "4rem 1rem", textAlign: "center", maxWidth: "480px" }}>
+          <div style={{ fontSize: "2.5rem", marginBottom: "0.5rem" }}>🛡️</div>
+          <h1 className="display" style={{ fontSize: "1.6rem" }}>Admin Access Restricted</h1>
+          <p className="hint" style={{ marginTop: "0.5rem", marginBottom: "1.5rem" }}>
+            The admin portal is reserved for authorized organization moderators only.
+          </p>
+          <Link href="/explore" className="btn btn-primary">
+            Return to Marketplace
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="animate-view-in">

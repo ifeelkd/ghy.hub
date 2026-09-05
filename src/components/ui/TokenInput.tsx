@@ -21,8 +21,10 @@ export default function TokenInput({
 }: TokenInputProps) {
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const filteredOptions = options.filter(
     (opt) =>
@@ -35,9 +37,30 @@ export default function TokenInput({
   );
 
   const canAddCustom =
-    query.trim() &&
+    query.trim().length > 0 &&
     !exactMatch &&
     !selected.some((s) => s.toLowerCase() === query.trim().toLowerCase());
+
+  const totalOptionsCount = filteredOptions.length + (canAddCustom ? 1 : 0);
+
+  // Auto-highlight first item when query changes
+  useEffect(() => {
+    if (query.trim() && totalOptionsCount > 0) {
+      setHighlightedIndex(0);
+    } else {
+      setHighlightedIndex(-1);
+    }
+  }, [query, totalOptionsCount]);
+
+  // Scroll highlighted item into view
+  useEffect(() => {
+    if (isOpen && menuRef.current && highlightedIndex >= 0) {
+      const items = menuRef.current.querySelectorAll<HTMLElement>(".tk-opt");
+      if (items[highlightedIndex]) {
+        items[highlightedIndex].scrollIntoView({ block: "nearest" });
+      }
+    }
+  }, [highlightedIndex, isOpen]);
 
   const addToken = (token: string) => {
     const trimmed = token.trim();
@@ -47,6 +70,7 @@ export default function TokenInput({
       onChange([...selected, trimmed]);
     }
     setQuery("");
+    setHighlightedIndex(-1);
     inputRef.current?.focus();
   };
 
@@ -63,6 +87,7 @@ export default function TokenInput({
         !containerRef.current.contains(e.target as Node)
       ) {
         setIsOpen(false);
+        setHighlightedIndex(-1);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -70,19 +95,55 @@ export default function TokenInput({
   }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
-      const trimmed = query.trim();
-      if (!trimmed) return;
-      if (filteredOptions.length > 0) {
+      if (!isOpen) {
+        setIsOpen(true);
+        setHighlightedIndex(0);
+      } else if (totalOptionsCount > 0) {
+        setHighlightedIndex((prev) =>
+          prev < totalOptionsCount - 1 ? prev + 1 : 0
+        );
+      }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (!isOpen) {
+        setIsOpen(true);
+        setHighlightedIndex(totalOptionsCount - 1);
+      } else if (totalOptionsCount > 0) {
+        setHighlightedIndex((prev) =>
+          prev > 0 ? prev - 1 : totalOptionsCount - 1
+        );
+      }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (!isOpen && totalOptionsCount > 0) {
+        setIsOpen(true);
+        return;
+      }
+      if (highlightedIndex >= 0 && highlightedIndex < filteredOptions.length) {
+        addToken(filteredOptions[highlightedIndex]);
+      } else if (
+        canAddCustom &&
+        highlightedIndex === filteredOptions.length
+      ) {
+        addToken(query.trim());
+      } else if (filteredOptions.length > 0) {
         addToken(filteredOptions[0]);
-      } else {
-        addToken(trimmed);
+      } else if (query.trim()) {
+        addToken(query.trim());
+      }
+    } else if (e.key === "Tab" && isOpen && highlightedIndex >= 0) {
+      if (highlightedIndex < filteredOptions.length) {
+        addToken(filteredOptions[highlightedIndex]);
+      } else if (canAddCustom) {
+        addToken(query.trim());
       }
     } else if (e.key === "Backspace" && !query && selected.length > 0) {
       removeToken(selected.length - 1);
     } else if (e.key === "Escape") {
       setIsOpen(false);
+      setHighlightedIndex(-1);
       inputRef.current?.blur();
     }
   };
@@ -123,15 +184,17 @@ export default function TokenInput({
           onKeyDown={handleKeyDown}
           placeholder={selected.length === 0 ? placeholder : ""}
           autoComplete="off"
+          aria-autocomplete="list"
         />
 
         {isOpen && (
-          <div className="tk-menu on">
-            {filteredOptions.map((opt) => (
+          <div ref={menuRef} className="tk-menu on">
+            {filteredOptions.map((opt, idx) => (
               <button
                 key={opt}
                 type="button"
-                className="tk-opt"
+                className={`tk-opt ${highlightedIndex === idx ? "hi" : ""}`}
+                onMouseEnter={() => setHighlightedIndex(idx)}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   addToken(opt);
@@ -144,7 +207,12 @@ export default function TokenInput({
             {canAddCustom && (
               <button
                 type="button"
-                className="tk-opt add"
+                className={`tk-opt add ${
+                  highlightedIndex === filteredOptions.length ? "hi" : ""
+                }`}
+                onMouseEnter={() =>
+                  setHighlightedIndex(filteredOptions.length)
+                }
                 onMouseDown={(e) => {
                   e.preventDefault();
                   addToken(query.trim());
@@ -156,7 +224,7 @@ export default function TokenInput({
             )}
 
             {filteredOptions.length === 0 && !canAddCustom && (
-              <div className="tk-empty">No matches. Type to add your own.</div>
+              <div className="tk-empty">No matches found. Press Enter to add.</div>
             )}
           </div>
         )}

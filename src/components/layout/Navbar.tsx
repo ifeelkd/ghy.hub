@@ -8,7 +8,7 @@ import OnboardingGuideModal from "../ui/OnboardingGuideModal";
 import { Sparkles, Menu, X } from "lucide-react";
 
 export default function Navbar() {
-  const { session, signOut, loginAsDemo } = useMarketplace();
+  const { session, signOut } = useMarketplace();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
@@ -157,26 +157,77 @@ export default function Navbar() {
                       <div className="who">{session.name}</div>
                       <div className="role">{getRoleDisplayName()}</div>
 
-                      <div style={{ padding: "0.4rem 0.75rem", fontSize: "0.72rem", color: "var(--faint)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700 }}>
-                        Switch Role / Demo
+                      <div style={{ borderTop: "1px solid var(--line)", marginTop: "0.4rem", paddingTop: "0.4rem" }}>
+                        {session.role === "admin" && (
+                          <button
+                            role="menuitem"
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              router.push("/admin");
+                            }}
+                          >
+                            🛡️ Admin Portal
+                          </button>
+                        )}
+                        {session.role === "freelancer" && (
+                          <>
+                            <button
+                              role="menuitem"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                router.push("/onboarding");
+                              }}
+                            >
+                              👤 Edit Profile
+                            </button>
+                            <button
+                              role="menuitem"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                router.push("/my-applications");
+                              }}
+                            >
+                              📋 My Applications
+                            </button>
+                            <button
+                              role="menuitem"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                router.push("/explore");
+                              }}
+                            >
+                              🔍 Explore Projects
+                            </button>
+                          </>
+                        )}
+                        {(session.role === "client" || session.role === "indie") && (
+                          <>
+                            <button
+                              role="menuitem"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                router.push("/dashboard");
+                              }}
+                            >
+                              📊 Dashboard
+                            </button>
+                            <button
+                              role="menuitem"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                router.push("/post-project");
+                              }}
+                            >
+                              ➕ Post a Project
+                            </button>
+                          </>
+                        )}
                       </div>
-                      <button role="menuitem" onClick={() => { loginAsDemo("freelancer"); setIsMenuOpen(false); router.push("/explore"); }}>
-                        👤 Freelancer
-                      </button>
-                      <button role="menuitem" onClick={() => { loginAsDemo("client"); setIsMenuOpen(false); router.push("/dashboard"); }}>
-                        🏢 Client
-                      </button>
-                      <button role="menuitem" onClick={() => { loginAsDemo("indie"); setIsMenuOpen(false); router.push("/dashboard"); }}>
-                        🌱 Indie Client
-                      </button>
-                      <button role="menuitem" onClick={() => { loginAsDemo("admin"); setIsMenuOpen(false); router.push("/admin"); }}>
-                        🛡️ Admin
-                      </button>
 
                       <button
                         role="menuitem"
                         className="out"
-                        style={{ marginTop: "0.3rem", borderTop: "1px solid var(--line)" }}
+                        style={{ marginTop: "0.4rem", borderTop: "1px solid var(--line)" }}
                         onClick={() => { setIsMenuOpen(false); signOut(); router.push("/"); }}
                       >
                         Sign out

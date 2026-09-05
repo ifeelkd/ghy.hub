@@ -16,11 +16,10 @@ export default function OnboardingGuideModal({
   isOpen,
   onClose,
 }: OnboardingGuideModalProps) {
-  const { session, loginAsDemo } = useMarketplace();
+  const { session } = useMarketplace();
   const router = useRouter();
 
-  const handleSelectRole = (role: "freelancer" | "client" | "indie" | "admin", destination: string) => {
-    loginAsDemo(role);
+  const handleNavigate = (destination: string) => {
     onClose();
     router.push(destination);
   };
@@ -49,7 +48,7 @@ export default function OnboardingGuideModal({
               transition: "all 0.15s ease",
               border: session?.role === "freelancer" ? "2px solid var(--accent)" : "1px solid var(--line)",
             }}
-            onClick={() => handleSelectRole("freelancer", "/explore")}
+            onClick={() => handleNavigate("/explore")}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
@@ -68,7 +67,7 @@ export default function OnboardingGuideModal({
                   <User size={20} />
                 </div>
                 <div>
-                  <b style={{ fontSize: "0.95rem" }}>I am a Freelancer</b>
+                  <b style={{ fontSize: "0.95rem" }}>I am a Freelancer / Educator</b>
                   <p className="meta">Browse listings, apply with 1-click profile, rate closed projects</p>
                 </div>
               </div>
@@ -86,7 +85,7 @@ export default function OnboardingGuideModal({
               transition: "all 0.15s ease",
               border: session?.role === "client" ? "2px solid var(--accent)" : "1px solid var(--line)",
             }}
-            onClick={() => handleSelectRole("client", "/dashboard")}
+            onClick={() => handleNavigate("/dashboard")}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
@@ -123,7 +122,7 @@ export default function OnboardingGuideModal({
               transition: "all 0.15s ease",
               border: session?.role === "indie" ? "2px solid var(--accent)" : "1px solid var(--line)",
             }}
-            onClick={() => handleSelectRole("indie", "/post-project")}
+            onClick={() => handleNavigate("/post-project")}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
@@ -150,42 +149,44 @@ export default function OnboardingGuideModal({
             </div>
           </div>
 
-          {/* 4. ADMIN MODERATOR */}
-          <div
-            className="glass"
-            style={{
-              padding: "1rem 1.1rem",
-              borderRadius: "var(--r-sm)",
-              cursor: "pointer",
-              transition: "all 0.15s ease",
-              border: session?.role === "admin" ? "2px solid var(--accent)" : "1px solid var(--line)",
-            }}
-            onClick={() => handleSelectRole("admin", "/admin")}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-                <div
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "10px",
-                    background: "var(--warn-tint)",
-                    color: "var(--warn)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <ShieldCheck size={20} />
+          {/* 4. ADMIN MODERATOR (Only visible if already an admin) */}
+          {session?.role === "admin" && (
+            <div
+              className="glass"
+              style={{
+                padding: "1rem 1.1rem",
+                borderRadius: "var(--r-sm)",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+                border: "2px solid var(--accent)",
+              }}
+              onClick={() => handleNavigate("/admin")}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
+                  <div
+                    style={{
+                      width: "36px",
+                      height: "36px",
+                      borderRadius: "10px",
+                      background: "var(--warn-tint)",
+                      color: "var(--warn)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <ShieldCheck size={20} />
+                  </div>
+                  <div>
+                    <b style={{ fontSize: "0.95rem" }}>Admin Moderation Desk</b>
+                    <p className="meta">Verify credentials, review community reports, remove policy violators</p>
+                  </div>
                 </div>
-                <div>
-                  <b style={{ fontSize: "0.95rem" }}>Admin Moderation Desk</b>
-                  <p className="meta">Verify credentials, review community reports, remove policy violators</p>
-                </div>
+                <ArrowRight size={18} color="var(--warn)" />
               </div>
-              <ArrowRight size={18} color="var(--warn)" />
             </div>
-          </div>
+          )}
         </div>
 
         {/* CORE PLATFORM PILLARS */}
