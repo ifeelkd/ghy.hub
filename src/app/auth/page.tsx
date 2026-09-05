@@ -631,13 +631,13 @@ function AuthPageInner() {
                         We sent a verification code to <b>{email}</b>
                       </p>
 
-                      <div className="field" style={{ margin: "0 auto 1.2rem", maxWidth: "260px" }}>
+                      <div className="field" style={{ margin: "0 auto 1.2rem", maxWidth: "290px" }}>
                         <input
                           type="text"
                           inputMode="numeric"
                           pattern="[0-9]*"
                           maxLength={8}
-                          placeholder="••••"
+                          placeholder="••••••"
                           value={otpCode}
                           onChange={(e) => {
                             const val = e.target.value.replace(/\D/g, "");
@@ -645,9 +645,9 @@ function AuthPageInner() {
                           }}
                           style={{
                             textAlign: "center",
-                            fontSize: "1.6rem",
+                            fontSize: "1.5rem",
                             fontWeight: 700,
-                            letterSpacing: "0.35em",
+                            letterSpacing: "0.22em",
                             padding: "0.6rem 0.5rem",
                           }}
                           autoFocus
@@ -993,13 +993,13 @@ function AuthPageInner() {
                             We sent a verification code to <b>{email}</b>
                           </p>
 
-                          <div className="field" style={{ margin: "0 auto 1.2rem", maxWidth: "260px" }}>
+                          <div className="field" style={{ margin: "0 auto 1.2rem", maxWidth: "290px" }}>
                             <input
                               type="text"
                               inputMode="numeric"
                               pattern="[0-9]*"
                               maxLength={8}
-                              placeholder="••••"
+                              placeholder="••••••"
                               value={otpCode}
                               onChange={(e) => {
                                 const val = e.target.value.replace(/\D/g, "");
@@ -1007,9 +1007,9 @@ function AuthPageInner() {
                               }}
                               style={{
                                 textAlign: "center",
-                                fontSize: "1.6rem",
+                                fontSize: "1.5rem",
                                 fontWeight: 700,
-                                letterSpacing: "0.35em",
+                                letterSpacing: "0.22em",
                                 padding: "0.6rem 0.5rem",
                               }}
                               autoFocus

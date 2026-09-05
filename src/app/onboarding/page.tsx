@@ -337,7 +337,7 @@ export default function OnboardingPage() {
                     options={CITIES}
                     selected={city}
                     onChange={(vals) => setCity(vals.slice(-1))}
-                    placeholder="Select city (e.g. Remote, Mumbai, Delhi NCR)"
+                    placeholder="Search or type your district / city (e.g. Kamrup, Assam or Bengaluru)"
                     maxItems={1}
                   />
                   {errors.city && <div className="err">{errors.city}</div>}

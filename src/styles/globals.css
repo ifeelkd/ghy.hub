@@ -1135,6 +1135,16 @@ footer {
   color: var(--faint);
 }
 
+.tk-hint {
+  padding: 0.55rem 0.8rem;
+  font-size: 0.74rem;
+  color: var(--faint);
+  background: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+  font-weight: 500;
+}
+
 /* ============ KANBAN BOARD ============ */
 .board {
   display: grid;

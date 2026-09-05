@@ -32,6 +32,9 @@ export default function TokenInput({
       (!query || opt.toLowerCase().includes(query.trim().toLowerCase()))
   );
 
+  const MAX_VISIBLE = 50;
+  const visibleOptions = filteredOptions.slice(0, MAX_VISIBLE);
+
   const exactMatch = options.some(
     (opt) => opt.toLowerCase() === query.trim().toLowerCase()
   );
@@ -41,7 +44,7 @@ export default function TokenInput({
     !exactMatch &&
     !selected.some((s) => s.toLowerCase() === query.trim().toLowerCase());
 
-  const totalOptionsCount = filteredOptions.length + (canAddCustom ? 1 : 0);
+  const totalOptionsCount = visibleOptions.length + (canAddCustom ? 1 : 0);
 
   // Auto-highlight first item when query changes
   useEffect(() => {
@@ -121,21 +124,21 @@ export default function TokenInput({
         setIsOpen(true);
         return;
       }
-      if (highlightedIndex >= 0 && highlightedIndex < filteredOptions.length) {
-        addToken(filteredOptions[highlightedIndex]);
+      if (highlightedIndex >= 0 && highlightedIndex < visibleOptions.length) {
+        addToken(visibleOptions[highlightedIndex]);
       } else if (
         canAddCustom &&
-        highlightedIndex === filteredOptions.length
+        highlightedIndex === visibleOptions.length
       ) {
         addToken(query.trim());
-      } else if (filteredOptions.length > 0) {
-        addToken(filteredOptions[0]);
+      } else if (visibleOptions.length > 0) {
+        addToken(visibleOptions[0]);
       } else if (query.trim()) {
         addToken(query.trim());
       }
     } else if (e.key === "Tab" && isOpen && highlightedIndex >= 0) {
-      if (highlightedIndex < filteredOptions.length) {
-        addToken(filteredOptions[highlightedIndex]);
+      if (highlightedIndex < visibleOptions.length) {
+        addToken(visibleOptions[highlightedIndex]);
       } else if (canAddCustom) {
         addToken(query.trim());
       }
@@ -189,7 +192,7 @@ export default function TokenInput({
 
         {isOpen && (
           <div ref={menuRef} className="tk-menu on">
-            {filteredOptions.map((opt, idx) => (
+            {visibleOptions.map((opt, idx) => (
               <button
                 key={opt}
                 type="button"
@@ -208,10 +211,10 @@ export default function TokenInput({
               <button
                 type="button"
                 className={`tk-opt add ${
-                  highlightedIndex === filteredOptions.length ? "hi" : ""
+                  highlightedIndex === visibleOptions.length ? "hi" : ""
                 }`}
                 onMouseEnter={() =>
-                  setHighlightedIndex(filteredOptions.length)
+                  setHighlightedIndex(visibleOptions.length)
                 }
                 onMouseDown={(e) => {
                   e.preventDefault();
@@ -221,6 +224,12 @@ export default function TokenInput({
                 Add &ldquo;{query.trim()}&rdquo;{" "}
                 <span className="g">not in list</span>
               </button>
+            )}
+
+            {filteredOptions.length > MAX_VISIBLE && (
+              <div className="tk-hint">
+                Showing top {MAX_VISIBLE} of {filteredOptions.length} matches — type to narrow down
+              </div>
             )}
 
             {filteredOptions.length === 0 && !canAddCustom && (

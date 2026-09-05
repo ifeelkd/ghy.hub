@@ -216,7 +216,7 @@ export default function PostProjectPage() {
                     options={CITIES}
                     selected={city}
                     onChange={(vals) => setCity(vals.slice(-1))}
-                    placeholder="Select city or Remote"
+                    placeholder="Search or type district / city (e.g. Kamrup, Assam or Remote)"
                     maxItems={1}
                   />
                   {errors.city && <div className="err">{errors.city}</div>}
